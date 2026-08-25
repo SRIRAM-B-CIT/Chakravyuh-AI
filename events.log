@@ -1,0 +1,403 @@
+[00:09:00] INFO: Chakravyuh AI SOC Defense Engine Online.
+[00:09:02] State: Benign | Telemetry Active | Local Defense: 192.168.29.104
+[00:09:05] State: Benign | Telemetry Active | Local Defense: 192.168.29.104
+[00:11:14] ==================================================
+[00:11:14] INFO: Live ST-GNN + RSSM Defense Active on wlp3s0
+[00:11:14] ==================================================
+[00:11:14] WARN: LiveCapture could not bind to wlp3s0: Command '['/usr/bin/tshark', '-D']' returned non-zero exit status 13.. Fallback to simulated monitoring mode.
+[00:11:17] State: Benign | Source IP: 192.168.29.124
+[00:11:20] State: Benign | Source IP: 192.168.29.124
+[00:11:23] State: Benign | Source IP: 192.168.29.124
+[00:11:26] State: Benign | Source IP: 192.168.29.124
+[00:11:29] State: Benign | Source IP: 192.168.29.124
+[00:11:32] State: Benign | Source IP: 192.168.29.124
+[00:12:48] ==================================================
+[00:12:48] INFO: Live ST-GNN + RSSM Defense Active on wlp3s0
+[00:12:48] ==================================================
+[00:12:49] WARN: LiveCapture could not bind to wlp3s0: Command '['/usr/bin/tshark', '-D']' returned non-zero exit status 13.. Fallback to simulated monitoring mode.
+[00:12:52] State: Benign | Source IP: 192.168.29.124
+[00:12:55] State: Benign | Source IP: 192.168.29.124
+[00:12:58] State: Benign | Source IP: 192.168.29.124
+[00:13:01] State: Benign | Source IP: 192.168.29.124
+[00:13:04] State: Benign | Source IP: 192.168.29.124
+[00:13:07] State: Benign | Source IP: 192.168.29.124
+[00:13:35] ==================================================
+[00:13:35] INFO: Live ST-GNN + RSSM Defense Active on wlp3s0
+[00:13:35] ==================================================
+[00:13:43] State: Benign | Source IP: 34.54.84.110
+[00:13:50] State: Benign | Source IP: 20.184.175.5
+[00:13:54] State: Benign | Source IP: 34.54.84.110
+[00:13:57] State: Benign | Source IP: 35.85.242.151
+[00:14:04] State: Benign | Source IP: 20.184.175.5
+[00:14:08] State: Benign | Source IP: 35.85.242.151
+[00:14:11] State: Benign | Source IP: 34.54.84.110
+[00:14:19] State: Benign | Source IP: 20.184.175.5
+[00:14:22] State: Benign | Source IP: 35.85.242.151
+[00:14:26] State: Benign | Source IP: 54.212.101.36
+[00:14:30] State: Benign | Source IP: 20.184.175.5
+[00:14:33] State: Benign | Source IP: 64.239.109.1
+[00:14:37] State: Benign | Source IP: 20.184.175.5
+[00:14:41] State: Benign | Source IP: 184.34.119.111
+[00:14:47] State: Benign | Source IP: 20.184.175.5
+[00:14:51] State: Benign | Source IP: 192.168.29.94
+[00:14:58] State: Benign | Source IP: 34.54.84.110
+[00:15:06] State: Benign | Source IP: 146.190.225.48
+[00:15:09] State: Benign | Source IP: 34.54.84.110
+[00:15:13] State: Benign | Source IP: 34.54.84.110
+[00:15:16] State: Benign | Source IP: 20.184.175.5
+[00:15:20] State: Benign | Source IP: 20.184.175.5
+[00:15:23] State: Benign | Source IP: 34.54.84.110
+[00:15:28] State: Benign | Source IP: 54.212.101.36
+[00:15:31] State: Benign | Source IP: 54.184.80.161
+[00:15:35] State: Benign | Source IP: 54.184.80.161
+[00:15:42] State: Benign | Source IP: 34.54.84.110
+[00:15:48] State: Benign | Source IP: 192.178.177.139
+[00:15:52] State: Benign | Source IP: 192.168.29.94
+[00:16:08] State: Benign | Source IP: 192.178.177.139
+[00:16:12] State: Benign | Source IP: 34.54.84.110
+[00:16:23] State: Benign | Source IP: 34.54.84.110
+[00:16:29] State: Benign | Source IP: 20.184.175.5
+[00:16:51] State: Benign | Source IP: 192.178.177.139
+[00:17:46] State: Benign | Source IP: 34.54.84.110
+[00:18:44] State: Benign | Source IP: 192.178.134.102
+[00:19:45] ==================================================
+[00:19:45] INFO: Live ST-GNN + RSSM Defense Active on wlp3s0
+[00:19:45] ==================================================
+[00:19:52] State: Benign | Source IP: 34.54.84.110
+[00:19:56] State: Benign | Source IP: 20.42.73.28
+[00:20:03] State: Benign | Source IP: 146.190.225.48
+[00:20:10] State: Benign | Source IP: 34.54.84.110
+[00:20:13] State: Benign | Source IP: 34.54.84.110
+[00:20:32] State: Benign | Source IP: 34.54.84.110
+[00:21:09] State: Benign | Source IP: 192.178.158.138
+[00:21:12] State: Benign | Source IP: 138.68.36.163
+[00:21:16] State: Benign | Source IP: 20.42.73.28
+[00:21:23] State: Benign | Source IP: 20.42.73.28
+[00:21:33] State: Benign | Source IP: 192.168.29.94
+[00:21:42] State: Benign | Source IP: 34.54.84.110
+[00:21:46] State: Benign | Source IP: 20.42.73.28
+[00:21:49] State: Benign | Source IP: 192.168.29.94
+[00:21:52] State: Benign | Source IP: 20.42.73.28
+[00:22:09] State: Benign | Source IP: 192.168.29.94
+[00:22:12] State: Benign | Source IP: 20.42.73.28
+[00:22:23] State: Benign | Source IP: 34.54.84.110
+[00:22:33] State: Benign | Source IP: 192.168.29.94
+[00:22:41] State: Benign | Source IP: 34.54.84.110
+[00:22:51] State: Benign | Source IP: 34.54.84.110
+[00:22:55] State: Benign | Source IP: 192.168.29.94
+[00:22:59] State: Benign | Source IP: 20.42.73.28
+[00:23:10] State: Benign | Source IP: 34.54.84.110
+[00:23:10] State: DoS/Flood | RSSM Risk: 96.0% | Source IP: 192.168.29.124
+[00:23:10] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:23:10] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:23:13] State: Benign | Source IP: 34.54.84.110
+[00:23:15] State: Benign | Source IP: 192.168.29.124
+[00:23:15] ACTION: Network telemetry reset to nominal baseline state.
+[00:23:17] State: DoS/Flood | RSSM Risk: 96.0% | Source IP: 192.168.29.124
+[00:23:17] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:23:17] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:23:20] State: Benign | Source IP: 34.54.84.110
+[00:23:22] State: Benign | Source IP: 192.168.29.124
+[00:23:22] ACTION: Network telemetry reset to nominal baseline state.
+[00:23:23] State: Benign | Source IP: 34.54.84.110
+[00:23:29] State: Benign | Source IP: 192.168.29.124
+[00:23:29] ACTION: Network telemetry reset to nominal baseline state.
+[00:23:30] State: Benign | Source IP: 192.168.29.124
+[00:23:30] ACTION: Network telemetry reset to nominal baseline state.
+[00:23:31] State: DoS/Flood | RSSM Risk: 96.0% | Source IP: 192.168.29.124
+[00:23:31] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:23:31] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:23:33] State: Benign | Source IP: 192.168.29.124
+[00:23:33] ACTION: Network telemetry reset to nominal baseline state.
+[00:23:41] State: Benign | Source IP: 34.54.84.110
+[00:23:45] State: Benign | Source IP: 20.42.73.28
+[00:23:53] State: Benign | Source IP: 192.168.29.94
+[00:25:44] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:25:44] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:25:44] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:26:53] ==================================================
+[00:26:53] INFO: Live ST-GNN + RSSM Defense Active on any
+[00:26:53] ==================================================
+[00:26:56] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:26:56] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:26:56] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:00] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:00] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:00] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:03] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:03] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:03] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:06] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:06] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:06] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:09] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:09] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:09] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:13] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:13] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:13] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:16] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:16] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:16] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:19] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:19] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:19] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:20] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.2% | Source IP: 192.168.29.124
+[00:27:20] ACTION: Network telemetry reset to nominal baseline state.
+[00:27:23] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:27:23] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:23] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:26] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:26] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:26] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:29] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:29] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:29] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:33] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:33] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:33] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:36] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:27:36] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:36] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:39] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:39] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:39] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:42] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:42] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:42] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:45] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:27:45] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:45] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:27:48] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:27:52] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:27:55] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:27:58] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:27:58] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:27:58] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:28:04] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:28:07] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:28:11] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:28:11] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:28:11] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:28:14] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:28:23] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:28:26] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:28:26] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:28:26] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:28:45] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:28:45] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:28:45] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:28:48] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:28:57] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:28:57] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:28:57] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:28:57] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:28:57] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:28:57] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:29:00] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:29:00] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:00] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:03] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:29:03] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:03] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:06] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:29:06] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:06] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:10] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:29:10] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:10] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:13] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:29:13] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:13] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:16] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:29:16] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:16] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:19] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:29:19] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:19] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:22] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:29:22] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:22] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:25] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:29:25] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:25] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:29] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:29:29] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:29] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:35] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:29:35] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:35] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:41] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:29:44] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:29:44] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:44] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:47] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:29:47] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:29:47] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:29:50] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:30:03] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:30:03] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:03] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:30:06] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:30:12] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:30:12] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:12] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:30:15] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:30:15] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:15] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:30:18] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:30:21] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:30:21] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:21] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:30:27] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:30:31] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:30:31] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:31] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:30:37] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:30:40] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:30:40] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:40] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:30:45] ACTION: 1-Click Rollback Restored. iptables -D INPUT -s 192.168.29.124 -j DROP
+[00:30:55] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:30:55] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:55] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:30:58] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:30:58] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:30:58] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:31:02] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:31:08] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:31:14] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:31:30] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:31:33] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:31:39] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:31:42] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:31:42] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:31:42] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:31:45] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:31:45] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:31:45] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:31:49] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:31:58] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:31:58] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:31:58] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:32:01] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:32:01] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:32:01] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:32:04] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:32:11] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:32:17] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:32:17] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:32:17] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:32:24] ACTION: 1-Click Rollback Restored. iptables -D INPUT -s 192.168.29.124 -j DROP
+[00:32:27] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.2% | Source IP: 192.168.29.124
+[00:32:27] ACTION: Network telemetry reset to nominal baseline state.
+[00:32:32] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:32:32] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:32:32] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:32:35] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:32:42] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:32:45] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:32:48] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:32:48] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:32:48] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:32:51] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:32:54] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:32:57] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:33:01] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:33:04] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:33:07] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:33:07] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:07] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:13] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.0% | Source IP: 127.0.0.1
+[00:33:22] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:33:22] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:22] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:26] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:33:26] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:26] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:29] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:33:29] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:29] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:32] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:33:32] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:32] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:36] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:33:36] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:36] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:39] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:33:39] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:39] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:42] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:33:42] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:33:42] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:33:46] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:33:46] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:33:46] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:33:49] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:33:49] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:33:49] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:33:52] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:33:52] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:33:52] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:33:56] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:33:56] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:33:56] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:33:57] State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.2% | Source IP: 192.168.29.124
+[00:33:57] ACTION: Network telemetry reset to nominal baseline state.
+[00:33:59] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:33:59] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:33:59] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:34:02] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:34:02] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:34:02] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:34:06] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:34:06] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:34:06] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:34:09] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:34:09] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:34:09] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:34:12] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:34:12] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:12] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:16] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:34:16] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:16] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:19] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[00:34:19] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:19] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:23] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:34:23] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:34:23] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:34:26] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[00:34:26] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[00:34:26] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[00:34:30] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:30] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:30] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:34] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:34] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:34] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:37] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:37] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:37] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:41] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:41] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:41] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:44] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:44] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:44] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:47] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:47] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:47] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:51] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:51] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:51] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:54] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:54] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:54] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:34:57] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:34:57] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:34:57] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
+[00:35:01] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[00:35:01] ALERT: Intercepting threat from 127.0.0.1! Triggering host micro-isolation...
+[00:35:01] ACTION: iptables -A INPUT -s 127.0.0.1 -j DROP
