@@ -24,6 +24,10 @@ def get_firewall_action_string(attacker_ip: str, action: str = "block") -> str:
 
 def isolate_host(attacker_ip: str):
     """Executes targeted micro-isolation on a single attacker IP across Windows and Linux."""
+    if attacker_ip in ("127.0.0.1", "::1", "localhost", "127.0.0.0/8"):
+        logging.info(f"[SAFEGUARD] Host {attacker_ip} is loopback; skipping system isolation rule.")
+        return
+
     logging.warning(f"[CHAKRAVYUH AI] Isolating malicious host: {attacker_ip} on {platform.system()}")
     try:
         if IS_WINDOWS:

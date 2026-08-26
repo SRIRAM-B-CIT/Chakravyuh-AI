@@ -502,65 +502,57 @@ def start_live_defense(interface=None, window_seconds=3):
                             pred_idx = int(np.argmax(mitre_probs))
                             pred_proba = float(mitre_probs[pred_idx])
                             label_name = MITRE_CLASSES[pred_idx]
-                        # 3. SOC Heuristic Safeguards
-                        # Key insight: DoS floods open MANY new TCP connections (high SYN rate)
-                        # WebSocket/HTTP polling reuses persistent connections (SYN rate ~0)
-                        # This correctly distinguishes attack traffic from dashboard self-polling
-                        # on port 8000.
+                            rollout_list = [round(float(v), 4) for v in k_risks.squeeze(0).cpu().tolist()]
 
-                        # SYN rate = new TCP connection attempts per second (from this src)
+                        # 3. SOC Heuristic Safeguards
                         syn_pkts = [p for p in target_packets if p.get('flags', 0) & 0x02]
                         syn_rate = len(syn_pkts) / window_seconds
-
-                        # Total packet rate (all ports, including app ports)
                         total_rate = len(target_packets) / window_seconds
 
-                        # Non-app port packet rate (port-scan / lateral movement detection)
-                        APP_PORTS = {5037, 8000, 3000, 80, 443, 8080, 8443}  # app + ADB + common
+                        APP_PORTS = {5037, 8000, 3000, 80, 443, 8080, 8443}
                         all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
                         meaningful_ports = all_dst_ports - {None} - APP_PORTS
                         non_app_packets = [p for p in target_packets
                                            if p.get('dst_port') is not None
                                            and p.get('dst_port') not in APP_PORTS
-                                           and p.get('dst_port') < 32768]  # exclude ephemeral response ports
+                                           and p.get('dst_port') < 32768]
                         non_app_rate = len(non_app_packets) / window_seconds
 
-                        # Debug log (shows SYN rate, total rate, and ports)
-                        write_log(f"DEBUG: src={src_ip} total={len(target_packets)} "
-                                  f"syn={len(syn_pkts)} syn_rate={syn_rate:.1f}/s "
-                                  f"total_rate={total_rate:.1f}/s ports={sorted(all_dst_ports)[:6]}")
+                        is_dos = (syn_rate >= 5.0) or (non_app_rate >= 10.0)
+                        is_recon = len(meaningful_ports) >= 6
+                        is_bot = dst_ip_count > 5
 
-                        # DoS/Flood: high SYN rate = many new connections = flood attack
-                        # Normal WebSocket polling: ~0-1 SYN/s | Attack (12 workers, 10ms): ~80+ SYN/s
-                        is_dos = (syn_rate >= 5) or (non_app_rate >= 10)
                         if is_dos:
                             label_name = "DoS/Flood"
                             pred_proba = max(pred_proba, 0.98)
                             future_threat_score = 0.96
                             rollout_list = [0.15, 0.40, 0.75, 0.96]
-                        # Recon: many distinct destination ports scanned
-                        elif len(meaningful_ports) >= 6:
+                        elif is_recon:
                             label_name = "Recon/PortScan"
                             pred_proba = max(pred_proba, 0.96)
                             future_threat_score = 0.92
                             rollout_list = [0.12, 0.35, 0.68, 0.92]
-                        # Lateral movement: many distinct destination IPs
-                        elif dst_ip_count > 5:
+                        elif is_bot:
                             label_name = "Bot/LateralMovement"
                             pred_proba = max(pred_proba, 0.95)
                             future_threat_score = 0.93
                             rollout_list = [0.14, 0.38, 0.72, 0.93]
+                        elif len(target_packets) < 20 and syn_rate < 3.0 and non_app_rate < 3.0:
+                            # Nominal safe background traffic (e.g. low-rate localhost/ADB/web polling)
+                            label_name = "Benign"
+                            pred_proba = 0.98
+                            future_threat_score = 0.05
+                            rollout_list = [0.02, 0.03, 0.04, 0.05]
                         else:
-                            # Neural-network-based classification for ambiguous traffic
+                            # Higher volume or neural network evaluation
                             if label_name != "Benign":
-                                # Trust the NetDreamer result
                                 future_threat_score = float(nn_risk)
                             else:
-                                # Low background traffic - stay nominal
                                 future_threat_score = 0.05
                                 rollout_list = [0.02, 0.03, 0.04, 0.05]
 
-                        is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and src_ip != "127.0.0.1")
+                        is_loopback = src_ip in ("127.0.0.1", "::1", "localhost")
+                        is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_loopback)
                         save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
 
                         # Exact rich log format with ML Conf & RSSM K-Horizon Risk
