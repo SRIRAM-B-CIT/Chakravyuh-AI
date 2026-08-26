@@ -158,41 +158,44 @@ Open PowerShell (Run as Administrator for firewall containment):
 
 ---
 
-## 🧪 Testing & Attack Demonstrations
+## 🧪 Testing & Attack Demonstration Suite
 
-You can demonstrate proactive threat detection on a **single laptop (localhost)** or across **two laptops on the same Wi-Fi/LAN**.
+Chakravyuh AI includes a complete multi-vector attack testing suite covering all trained MITRE and CIC-IDS attack categories. You can demonstrate proactive threat forecasting and automated self-healing on a **single machine (localhost)** or across **multiple nodes on the same Wi-Fi/LAN**.
 
-### Option 1: High-Density DoS / Traffic Flood Test
-Sends concurrent connection surges against the defense target:
-
-* **Same Laptop:**
-  ```bash
-  uv run traffic_flood.py 127.0.0.1 8000
-  ```
-* **Two Laptops (From Attacker Laptop A to Defense Laptop B):**
-  ```bash
-  uv run traffic_flood.py <DEFENSE_IP> 8000
-  ```
+### 🎮 Option 1: Unified Interactive Attack Suite Menu
+Launch the interactive terminal console to pick and execute any attack vector with custom parameters:
+```bash
+../.venv/bin/python attack_suite.py
+```
+*(Or launch directly by vector number, e.g., `../.venv/bin/python attack_suite.py 3 127.0.0.1 8000 10`)*
 
 ---
 
-### Option 2: SYN Port Reconnaissance Scanner
-Simulates adversarial network scanning and discovery:
+### 🚀 Option 2: Individual Attack Simulators
 
-* **Same Laptop:**
-  ```bash
-  uv run recon_scan.py 127.0.0.1
-  ```
-* **Two Laptops:**
-  ```bash
-  uv run recon_scan.py <DEFENSE_IP>
-  ```
+| Attack Vector | Script | Target MITRE Category | Description | Command |
+|---|---|---|---|---|
+| **DoS / Traffic Flood** | `traffic_flood.py` | `DoS/Flood` (Class 4) | 12-worker concurrent connection surge | `../.venv/bin/python traffic_flood.py 127.0.0.1 8000` |
+| **SYN Recon Port Scan** | `recon_scan.py` | `Recon/PortScan` (Class 1) | Multi-port network reconnaissance sweep (Ports 20–1024) | `../.venv/bin/python recon_scan.py 127.0.0.1` |
+| **Credential Brute-Force** | `brute_force.py` | `Recon/BruteForce` (Class 1) | High-frequency password stuffing & dictionary probe | `../.venv/bin/python brute_force.py 127.0.0.1 8000` |
+| **Infiltration / Exploit** | `infiltration_exploit.py` | `Infiltration` (Class 2) | Command injection & RCE payload dropper delivery | `../.venv/bin/python infiltration_exploit.py 127.0.0.1 8000` |
+| **Botnet C2 & Lateral** | `bot_lateral.py` | `Bot/LateralMovement` (Class 3) | Periodic C2 heartbeat beacons & internal propagation | `../.venv/bin/python bot_lateral.py 127.0.0.1 8000` |
+| **Slowloris DoS** | `slowloris_dos.py` | `DoS/Flood` (Slowloris Variant) | Low-and-slow HTTP header connection pool starvation | `../.venv/bin/python slowloris_dos.py 127.0.0.1 8000` |
 
 ---
 
-### Option 3: 1-Click UI Attack Simulation (No Script Needed)
-* Click **`[ ⚡ Simulate Attack ]`** in the top navigation header of the dashboard.
-* Or click **`Simulate Attack Spike`** inside the **SOAR Autonomous Defense Console**.
+### 🛡️ Option 3: Automated SOAR Self-Healing Playbooks ("Fix the Issue")
+
+When an attack occurs, Chakravyuh AI executes an end-to-end automated containment and self-healing cycle:
+1. **Targeted Micro-Isolation**: Immediate OS-level firewall drop rule applied (`iptables -A INPUT -s <IP> -j DROP` on Linux, `netsh advfirewall` on Windows).
+2. **Active Socket Connection Teardown**: Immediately severs active malicious TCP sockets from the threat source using `ss -K dst <IP>` and purges connection tracking table entries.
+3. **Attack-Specific Remediation Playbooks**:
+   - **DoS / Flood Playbook**: Activates kernel TCP SYN Cookies (`net.ipv4.tcp_syncookies=1`), purges conntrack pools, and enforces ingress burst rate-limiting.
+   - **Brute-Force Playbook**: Quarantines auth endpoints, terminates rogue auth sessions, creates Fail2ban jail policies, and triggers credential security audits.
+   - **Infiltration Playbook**: Kills suspicious spawned child processes/reverse shells, audits filesystem binary hashes, and creates forensic telemetry snapshots.
+   - **Botnet / Lateral Playbook**: Quarantines internal spreading channels, blackholes outbound C2 command beacons, and updates ST-GNN neighbor routing tables.
+4. **1-Click Analyst Rollback & Self-Healing Baseline Reset**:
+   - Click **`[ 🛡 1-Click Rollback ]`** in the dashboard to restore traffic, or click **`[ 🔄 Auto-Remediate ]`** to re-run automated playbooks on demand.
 
 ---
 
@@ -200,15 +203,19 @@ Simulates adversarial network scanning and discovery:
 
 1. **Topology Graph:**
    * Attacker node pulses in **Radiant Red** (`ISOLATED` / `ATTACKER`).
-   * **Threat Flow** curved edge animates with glowing particles and live packet velocity.
+   * **Threat Flow** curved edge animates with glowing particles and live protocol signatures (`TCP/SYN`, `TCP/Auth`, `HTTP/Payload`, `TCP/C2`).
 2. **RSSM Horizon Chart:**
    * Plots forward threat trajectory surging up to **`96.0% Critical Risk`**.
 3. **Live Event Logs:**
    * Displays rich telemetry:
      ```text
-     State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
-     ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
-     ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP (or netsh advfirewall on Windows)
+     State: Infiltration | ML Conf: 98.0% | RSSM K-Horizon Risk: 98.0% | Source IP: 192.168.29.124
+     ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation & active neutralization...
+     ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+     SOAR REMEDIATION: Host micro-isolation engaged against exploit vector 192.168.29.124
+     SOAR REMEDIATION: Terminated rogue child sockets and interactive shell pipes for 192.168.29.124
+     SOAR REMEDIATION: Integrity hash check completed on sensitive system binaries
+     SOAR REMEDIATION: Privilege escalation vectors blocked: session sandbox policy enforced
      ```
 4. **Analyst Rollback & Baseline Reset:**
    * Click **`[ 🛡 1-Click Rollback ]`** to restore traffic without restarting.

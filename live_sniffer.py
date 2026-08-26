@@ -9,7 +9,7 @@ import numpy as np
 import pyshark
 import torch
 
-from soar_agent import isolate_host, get_firewall_action_string, IS_WINDOWS
+from soar_agent import isolate_host, rollback_isolation, execute_remediation_playbook, get_firewall_action_string, IS_WINDOWS
 from model_rssm_gnn import NetworkWorldModel, FEATURE_NAMES, MITRE_CLASSES
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -558,10 +558,12 @@ def start_live_defense(interface=None, window_seconds=3):
                         write_log(f"State: {label_name} | ML Conf: {pred_proba*100:.1f}% | RSSM K-Horizon Risk: {future_threat_score*100:.1f}% | Source IP: {src_ip}")
                         
                         if is_isolated:
-                            write_log(f"ALERT: Intercepting threat from {src_ip}! Triggering host micro-isolation...")
+                            write_log(f"ALERT: Intercepting threat from {src_ip}! Triggering host micro-isolation & active neutralization...")
                             action_str = get_firewall_action_string(src_ip, "block")
                             write_log(f"ACTION: {action_str}")
-                            isolate_host(src_ip)
+                            playbook_res = execute_remediation_playbook(label_name, src_ip)
+                            for step in playbook_res.get("steps", []):
+                                write_log(f"SOAR REMEDIATION: {step}")
                 else:
                     save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
                     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")

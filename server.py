@@ -201,9 +201,122 @@ def rollback_endpoint(req: HostActionRequest):
         "message": f"Host {ip} isolation successfully rolled back."
     }
 
+class RemediationRequest(BaseModel):
+    ip: str
+    threat_type: Optional[str] = "DoS/Flood"
+
+class LaunchAttackRequest(BaseModel):
+    vector: str
+    target_ip: Optional[str] = "127.0.0.1"
+    target_port: Optional[int] = 8000
+    duration: Optional[int] = 10
+
+@app.get("/api/soar/playbooks")
+def get_soar_playbooks():
+    """Returns the catalog of active automated SOAR self-healing playbooks."""
+    return {
+        "active_isolations": list(soar_agent.ACTIVE_ISOLATIONS),
+        "playbooks": [
+            {
+                "id": "playbook_dos",
+                "name": "DoS / Flood Mitigation & Self-Healing",
+                "target_class": "DoS/Flood",
+                "actions": ["Micro-Isolation (Netfilter/Firewall)", "Active Socket Severing (ss -K)", "TCP SYN Cookies Activation", "Ingress Burst Rate-Limiting"]
+            },
+            {
+                "id": "playbook_bruteforce",
+                "name": "Credential Brute-Force Containment & Account Safeguard",
+                "target_class": "Recon/BruteForce",
+                "actions": ["Quarantine Isolation", "Auth Session Teardown", "Fail2ban Jail Lockout Staging", "Credential Audit Event Dispatch"]
+            },
+            {
+                "id": "playbook_infiltration",
+                "name": "Infiltration & RCE Exploit Containment",
+                "target_class": "Infiltration",
+                "actions": ["Targeted Host Isolation", "Reverse Shell Socket Teardown", "Binary Integrity Verification", "Forensic Log Snapshot"]
+            },
+            {
+                "id": "playbook_bot_lateral",
+                "name": "Botnet C2 Neutralization & Lateral Quarantine",
+                "target_class": "Bot/LateralMovement",
+                "actions": ["Node Network Segmentation", "C2 Beacon Egress Blackhole", "ST-GNN Dynamic Route Re-routing", "Memory Dropper Artifact Scan"]
+            }
+        ]
+    }
+
+@app.post("/api/soar/remediate")
+def remediate_threat_endpoint(req: RemediationRequest):
+    """Executes the full automated SOAR self-healing playbook for a detected threat."""
+    ip = req.ip.strip()
+    threat_type = req.threat_type or "DoS/Flood"
+    if not ip:
+        raise HTTPException(status_code=400, detail="IP address required")
+
+    write_audit_log(f"SOAR TRIGGER: Initiating automated self-healing remediation for {threat_type} from {ip}...")
+    
+    # Execute full SOAR playbook
+    result = soar_agent.execute_remediation_playbook(threat_type, ip)
+    
+    for step in result.get("steps", []):
+        write_audit_log(f"SOAR ACTION: {step}")
+
+    # Update state file to reflect isolated & remediated status
+    state = load_current_state()
+    state["isolated"] = True
+    state["netfilter_drops"] = "41.3k Drops"
+    if "topology" in state and "nodes" in state["topology"]:
+        for node in state["topology"]["nodes"]:
+            if node["ip"] == ip:
+                node["status"] = "ISOLATED"
+                node["is_isolated"] = True
+                node["role"] = f"Isolated Threat ({threat_type})"
+
+    try:
+        with open(STATE_JSON, "w") as f:
+            json.dump(state, f, indent=2)
+    except Exception as e:
+        print(f"Failed to update state: {e}")
+
+    write_audit_log(f"SOAR STATUS: Remediation playbook '{result['playbook']}' successfully executed.")
+    return {
+        "status": "success",
+        "threat_ip": ip,
+        "threat_type": threat_type,
+        "playbook_result": result
+    }
+
+@app.post("/api/attack/launch")
+def launch_attack_simulator_endpoint(req: LaunchAttackRequest):
+    """Launches an actual background attack simulation script."""
+    import subprocess
+    script_map = {
+        "1": "traffic_flood.py",
+        "2": "recon_scan.py",
+        "3": "brute_force.py",
+        "4": "infiltration_exploit.py",
+        "5": "bot_lateral.py",
+        "6": "slowloris_dos.py"
+    }
+    script = script_map.get(req.vector, "traffic_flood.py")
+    script_path = os.path.join(BASE_DIR, script)
+    
+    if not os.path.exists(script_path):
+        raise HTTPException(status_code=404, detail=f"Script {script} not found")
+
+    cmd = [sys.executable, script_path, req.target_ip, str(req.target_port), "--duration", str(req.duration)]
+    if req.vector == "2":
+        cmd = [sys.executable, script_path, req.target_ip]
+        
+    try:
+        subprocess.Popen(cmd)
+        write_audit_log(f"ATTACK LAUNCHED: {script} executed against {req.target_ip}:{req.target_port} (Duration: {req.duration}s)")
+        return {"status": "success", "message": f"Launched {script} in background."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/api/simulate/attack")
 def simulate_attack_scenario(req: SimulationRequest):
-    """Generates an immediate attack simulation state for SOC demonstration and testing."""
+    """Generates a rich attack simulation state across all 5 MITRE threat categories."""
     ip = req.ip or "192.168.29.124"
     attack = req.attack_type or "DoS/Flood"
     risk = float(req.risk_level or 0.96)
@@ -212,6 +325,16 @@ def simulate_attack_scenario(req: SimulationRequest):
     rollout_step1 = round(risk * 0.40, 2)
     rollout_step2 = round(risk * 0.75, 2)
     rollout_step3 = round(risk, 2)
+
+    # Tailored network protocol, edge traffic descriptions, and animations per vector
+    vector_profiles = {
+        "DoS/Flood": {"protocol": "TCP/SYN", "traffic": "High-Density Flood (148 pkts/s)", "weight": 86, "byte_rate": "18.4 MB/s"},
+        "Recon/PortScan": {"protocol": "TCP/Probe", "traffic": "SYN Port Sweep (Ports 20-1024)", "weight": 42, "byte_rate": "1.8 MB/s"},
+        "Recon/BruteForce": {"protocol": "TCP/Auth", "traffic": "Credential Stuffing (86 attempts/s)", "weight": 54, "byte_rate": "3.4 MB/s"},
+        "Infiltration": {"protocol": "HTTP/Payload", "traffic": "RCE Exploit Dropper Payload", "weight": 68, "byte_rate": "7.2 MB/s"},
+        "Bot/LateralMovement": {"protocol": "TCP/C2", "traffic": "C2 Heartbeat & Lateral Spread", "weight": 76, "byte_rate": "9.6 MB/s"}
+    }
+    prof = vector_profiles.get(attack, vector_profiles["DoS/Flood"])
 
     sim_state = {
         "src_ip": ip,
@@ -232,14 +355,14 @@ def simulate_attack_scenario(req: SimulationRequest):
                 {"id": "192.168.29.1", "ip": "192.168.29.1", "label": "Gateway", "role": "Gateway Router", "risk_score": 0.02, "status": "SAFE", "packet_count": 24, "byte_rate": "1.2 MB/s", "is_defense": False, "is_isolated": False},
                 {"id": "192.168.29.104", "ip": "192.168.29.104", "label": "Defense", "role": "Defense Controller", "risk_score": 0.05, "status": "SAFE", "packet_count": 148, "byte_rate": "3.8 MB/s", "is_defense": True, "is_isolated": False},
                 {"id": "192.168.29.42", "ip": "192.168.29.42", "label": "Server", "role": "Internal Core Server", "risk_score": 0.12, "status": "SAFE", "packet_count": 18, "byte_rate": "850 KB/s", "is_defense": False, "is_isolated": False},
-                {"id": ip, "ip": ip, "label": "Attacker", "role": "Threat Host", "risk_score": risk, "status": "ATTACKER", "packet_count": 148, "byte_rate": "18.4 MB/s", "is_defense": False, "is_isolated": False}
+                {"id": ip, "ip": ip, "label": "Attacker", "role": f"Active {attack} Host", "risk_score": risk, "status": "ATTACKER", "packet_count": 148, "byte_rate": prof["byte_rate"], "is_defense": False, "is_isolated": False}
             ],
             "edges": [
                 {"id": "e-gw-def", "source": "192.168.29.1", "target": "192.168.29.104", "weight": 14, "traffic": "Safe Path", "protocol": "TCP/HTTPS", "animated": False, "threat": False},
                 {"id": "e-def-internal", "source": "192.168.29.104", "target": "192.168.29.42", "weight": 8, "traffic": "Safe Path", "protocol": "gRPC/TLS", "animated": False, "threat": False},
                 {"id": "e-gw-internal", "source": "192.168.29.1", "target": "192.168.29.42", "weight": 6, "traffic": "Internal Route", "protocol": "TCP/TLS", "animated": False, "threat": False},
-                {"id": "e-att-def", "source": ip, "target": "192.168.29.104", "weight": 86, "traffic": "Threat Flow (148 pkts/s)", "protocol": "TCP/SYN", "animated": True, "threat": True},
-                {"id": "e-att-srv", "source": ip, "target": "192.168.29.42", "weight": 34, "traffic": "Lateral Probe", "protocol": "TCP/SYN", "animated": True, "threat": True}
+                {"id": "e-att-def", "source": ip, "target": "192.168.29.104", "weight": prof["weight"], "traffic": prof["traffic"], "protocol": prof["protocol"], "animated": True, "threat": True},
+                {"id": "e-att-srv", "source": ip, "target": "192.168.29.42", "weight": int(prof["weight"] * 0.4), "traffic": "Lateral Vector", "protocol": prof["protocol"], "animated": True, "threat": True}
             ],
             "stats": {
                 "total_nodes": 4,
@@ -258,7 +381,7 @@ def simulate_attack_scenario(req: SimulationRequest):
         print(f"Failed to write state.json: {e}")
 
     write_audit_log(f"State: {attack} | ML Conf: 98.0% | RSSM K-Horizon Risk: {risk*100:.1f}% | Source IP: {ip}")
-    write_audit_log(f"ALERT: Intercepting threat from {ip}! Triggering host micro-isolation...")
+    write_audit_log(f"ALERT: Intercepting threat vector '{attack}' from {ip}! Triggering host micro-isolation...")
     action_str = soar_agent.get_firewall_action_string(ip, "block")
     write_audit_log(f"ACTION: {action_str}")
     return {"status": "success", "message": f"Simulation initiated for {attack} on {ip}"}
