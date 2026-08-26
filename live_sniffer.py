@@ -283,66 +283,101 @@ def extract_flow_features(packets):
     if not lengths:
         return None, 0, 0
 
+    lengths_arr = np.array(lengths, dtype=np.float64)
+    n = len(lengths_arr)
+
     start_time = min(timestamps) if timestamps else time.time()
     end_time = max(timestamps) if timestamps else start_time + 1.0
-    flow_duration = max((end_time - start_time) * 1e6, 1.0)
-    
-    # Inter-arrival times
+    flow_duration = max((end_time - start_time) * 1e6, 1.0)  # microseconds like CIC-IDS
+
+    # Inter-arrival times (microseconds, matching CIC-IDS 'Flow IAT *' columns)
     if len(timestamps) > 1:
         iats = np.diff(np.sort(timestamps)) * 1e6
-        iat_mean = float(np.mean(iats))
-        iat_var = float(np.var(iats))
-        iat_max = float(np.max(iats))
+        iat_mean = float(np.mean(iats))   # → Flow IAT Mean
+        iat_var  = float(np.std(iats))    # → Flow IAT Std  (training used Std, not Var!)
+        iat_max  = float(np.max(iats))    # → Flow IAT Max
     else:
         iat_mean = 0.0
-        iat_var = 0.0
-        iat_max = 0.0
+        iat_var  = 0.0
+        iat_max  = 0.0
 
-    total_bytes = sum(lengths)
-    forward_packets = packet_count
-    backward_packets = max(1, int(packet_count * 0.2))
-    forward_bytes = total_bytes
-    backward_bytes = max(64, int(total_bytes * 0.2))
+    # Packet / byte counts
+    forward_packets  = n                           # Tot Fwd Pkts  (all captured = forward view)
+    backward_packets = max(1, int(n * 0.2))        # Tot Bwd Pkts  (approximated as 20% response)
+    total_packets    = forward_packets + backward_packets
+    forward_bytes    = float(np.sum(lengths_arr))  # TotLen Fwd Pkts
+    backward_bytes   = max(64.0, forward_bytes * 0.2)  # TotLen Bwd Pkts (proxy)
+    total_bytes      = forward_bytes + backward_bytes
+    byte_ratio       = forward_bytes / (backward_bytes + 1.0)
+    packet_ratio     = float(forward_packets) / (backward_packets + 1.0)
 
-    tp1 = packet_count + 1.0
-    
+    tp1 = float(total_packets) + 1.0  # avoid /0, matches training: tp1 = total_pkts + 1
+
+    # ---- Features 24-28: CIC-IDS proxies (exact column mapping) ----
+    # ttl_mean  → Fwd Pkt Len Mean  (mean of forward packet lengths)
+    fwd_pkt_len_mean = float(np.mean(lengths_arr))     # Fwd Pkt Len Mean
+    fwd_pkt_len_std  = float(np.std(lengths_arr))      # Fwd Pkt Len Std
+
+    # win_mean  → Init Fwd Win Byts  (initial TCP window — 65535 for SYN, 8192 otherwise)
+    win_mean = 65535.0 if syn_count > 0 else 8192.0    # Init Fwd Win Byts
+    # win_var   → Init Bwd Win Byts  (backward window proxy — 0 if no ACK reply observed)
+    win_var  = 0.0 if ack_count == 0 else 8192.0       # Init Bwd Win Byts
+
+    # frag_count → Fwd Byts/b Avg  (bytes per packet average)
+    frag_count = forward_bytes / (float(n) + 1.0)      # Fwd Byts/b Avg
+
+    # ---- Features 29-31 ----
+    # pkt_size_mean → Pkt Size Avg  (total_bytes / total_packets)
+    pkt_size_mean    = total_bytes / (float(total_packets) + 1.0)
+    # pkt_size_var  → Pkt Len Var   (variance of individual packet lengths)
+    pkt_size_var     = float(np.var(lengths_arr))
+    # pkt_size_entropy → Pkt Len Std (std of individual packet lengths, used as entropy proxy)
+    pkt_size_entropy = float(np.std(lengths_arr))
+
     feature_dict = {
-        "flow_duration": flow_duration,
-        "forward_packets": float(forward_packets),
+        # 0-8: Flow volume features
+        "flow_duration":    flow_duration,
+        "forward_packets":  float(forward_packets),
         "backward_packets": float(backward_packets),
-        "total_packets": float(packet_count),
-        "forward_bytes": float(forward_bytes),
-        "backward_bytes": float(backward_bytes),
-        "total_bytes": float(total_bytes),
-        "byte_ratio": float(forward_bytes / (backward_bytes + 1.0)),
-        "packet_ratio": float(forward_packets / (backward_packets + 1.0)),
+        "total_packets":    float(total_packets),
+        "forward_bytes":    float(forward_bytes),
+        "backward_bytes":   float(backward_bytes),
+        "total_bytes":      float(total_bytes),
+        "byte_ratio":       byte_ratio,
+        "packet_ratio":     packet_ratio,
+        # 9-14: TCP flag counts (raw)  → SYN/ACK/FIN/RST/PSH/URG Flag Cnt
         "syn_count": float(syn_count),
         "ack_count": float(ack_count),
         "fin_count": float(fin_count),
         "rst_count": float(rst_count),
         "psh_count": float(psh_count),
         "urg_count": float(urg_count),
-        "syn_ratio": float(syn_count / tp1),
-        "ack_ratio": float(ack_count / tp1),
-        "fin_ratio": float(fin_count / tp1),
-        "rst_ratio": float(rst_count / tp1),
-        "psh_ratio": float(psh_count / tp1),
-        "urg_ratio": float(urg_count / tp1),
+        # 15-20: TCP flag ratios (computed), divided by total_packets+1 like training
+        "syn_ratio": float(syn_count) / tp1,
+        "ack_ratio": float(ack_count) / tp1,
+        "fin_ratio": float(fin_count) / tp1,
+        "rst_ratio": float(rst_count) / tp1,
+        "psh_ratio": float(psh_count) / tp1,
+        "urg_ratio": float(urg_count) / tp1,
+        # 21-23: Inter-arrival times → Flow IAT Mean/Std/Max
         "iat_mean": iat_mean,
-        "iat_var": iat_var,
-        "iat_max": iat_max,
-        "ttl_mean": float(np.mean(lengths)),
-        "ttl_var": float(np.var(lengths)),
-        "win_mean": 65535.0 if syn_count > 0 else 8192.0,
-        "win_var": 0.0,
-        "frag_count": 0.0,
-        "pkt_size_mean": float(np.mean(lengths)),
-        "pkt_size_var": float(np.var(lengths)),
-        "pkt_size_entropy": float(np.std(lengths))
+        "iat_var":  iat_var,   # NOTE: training used IAT Std as proxy for iat_var
+        "iat_max":  iat_max,
+        # 24-28: CIC-IDS proxy columns
+        "ttl_mean":   fwd_pkt_len_mean,  # Fwd Pkt Len Mean
+        "ttl_var":    fwd_pkt_len_std,   # Fwd Pkt Len Std
+        "win_mean":   win_mean,          # Init Fwd Win Byts
+        "win_var":    win_var,           # Init Bwd Win Byts
+        "frag_count": frag_count,        # Fwd Byts/b Avg
+        # 29-31: Packet size distribution
+        "pkt_size_mean":    pkt_size_mean,
+        "pkt_size_var":     pkt_size_var,
+        "pkt_size_entropy": pkt_size_entropy,  # Pkt Len Std
     }
 
     feature_array = np.array([[feature_dict[col] for col in FEATURE_NAMES]], dtype=np.float32)
     return feature_array, len(dst_ips), len(dst_ports)
+
 
 
 def packet_capture_thread(iface):
