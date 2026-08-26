@@ -4501,3 +4501,229 @@
 [23:22:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
 [23:22:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
 [23:22:51] State: Benign | ML Conf: 99.8% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:29:18] ==================================================
+[23:29:18] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0, wlx00e0202fda61
+[23:29:18] ==================================================
+[23:29:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[23:29:18] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[23:29:18] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[23:29:18] INFO: Capture thread started on interface: lo
+[23:29:18] INFO: Capture thread started on interface: enp0s31f6
+[23:29:18] INFO: Capture thread started on interface: wlp3s0
+[23:29:18] INFO: Capture thread started on interface: wlx00e0202fda61
+[23:29:19] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 88.0 pkts/s
+[23:29:19] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:29:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:29:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:29:26] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 13.0 pkts/s
+[23:29:26] State: Bot/LateralMovement | ML Conf: 99.9% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.193
+[23:29:26] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:29:26] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:29:26] SOAR REMEDIATION: Segmented node 192.168.29.193 from internal lateral propagation paths
+[23:29:26] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[23:29:26] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[23:29:26] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[23:29:27] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 100.0% | Packet Velocity: 11.0 pkts/s
+[23:29:27] State: Recon/BruteForce | ML Conf: 100.0% | RSSM K-Horizon Risk: 100.0% | Source IP: 192.168.29.193
+[23:29:28] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:29:28] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:29:28] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:29:28] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:29:28] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:29:28] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:29:28] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:29:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:34:07] ==================================================
+[23:34:07] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0, wlx00e0202fda61
+[23:34:07] ==================================================
+[23:34:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[23:34:07] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[23:34:07] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[23:34:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:34:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:34:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:34:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:34:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:34:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:34:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 134.221.96.3
+[23:34:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:34:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:34:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[23:34:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 20.42.65.85
+[23:34:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 20.42.65.85
+[23:34:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:34:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:34:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:34:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:34:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:35:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:35:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[23:35:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:24] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:24] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:25] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:26] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:26] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:26] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:26] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:27] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:27] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:29] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:29] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:30] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:30] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:31] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:31] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:31] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:31] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:32] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:32] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 146.190.225.48
+[23:35:33] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:35:33] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.188
+[23:35:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:35:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:35:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:35:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.188
+[23:35:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:35:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.188
+[23:35:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:35:58] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 1407.0 pkts/s
+[23:35:58] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:35:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:01] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 3914.0 pkts/s
+[23:36:01] State: DoS/Flood | ML Conf: 99.8% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:02] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 3925.5 pkts/s
+[23:36:02] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:03] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 3899.0 pkts/s
+[23:36:03] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:03] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 3873.0 pkts/s
+[23:36:03] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:04] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 3865.0 pkts/s
+[23:36:04] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:04] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 3870.0 pkts/s
+[23:36:04] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 20.42.65.85
+[23:36:08] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 2828.0 pkts/s
+[23:36:08] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:08] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 1730.0 pkts/s
+[23:36:08] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:09] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 752.0 pkts/s
+[23:36:09] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:36:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:36:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.188
+[23:36:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:36:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:36:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:24] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 22.5 pkts/s
+[23:36:24] State: Recon/BruteForce | ML Conf: 100.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:36:24] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:36:24] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:36:24] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:36:24] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:36:24] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:36:24] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:36:24] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:36:24] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 49.5 pkts/s
+[23:36:24] State: Recon/BruteForce | ML Conf: 99.6% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:36:25] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 61.5 pkts/s
+[23:36:25] State: Recon/BruteForce | ML Conf: 100.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:36:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:36:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 44.252.158.227
+[23:37:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[23:37:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.188
+[23:37:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:37:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:37:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[23:37:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:23] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:23] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:25] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:28] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:54] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:54] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:55] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:55] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:56] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:56] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:56] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:56] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:57] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:57] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:58] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:58] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:37:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:37:59] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:37:59] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:38:00] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:38:00] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:38:00] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:38:00] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:38:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:38:02] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 4000.0 pkts/s
+[23:38:02] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:38:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[23:38:05] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 2157.5 pkts/s
+[23:38:05] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:38:05] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 1404.5 pkts/s
+[23:38:05] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:38:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[23:38:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:38:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:38:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:38:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 8.6.0.1
+[23:38:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:38:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:38:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:38:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:38:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:38:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:38:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:38:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[23:38:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.188
+[23:38:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:38:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:38:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:38:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:39:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:39:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:39:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:39:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:39:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.188
+[23:39:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:39:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
+[23:39:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246

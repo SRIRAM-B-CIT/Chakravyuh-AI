@@ -1,5 +1,5 @@
 {
-  "src_ip": "2.64.116.224",
+  "src_ip": "192.168.29.193",
   "label": "Benign",
   "ml_conf": 0.98,
   "risk_score": 0.05,
@@ -76,8 +76,8 @@
         "is_isolated": false
       },
       {
-        "id": "2.64.116.224",
-        "ip": "2.64.116.224",
+        "id": "192.168.29.193",
+        "ip": "192.168.29.193",
         "label": "Attacker",
         "role": "External Node",
         "risk_score": 0.05,
@@ -121,7 +121,7 @@
       },
       {
         "id": "e-att-def",
-        "source": "2.64.116.224",
+        "source": "192.168.29.193",
         "target": "192.168.29.104",
         "weight": 2,
         "traffic": "Safe Path",
@@ -131,7 +131,7 @@
       },
       {
         "id": "e-att-srv",
-        "source": "2.64.116.224",
+        "source": "192.168.29.193",
         "target": "192.168.29.42",
         "weight": 34,
         "traffic": "Internal Route",
@@ -144,8 +144,8 @@
       "total_nodes": 4,
       "total_edges": 5,
       "threat_level": "NORMAL",
-      "active_flows": 145
+      "active_flows": 130
     }
   },
-  "last_updated": 1787766771.6314278
+  "last_updated": 1787767764.8140488
 }
