@@ -27,12 +27,14 @@ weights_path = os.path.join(MODELS_DIR, "netdreamer_weights.pth")
 world_model = NetworkWorldModel.load_pretrained(weights_path)
 world_model.eval()
 
-INTERFACE = os.getenv("DEFENSE_INTERFACE", "wlp3s0")
 DEFENSE_IP = os.getenv("DEFENSE_IP", "192.168.29.104")
 GATEWAY_IP = os.getenv("GATEWAY_IP", "192.168.29.1")
 INTERNAL_SERVER_IP = os.getenv("INTERNAL_SERVER_IP", "192.168.29.42")
 
-live_packet_deque = deque(maxlen=4000)
+# Interfaces to capture on: loopback (lo) catches 127.0.0.1 attacks; any catches Wi-Fi attacks
+DEFAULT_INTERFACES = ["lo", "any"] if not IS_WINDOWS else []
+
+live_packet_deque = deque(maxlen=8000)
 stop_sniffer_event = threading.Event()
 
 
@@ -248,8 +250,7 @@ def extract_flow_features(packets):
             lengths.append(l)
             port = p.get('dst_port')
             if port is not None:
-                if port not in (8000, 3000) and (port <= 1024 or port in (8080, 8443, 9000, 27017, 3306, 5432)):
-                    dst_ports.add(port)
+                dst_ports.add(port)
             flags = p.get('flags', 0)
             if flags & 0x01: fin_count += 1
             if flags & 0x02: syn_count += 1
@@ -268,8 +269,7 @@ def extract_flow_features(packets):
                 if 'TCP' in p:
                     if hasattr(p.tcp, 'dstport'):
                         port = int(p.tcp.dstport)
-                        if port not in (8000, 3000) and (port <= 1024 or port in (8080, 8443, 9000, 27017, 3306, 5432)):
-                            dst_ports.add(port)
+                        dst_ports.add(port)
                     flags = int(p.tcp.flags, 16) if hasattr(p.tcp, 'flags') else 0
                     if flags & 0x01: fin_count += 1
                     if flags & 0x02: syn_count += 1
@@ -345,16 +345,13 @@ def extract_flow_features(packets):
     return feature_array, len(dst_ips), len(dst_ports)
 
 
-def packet_capture_thread(chosen_interface):
+def packet_capture_thread(iface):
+    """Captures live packets on a single interface in a dedicated asyncio event loop."""
     import asyncio
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
-        if chosen_interface:
-            capture = pyshark.LiveCapture(interface=chosen_interface)
-        else:
-            capture = pyshark.LiveCapture()
-            
+        capture = pyshark.LiveCapture(interface=iface) if iface else pyshark.LiveCapture()
         for packet in capture.sniff_continuously():
             if stop_sniffer_event.is_set():
                 break
@@ -368,25 +365,28 @@ def packet_capture_thread(chosen_interface):
                 elif hasattr(packet, 'ipv6'):
                     src = getattr(packet.ipv6, 'src', None)
                     dst = getattr(packet.ipv6, 'dst', None)
-                
+
                 length = int(packet.length) if hasattr(packet, 'length') else 64
                 dst_port = None
                 flags = 0
-                
+
                 if hasattr(packet, 'tcp'):
                     if hasattr(packet.tcp, 'dstport'):
                         dst_port = int(packet.tcp.dstport)
                     if hasattr(packet.tcp, 'flags'):
-                        flags = int(packet.tcp.flags, 16)
+                        try:
+                            flags = int(packet.tcp.flags, 16)
+                        except (ValueError, TypeError):
+                            flags = int(packet.tcp.flags)
                 elif hasattr(packet, 'udp'):
                     if hasattr(packet.udp, 'dstport'):
                         dst_port = int(packet.udp.dstport)
-                
+
                 if src:
                     live_packet_deque.append({
                         'time': pkt_time,
                         'src': str(src),
-                        'dst': str(dst),
+                        'dst': str(dst) if dst else None,
                         'length': length,
                         'dst_port': dst_port,
                         'flags': flags
@@ -394,27 +394,34 @@ def packet_capture_thread(chosen_interface):
             except Exception:
                 continue
     except Exception as e:
-        write_log(f"WARN: Live capture thread exception: {e}")
+        write_log(f"WARN: Capture thread [{iface}] error: {e}")
 
 
 def start_live_defense(interface=None, window_seconds=3):
-    chosen_interface = interface or os.getenv("DEFENSE_INTERFACE")
-    if chosen_interface is None:
-        chosen_interface = None if IS_WINDOWS else "any"
-        
-    display_iface = chosen_interface or ("Default Windows Adapter" if IS_WINDOWS else "any")
+    # Determine which interfaces to sniff on
+    env_iface = interface or os.getenv("DEFENSE_INTERFACE")
+    if env_iface:
+        interfaces_to_capture = [env_iface]
+    elif IS_WINDOWS:
+        interfaces_to_capture = [None]  # PyShark picks default on Windows
+    else:
+        interfaces_to_capture = DEFAULT_INTERFACES  # ["lo", "any"]
+
+    display_iface = ", ".join(str(i) for i in interfaces_to_capture)
     write_log(f"==================================================")
     write_log(f"INFO: Live NetDreamer RSSM Defense Active on {display_iface}")
     write_log(f"==================================================")
-    
+
     # Initialize fresh nominal baseline on start
     save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
     write_log(f"INFO: Telemetry initialized to NOMINAL SAFE baseline.")
-    
-    # Start live capture in dedicated thread with its own asyncio loop
-    t = threading.Thread(target=packet_capture_thread, args=(chosen_interface,), daemon=True)
-    t.start()
+
+    # Spawn one capture thread per interface so we see loopback (lo) AND Wi-Fi (any)
+    for iface in interfaces_to_capture:
+        t = threading.Thread(target=packet_capture_thread, args=(iface,), daemon=True)
+        t.start()
+        write_log(f"INFO: Capture thread started on interface: {iface}")
 
     try:
         while not stop_sniffer_event.is_set():
@@ -459,28 +466,42 @@ def start_live_defense(interface=None, window_seconds=3):
                             label_name = MITRE_CLASSES[pred_idx]
                             rollout_list = k_risks.squeeze(0).cpu().tolist()
 
-                        # 3. SOC Calibrated Safeguards
-                        if len(target_packets) > 100:
+                        # 3. SOC Heuristic Safeguards (override ML when traffic patterns are unambiguous)
+                        # Count distinct destination ports attacked (excluding noise ports)
+                        all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
+                        noise_ports = {None}
+                        meaningful_ports = all_dst_ports - noise_ports
+
+                        # Connection-rate = packets per second from this src in window
+                        conn_rate = len(target_packets) / window_seconds
+
+                        # DoS/Flood: high packet rate to a single port (e.g. traffic_flood.py)
+                        if conn_rate >= 10 or len(target_packets) >= 30:
                             label_name = "DoS/Flood"
                             pred_proba = max(pred_proba, 0.98)
                             future_threat_score = 0.96
                             rollout_list = [0.15, 0.40, 0.75, 0.96]
-                        elif dst_port_count >= 6:
+                        # Recon: many distinct destination ports scanned
+                        elif len(meaningful_ports) >= 6:
                             label_name = "Recon/PortScan"
                             pred_proba = max(pred_proba, 0.96)
                             future_threat_score = 0.92
                             rollout_list = [0.12, 0.35, 0.68, 0.92]
+                        # Lateral movement: many distinct destination IPs
                         elif dst_ip_count > 5:
                             label_name = "Bot/LateralMovement"
                             pred_proba = max(pred_proba, 0.95)
                             future_threat_score = 0.93
                             rollout_list = [0.14, 0.38, 0.72, 0.93]
                         else:
-                            # Normal background network traffic & dashboard polling
-                            label_name = "Benign"
-                            pred_proba = 0.98
-                            future_threat_score = 0.05
-                            rollout_list = [0.02, 0.03, 0.04, 0.05]
+                            # Neural-network-based classification for ambiguous traffic
+                            if label_name != "Benign":
+                                # Trust the NetDreamer result
+                                future_threat_score = float(nn_risk)
+                            else:
+                                # Low background traffic - stay nominal
+                                future_threat_score = 0.05
+                                rollout_list = [0.02, 0.03, 0.04, 0.05]
 
                         is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and src_ip != "127.0.0.1")
                         save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
