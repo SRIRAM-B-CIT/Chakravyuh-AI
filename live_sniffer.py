@@ -345,32 +345,56 @@ def extract_flow_features(packets):
     return feature_array, len(dst_ips), len(dst_ports)
 
 
-def packet_capture_thread(capture):
+def packet_capture_thread(chosen_interface):
+    import asyncio
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     try:
+        if chosen_interface:
+            capture = pyshark.LiveCapture(interface=chosen_interface)
+        else:
+            capture = pyshark.LiveCapture()
+            
         for packet in capture.sniff_continuously():
             if stop_sniffer_event.is_set():
                 break
             try:
                 pkt_time = float(packet.sniff_timestamp)
-                src = packet.ip.src if 'IP' in packet else None
-                dst = packet.ip.dst if 'IP' in packet else None
+                src = None
+                dst = None
+                if hasattr(packet, 'ip'):
+                    src = getattr(packet.ip, 'src', None)
+                    dst = getattr(packet.ip, 'dst', None)
+                elif hasattr(packet, 'ipv6'):
+                    src = getattr(packet.ipv6, 'src', None)
+                    dst = getattr(packet.ipv6, 'dst', None)
+                
                 length = int(packet.length) if hasattr(packet, 'length') else 64
-                dst_port = int(packet.tcp.dstport) if ('TCP' in packet and hasattr(packet.tcp, 'dstport')) else None
-                flags = int(packet.tcp.flags, 16) if ('TCP' in packet and hasattr(packet.tcp, 'flags')) else 0
+                dst_port = None
+                flags = 0
+                
+                if hasattr(packet, 'tcp'):
+                    if hasattr(packet.tcp, 'dstport'):
+                        dst_port = int(packet.tcp.dstport)
+                    if hasattr(packet.tcp, 'flags'):
+                        flags = int(packet.tcp.flags, 16)
+                elif hasattr(packet, 'udp'):
+                    if hasattr(packet.udp, 'dstport'):
+                        dst_port = int(packet.udp.dstport)
                 
                 if src:
                     live_packet_deque.append({
                         'time': pkt_time,
-                        'src': src,
-                        'dst': dst,
+                        'src': str(src),
+                        'dst': str(dst),
                         'length': length,
                         'dst_port': dst_port,
                         'flags': flags
                     })
             except Exception:
                 continue
-    except Exception:
-        pass
+    except Exception as e:
+        write_log(f"WARN: Live capture thread exception: {e}")
 
 
 def start_live_defense(interface=None, window_seconds=3):
@@ -388,23 +412,9 @@ def start_live_defense(interface=None, window_seconds=3):
     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
     write_log(f"INFO: Telemetry initialized to NOMINAL SAFE baseline.")
     
-    capture = None
-    try:
-        if chosen_interface:
-            capture = pyshark.LiveCapture(interface=chosen_interface)
-        else:
-            capture = pyshark.LiveCapture()
-    except Exception as e:
-        try:
-            fallback_iface = "Wi-Fi" if IS_WINDOWS else "wlp3s0"
-            capture = pyshark.LiveCapture(interface=fallback_iface)
-        except Exception as ex:
-            write_log(f"WARN: LiveCapture could not bind: {ex}. Fallback to simulated monitoring mode.")
-            capture = None
-
-    if capture is not None:
-        t = threading.Thread(target=packet_capture_thread, args=(capture,), daemon=True)
-        t.start()
+    # Start live capture in dedicated thread with its own asyncio loop
+    t = threading.Thread(target=packet_capture_thread, args=(chosen_interface,), daemon=True)
+    t.start()
 
     try:
         while not stop_sniffer_event.is_set():
