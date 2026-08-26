@@ -447,6 +447,9 @@ def start_live_defense(interface=None, window_seconds=3):
     write_log(f"INFO: Live NetDreamer RSSM Defense Active on {display_iface}")
     write_log(f"==================================================")
 
+    # Flush any stale packets from previous runs before starting
+    live_packet_deque.clear()
+
     # Initialize fresh nominal baseline on start
     save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
@@ -502,16 +505,25 @@ def start_live_defense(interface=None, window_seconds=3):
                             rollout_list = k_risks.squeeze(0).cpu().tolist()
 
                         # 3. SOC Heuristic Safeguards (override ML when traffic patterns are unambiguous)
-                        # Count distinct destination ports attacked (excluding noise ports)
+                        # App system ports (frontend/backend self-traffic) — excluded from attack rate
+                        APP_PORTS = {8000, 3000, 80, 443, 8080, 8443}
+
+                        # Count distinct destination ports that are NOT our own app ports
                         all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
-                        noise_ports = {None}
-                        meaningful_ports = all_dst_ports - noise_ports
+                        meaningful_ports = all_dst_ports - {None} - APP_PORTS
 
-                        # Connection-rate = packets per second from this src in window
-                        conn_rate = len(target_packets) / window_seconds
+                        # Attack-rate = packets/sec that are NOT hitting our own app ports
+                        # This filters out Next.js <-> FastAPI polling on lo interface
+                        attack_packets = [p for p in target_packets
+                                          if p.get('dst_port') not in APP_PORTS
+                                          and p.get('dst_port') is not None]
+                        conn_rate = len(attack_packets) / window_seconds
 
-                        # DoS/Flood: high packet rate to a single port (e.g. traffic_flood.py)
-                        if conn_rate >= 10 or len(target_packets) >= 30:
+                        # DoS/Flood: high NON-app packet rate (e.g. traffic_flood.py hitting a custom port)
+                        # OR very high total packet rate suggesting a flood even on app ports
+                        is_dos = (conn_rate >= 10) or (len(attack_packets) >= 30) or \
+                                 (len(target_packets) >= 80 and len(all_dst_ports) <= 2)
+                        if is_dos:
                             label_name = "DoS/Flood"
                             pred_proba = max(pred_proba, 0.98)
                             future_threat_score = 0.96
