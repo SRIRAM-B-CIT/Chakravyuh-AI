@@ -1373,3 +1373,6 @@
 [12:33:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
 [12:33:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
 [12:33:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[16:44:48] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[16:44:48] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[16:44:48] ACTION: netsh advfirewall firewall add rule name="Chakravyuh-Block-192.168.29.124" dir=in action=block remoteip=192.168.29.124

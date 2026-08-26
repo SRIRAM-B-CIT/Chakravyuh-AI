@@ -10,8 +10,9 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, BrainCircuit } from "lucide-react";
 import { SystemState } from "@/lib/types";
+import { Badge } from "@/components/ui/Badge";
 
 interface HorizonChartProps {
   state: SystemState;
@@ -24,10 +25,14 @@ export const HorizonChart: React.FC<HorizonChartProps> = ({ state }) => {
     setMounted(true);
   }, []);
 
-  const isAttack = state.risk_score >= 0.50 || (state.label && state.label !== "Benign");
-  const rollout = state.rollout && state.rollout.length === 4 
-    ? state.rollout 
-    : (isAttack ? [0.15, 0.40, 0.75, 0.96] : [0.02, 0.03, 0.04, 0.05]);
+  const isAttack =
+    state.risk_score >= 0.5 || (state.label && state.label !== "Benign");
+  const rollout =
+    state.rollout && state.rollout.length === 4
+      ? state.rollout
+      : isAttack
+      ? [0.15, 0.4, 0.75, 0.96]
+      : [0.02, 0.03, 0.04, 0.05];
 
   const threatRollout = rollout;
   const internalSubnetScore = 5.0;
@@ -57,39 +62,44 @@ export const HorizonChart: React.FC<HorizonChartProps> = ({ state }) => {
   ];
 
   return (
-    <div className="tactical-card p-3.5 flex flex-col h-full relative overflow-hidden bg-[#0c121e]/95 border border-slate-800">
-      {/* Header with Title and Custom Legends */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-2 border-b border-slate-800/80 pb-2">
+    <div className="tactical-card p-4 flex flex-col h-full relative overflow-hidden">
+      {/* Header with Title and Legends */}
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-3 border-b border-slate-800/80 pb-3">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-rose-400" />
-          <h2 className="text-xs font-bold text-white tracking-wide uppercase font-mono">
-            RSSM K-Step Attack Horizon Rollout Projection
-          </h2>
+          <BrainCircuit className="w-4 h-4 text-violet-400" />
+          <div>
+            <h2 className="text-xs font-bold text-white tracking-wide uppercase font-mono">
+              RSSM K-STEP ATTACK HORIZON ROLLOUT PROJECTION
+            </h2>
+            <p className="text-[10px] text-slate-400 font-mono">
+              RECURRENT STATE SPACE MODEL FORECAST
+            </p>
+          </div>
         </div>
 
         {/* Legend Indicators */}
-        <div className="flex items-center gap-4 text-xs font-mono">
+        <div className="flex items-center gap-3 text-xs font-mono">
           <div className="flex items-center gap-1.5 text-cyan-400">
-            <span className="w-3 h-0.5 bg-cyan-400 inline-block" />
-            <span>Internal Subnet ({internalSubnetScore.toFixed(1)}%)</span>
+            <span className="w-2.5 h-0.5 bg-cyan-400 inline-block rounded-full" />
+            <span>Subnet ({internalSubnetScore.toFixed(1)}%)</span>
           </div>
           <div className="flex items-center gap-1.5 text-red-400">
-            <span className="w-3 h-0.5 bg-red-500 inline-block" />
-            <span>Threat Node ({threatScorePct}.0%)</span>
+            <span className="w-2.5 h-0.5 bg-red-500 inline-block rounded-full" />
+            <span>Threat ({threatScorePct}%)</span>
           </div>
         </div>
       </div>
 
-      {/* Chart Canvas with Guaranteed Pixel Height */}
-      <div 
-        className="w-full relative rounded-lg bg-[#060a12] border border-slate-800/80 p-2"
+      {/* Chart Canvas */}
+      <div
+        className="w-full relative rounded-xl bg-[#040812] border border-slate-800/90 p-3"
         style={{ minHeight: "220px", height: "220px" }}
       >
         {mounted ? (
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={195}>
             <AreaChart
               data={chartData}
-              margin={{ top: 15, right: 30, left: -20, bottom: 0 }}
+              margin={{ top: 15, right: 25, left: -20, bottom: 0 }}
             >
               <defs>
                 <linearGradient id="threatAreaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -116,25 +126,27 @@ export const HorizonChart: React.FC<HorizonChartProps> = ({ state }) => {
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "rgba(10, 15, 26, 0.95)",
+                  backgroundColor: "rgba(6, 11, 20, 0.95)",
                   borderColor: "#1e2c47",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontSize: "11px",
                   fontFamily: "monospace",
+                  color: "#f1f5f9",
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
                 }}
                 formatter={(val: any, name: string) => [`${val}% Risk`, name]}
               />
 
-              {/* Internal Subnet Flat Base Line (Cyan) */}
+              {/* Internal Subnet Line */}
               <Line
                 type="monotone"
                 dataKey="Internal Subnet"
-                stroke="#22d3ee"
+                stroke="#38bdf8"
                 strokeWidth={2}
-                dot={{ r: 3, fill: "#22d3ee" }}
+                dot={{ r: 3, fill: "#38bdf8" }}
               />
 
-              {/* Threat Horizon Surge Area & Line (Red) */}
+              {/* Threat Horizon Surge Area */}
               <Area
                 type="monotone"
                 dataKey="Threat Node"
@@ -152,16 +164,13 @@ export const HorizonChart: React.FC<HorizonChartProps> = ({ state }) => {
           </div>
         )}
 
-        {/* Peak Threat Callout Badge at t+3 */}
+        {/* Peak Callout Badge */}
         {isAttack && (
           <div className="absolute right-6 top-3 pointer-events-none">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#1a0f14] text-red-400 border border-red-500/80 shadow-tactical-crimson">
-              Threat Node ({threatScorePct}.0%)
-            </span>
+            <Badge variant="critical">t+3 PEAK FORECAST: {threatScorePct}%</Badge>
           </div>
         )}
       </div>
     </div>
   );
 };
-
