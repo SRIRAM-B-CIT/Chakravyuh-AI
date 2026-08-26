@@ -305,9 +305,24 @@ def start_live_defense(interface=None, window_seconds=3):
         return
 
     for packet in capture.sniff_continuously():
+        try:
+            pkt_time = float(packet.sniff_timestamp)
+            # Skip stale backlog packets if queue was delayed
+            if time.time() - pkt_time > 3.5:
+                continue
+        except Exception:
+            pass
+
         packet_buffer.append(packet)
         
         if time.time() - last_flush >= window_seconds:
+            # Keep only fresh packets in window
+            now = time.time()
+            try:
+                packet_buffer = [p for p in packet_buffer if now - float(p.sniff_timestamp) <= window_seconds + 1.0]
+            except Exception:
+                pass
+
             if packet_buffer:
                 ip_counts = Counter()
                 for p in packet_buffer:
@@ -334,12 +349,12 @@ def start_live_defense(interface=None, window_seconds=3):
                         pred_proba = np.max(clf.predict_proba(scaled_feats)[0])
                         label_name = encoder.inverse_transform([pred_class])[0]
                         
-                        # 1. High-Volume Flood Attack (>300 pkts in 3s window from stress tools like traffic_flood.py)
-                        if len(target_packets) > 300:
+                        # 1. High-Volume Flood Attack (>100 pkts in 3s window)
+                        if len(target_packets) > 100:
                             label_name = "DoS/Flood"
                             pred_proba = 0.98
                             future_threat_score = 0.96
-                        # 2. Port Reconnaissance Scanner (scanning >= 6 target service ports like recon_scan.py)
+                        # 2. Port Reconnaissance Scanner (scanning >= 6 target service ports)
                         elif dst_port_count >= 6:
                             label_name = "Recon/PortScan"
                             pred_proba = 0.96
@@ -350,7 +365,7 @@ def start_live_defense(interface=None, window_seconds=3):
                             pred_proba = 0.95
                             future_threat_score = 0.93
                         else:
-                            # Normal background network traffic & dashboard polling (<300 pkts)
+                            # Normal background network traffic & dashboard polling
                             label_name = "Benign"
                             pred_proba = 0.98
                             future_threat_score = 0.05
