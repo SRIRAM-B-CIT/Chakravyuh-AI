@@ -19,9 +19,6 @@ STATE_JSON = os.path.join(BASE_DIR, "state.json")
 
 # Load fitted MinMaxScaler
 scaler_path = os.path.join(MODELS_DIR, "train_scaler.pkl")
-if not os.path.exists(scaler_path):
-    scaler_path = os.path.join(MODELS_DIR, "scaler.pkl")
-
 with open(scaler_path, "rb") as sf:
     scaler = pickle.load(sf)
 
