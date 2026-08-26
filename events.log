@@ -1373,3 +1373,1042 @@
 [12:33:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
 [12:33:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
 [12:33:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:56:52] ==================================================
+[14:56:52] INFO: Live NetDreamer RSSM Defense Active on any
+[14:56:52] ==================================================
+[14:56:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:56:52] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[14:56:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 54.214.153.210
+[14:57:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:57:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 185.199.111.153
+[14:57:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:57:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:58:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[14:58:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:58:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[14:59:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:00:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:03:29] ==================================================
+[15:03:29] INFO: Live NetDreamer RSSM Defense Active on any
+[15:03:29] ==================================================
+[15:03:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:03:29] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:03:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:03:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:03:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:03:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:03:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:03:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:03:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: ::1
+[15:03:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:03:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:04:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:05:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:06:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:07:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:08:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:09:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:10:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:11:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:12:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:13:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:14:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:15:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:16:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:17:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:18:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:18:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:19:51] ==================================================
+[15:19:51] INFO: Live NetDreamer RSSM Defense Active on lo, any
+[15:19:51] ==================================================
+[15:19:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:19:51] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:19:51] INFO: Capture thread started on interface: lo
+[15:19:51] INFO: Capture thread started on interface: any
+[15:19:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:19:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:20:01] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:04] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:07] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:10] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:13] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:16] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:19] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:22] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:31] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:34] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:37] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:40] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:44] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:47] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:50] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:53] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:56] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:20:59] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:02] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:05] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:07] ACTION: 1-Click Rollback Restored. iptables -D INPUT -s 192.168.29.124 -j DROP
+[15:21:08] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:21:09] ACTION: Network telemetry reset to nominal baseline state.
+[15:21:11] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:15] State: DoS/Flood | ML Conf: 99.7% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:18] State: DoS/Flood | ML Conf: 99.4% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:21] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:24] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:27] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:30] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:33] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:36] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:39] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:42] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:45] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:49] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:52] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:55] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:21:58] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:01] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:04] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:07] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:10] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:13] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:17] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:20] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:23] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:26] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:29] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:32] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:35] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:39] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:42] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:45] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:48] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:51] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:54] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:22:57] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:00] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:03] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:07] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:10] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:13] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:16] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:19] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:22] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:31] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:34] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:37] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:40] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:44] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:47] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:50] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:53] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:56] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:23:59] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:02] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:05] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:08] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:11] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:14] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:17] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:20] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:24] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:27] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:30] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:33] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:36] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:39] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:42] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:46] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:49] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:52] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:55] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:24:59] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:02] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:05] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:08] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:11] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:14] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:17] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:20] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:23] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:26] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:29] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:32] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:36] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:39] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:42] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:45] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:48] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:51] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:54] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:25:57] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:00] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:03] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:06] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:09] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:12] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:15] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:19] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:22] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:31] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:34] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:37] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:40] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:43] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:46] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:49] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:52] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:55] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:26:59] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:02] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:05] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:08] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:11] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:14] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:17] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:20] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:23] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:26] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:29] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:32] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:35] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:39] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:42] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:45] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:48] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:51] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:54] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:27:57] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:00] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:03] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:06] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:09] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:12] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:15] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:18] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:22] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:32] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:28:35] State: Recon/PortScan | ML Conf: 98.9% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:28:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:28:42] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:28:45] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:28:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:28:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:28:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:28:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:13] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:29:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:29:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:56] ==================================================
+[15:30:56] INFO: Live NetDreamer RSSM Defense Active on lo, any
+[15:30:56] ==================================================
+[15:30:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:30:56] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:30:56] INFO: Capture thread started on interface: lo
+[15:30:56] INFO: Capture thread started on interface: any
+[15:30:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:31:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:31:06] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:09] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:12] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:15] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:18] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:21] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:24] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:27] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:31] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:34] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:37] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:40] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:44] State: DoS/Flood | ML Conf: 99.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:47] State: DoS/Flood | ML Conf: 99.8% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:31:50] State: Benign | ML Conf: 69.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:31:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:31:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:31:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:32:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:32:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:32:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:32:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:32:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:32:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:32:22] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:32:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:31] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:34] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:37] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:41] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:44] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:47] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:50] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:53] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:56] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:32:59] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:33:03] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:33:06] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:33:09] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:33:12] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:33:16] State: DoS/Flood | ML Conf: 98.5% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:33:19] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:33:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:31] State: Benign | ML Conf: 98.7% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:33:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:33:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:34:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:49] ==================================================
+[15:35:49] INFO: Live NetDreamer RSSM Defense Active on lo, any
+[15:35:49] ==================================================
+[15:35:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:49] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:35:49] INFO: Capture thread started on interface: lo
+[15:35:49] INFO: Capture thread started on interface: any
+[15:35:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:35:58] DEBUG: src=127.0.0.1 total_pkts=147 attack_pkts=145 rate=48.3/s ports=[5037, 8000, 34084, 34100, 34116, 34124]
+[15:35:58] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:36:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:36:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:07] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[15:37:07] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[15:37:07] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[15:37:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:24] ACTION: 1-Click Rollback Restored. iptables -D INPUT -s 192.168.29.124 -j DROP
+[15:37:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:26] ACTION: Network telemetry reset to nominal baseline state.
+[15:37:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:37:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:38:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:39:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:40:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:40:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:41:13] ==================================================
+[15:41:13] INFO: Live NetDreamer RSSM Defense Active on lo, any
+[15:41:13] ==================================================
+[15:41:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:41:13] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:41:13] INFO: Capture thread started on interface: lo
+[15:41:13] INFO: Capture thread started on interface: any
+[15:41:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:41:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:41:23] DEBUG: src=127.0.0.1 total=157 syn=67 syn_rate=22.3/s total_rate=52.3/s ports=[5037, 40055, 42180, 42463, 48916, 48922]
+[15:41:23] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:26] DEBUG: src=127.0.0.1 total=90 syn=0 syn_rate=0.0/s total_rate=30.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:41:26] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:29] DEBUG: src=127.0.0.1 total=98 syn=0 syn_rate=0.0/s total_rate=32.7/s ports=[8000, 33135, 38608, 38628, 38640, 38646]
+[15:41:29] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:32] DEBUG: src=127.0.0.1 total=84 syn=0 syn_rate=0.0/s total_rate=28.0/s ports=[8000, 33135, 38608, 38638, 40055, 40389]
+[15:41:33] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:36] DEBUG: src=127.0.0.1 total=106 syn=0 syn_rate=0.0/s total_rate=35.3/s ports=[8000, 33135, 38608, 38638, 40055, 42180]
+[15:41:36] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:39] DEBUG: src=127.0.0.1 total=85 syn=0 syn_rate=0.0/s total_rate=28.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:41:39] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:42] DEBUG: src=127.0.0.1 total=83 syn=0 syn_rate=0.0/s total_rate=27.7/s ports=[8000, 33135, 38608, 40055, 40389, 42180]
+[15:41:42] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:45] DEBUG: src=127.0.0.1 total=86 syn=0 syn_rate=0.0/s total_rate=28.7/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:41:45] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:48] DEBUG: src=127.0.0.1 total=76 syn=0 syn_rate=0.0/s total_rate=25.3/s ports=[53, 8000, 33135, 38608, 40055, 42180]
+[15:41:48] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:51] DEBUG: src=127.0.0.1 total=110 syn=0 syn_rate=0.0/s total_rate=36.7/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:41:51] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:54] DEBUG: src=127.0.0.1 total=166 syn=0 syn_rate=0.0/s total_rate=55.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:41:54] State: DoS/Flood | ML Conf: 99.5% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:41:58] DEBUG: src=127.0.0.1 total=201 syn=0 syn_rate=0.0/s total_rate=67.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:41:58] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:01] DEBUG: src=127.0.0.1 total=106 syn=0 syn_rate=0.0/s total_rate=35.3/s ports=[8000, 38628, 38640, 38646, 40055, 40389]
+[15:42:01] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:04] DEBUG: src=127.0.0.1 total=39 syn=0 syn_rate=0.0/s total_rate=13.0/s ports=[8000, 40055, 45698, 55842]
+[15:42:04] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:07] DEBUG: src=127.0.0.1 total=72 syn=0 syn_rate=0.0/s total_rate=24.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:07] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:11] DEBUG: src=127.0.0.1 total=122 syn=0 syn_rate=0.0/s total_rate=40.7/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:11] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:14] DEBUG: src=127.0.0.1 total=54 syn=0 syn_rate=0.0/s total_rate=18.0/s ports=[8000, 40055, 40389, 42180, 42463, 45698]
+[15:42:14] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:17] DEBUG: src=127.0.0.1 total=33 syn=0 syn_rate=0.0/s total_rate=11.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:17] State: DoS/Flood | ML Conf: 99.7% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:20] DEBUG: src=127.0.0.1 total=96 syn=0 syn_rate=0.0/s total_rate=32.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:20] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:23] DEBUG: src=127.0.0.1 total=70 syn=0 syn_rate=0.0/s total_rate=23.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:23] State: DoS/Flood | ML Conf: 99.8% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:26] DEBUG: src=127.0.0.1 total=94 syn=0 syn_rate=0.0/s total_rate=31.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:27] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:30] DEBUG: src=127.0.0.1 total=106 syn=0 syn_rate=0.0/s total_rate=35.3/s ports=[53, 8000, 33135, 38608, 38628, 38640]
+[15:42:30] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:33] DEBUG: src=127.0.0.1 total=103 syn=0 syn_rate=0.0/s total_rate=34.3/s ports=[53, 8000, 33135, 38608, 40055, 40389]
+[15:42:33] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:36] DEBUG: src=127.0.0.1 total=89 syn=0 syn_rate=0.0/s total_rate=29.7/s ports=[53, 8000, 33135, 38608, 38638, 40055]
+[15:42:36] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:39] DEBUG: src=127.0.0.1 total=72 syn=0 syn_rate=0.0/s total_rate=24.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:39] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:42] DEBUG: src=127.0.0.1 total=92 syn=0 syn_rate=0.0/s total_rate=30.7/s ports=[8000, 33135, 38608, 40055, 40389, 42180]
+[15:42:42] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:45] DEBUG: src=127.0.0.1 total=98 syn=0 syn_rate=0.0/s total_rate=32.7/s ports=[53, 8000, 33135, 38608, 40055, 42180]
+[15:42:45] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:48] DEBUG: src=127.0.0.1 total=66 syn=0 syn_rate=0.0/s total_rate=22.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:48] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:51] DEBUG: src=127.0.0.1 total=78 syn=0 syn_rate=0.0/s total_rate=26.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:51] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:54] DEBUG: src=127.0.0.1 total=82 syn=0 syn_rate=0.0/s total_rate=27.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:54] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:42:57] DEBUG: src=127.0.0.1 total=72 syn=0 syn_rate=0.0/s total_rate=24.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:42:57] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:01] DEBUG: src=127.0.0.1 total=114 syn=0 syn_rate=0.0/s total_rate=38.0/s ports=[8000, 33135, 38608, 38628, 38640, 38646]
+[15:43:01] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:04] DEBUG: src=127.0.0.1 total=71 syn=0 syn_rate=0.0/s total_rate=23.7/s ports=[8000, 33135, 38608, 38638, 40055, 40389]
+[15:43:04] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:07] DEBUG: src=127.0.0.1 total=97 syn=0 syn_rate=0.0/s total_rate=32.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:43:07] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:10] DEBUG: src=127.0.0.1 total=94 syn=0 syn_rate=0.0/s total_rate=31.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:43:10] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:13] DEBUG: src=127.0.0.1 total=74 syn=0 syn_rate=0.0/s total_rate=24.7/s ports=[8000, 33135, 38608, 40055, 40389, 42180]
+[15:43:13] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:16] DEBUG: src=127.0.0.1 total=76 syn=0 syn_rate=0.0/s total_rate=25.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:43:16] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:19] DEBUG: src=127.0.0.1 total=80 syn=0 syn_rate=0.0/s total_rate=26.7/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:43:19] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:22] DEBUG: src=127.0.0.1 total=60 syn=0 syn_rate=0.0/s total_rate=20.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:43:22] State: DoS/Flood | ML Conf: 99.8% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:25] DEBUG: src=127.0.0.1 total=84 syn=0 syn_rate=0.0/s total_rate=28.0/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:43:25] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:28] DEBUG: src=127.0.0.1 total=81 syn=0 syn_rate=0.0/s total_rate=27.0/s ports=[8000, 33135, 38608, 38628, 38640, 38646]
+[15:43:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:32] DEBUG: src=127.0.0.1 total=208 syn=0 syn_rate=0.0/s total_rate=69.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:43:32] State: DoS/Flood | ML Conf: 99.6% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:35] DEBUG: src=127.0.0.1 total=113 syn=4 syn_rate=1.3/s total_rate=37.7/s ports=[40055, 40389, 42180, 42463, 43934, 45698]
+[15:43:35] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:43:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:43:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:43:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:43:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:43:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:43:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:43:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:00] DEBUG: src=::1 total=2 syn=0 syn_rate=0.0/s total_rate=0.7/s ports=[3000, 59526]
+[15:44:00] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 100.0% | Source IP: ::1
+[15:44:00] ALERT: Intercepting threat from ::1! Triggering host micro-isolation...
+[15:44:00] ACTION: iptables -A INPUT -s ::1 -j DROP
+[15:44:04] DEBUG: src=127.0.0.1 total=41 syn=0 syn_rate=0.0/s total_rate=13.7/s ports=[8000, 40055, 42180, 42463, 45698, 55842]
+[15:44:04] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:44:07] DEBUG: src=127.0.0.1 total=43 syn=0 syn_rate=0.0/s total_rate=14.3/s ports=[8000, 33135, 38608, 40055, 42180, 42463]
+[15:44:07] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:44:10] DEBUG: src=127.0.0.1 total=60 syn=0 syn_rate=0.0/s total_rate=20.0/s ports=[8000, 40055, 42180, 42463, 45698, 55842]
+[15:44:10] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:44:14] DEBUG: src=127.0.0.1 total=47 syn=0 syn_rate=0.0/s total_rate=15.7/s ports=[8000, 40055, 42180, 42463, 45698, 55842]
+[15:44:14] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:44:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:44:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:45:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:46:06] ==================================================
+[15:46:06] INFO: Live NetDreamer RSSM Defense Active on lo, any
+[15:46:06] ==================================================
+[15:46:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:46:06] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:46:06] INFO: Capture thread started on interface: lo
+[15:46:06] INFO: Capture thread started on interface: any
+[15:46:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:46:13] DEBUG: src=127.0.0.1 total=8 syn=0 syn_rate=0.0/s total_rate=2.7/s ports=[42180, 42463]
+[15:47:53] ==================================================
+[15:47:53] INFO: Live NetDreamer RSSM Defense Active on lo, any
+[15:47:53] ==================================================
+[15:47:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:47:53] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:47:53] INFO: Capture thread started on interface: lo
+[15:47:53] INFO: Capture thread started on interface: any
+[15:47:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:47:59] DEBUG: src=127.0.0.1 total=7 syn=0 syn_rate=0.0/s total_rate=2.3/s ports=[42180, 42463]
+[15:50:55] ==================================================
+[15:50:55] INFO: Live NetDreamer RSSM Defense Active on lo, any
+[15:50:55] ==================================================
+[15:50:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:50:55] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[15:50:55] INFO: Capture thread started on interface: lo
+[15:50:55] INFO: Capture thread started on interface: any
+[15:50:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:51:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:51:05] State: DoS/Flood | ML Conf: 99.2% | RSSM K-Horizon Risk: 99.9% | Source IP: 127.0.0.1
+[15:51:09] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:12] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:15] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:18] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:21] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:24] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:27] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:30] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:33] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:36] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:40] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:43] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:46] State: Recon/PortScan | ML Conf: 99.6% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:49] State: Recon/PortScan | ML Conf: 96.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:52] State: Recon/PortScan | ML Conf: 99.7% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:55] State: Recon/PortScan | ML Conf: 99.3% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:51:58] State: Benign | ML Conf: 93.3% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:52:02] State: Benign | ML Conf: 89.7% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[15:52:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:52:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:53:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:42] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:54:45] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:54:48] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.1
+[15:54:51] State: DoS/Flood | ML Conf: 99.9% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[15:54:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:54:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:55:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:00] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:09] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:12] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:14] ACTION: 1-Click Rollback Restored. iptables -D INPUT -s 192.168.29.124 -j DROP
+[15:56:15] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:16] ACTION: Network telemetry reset to nominal baseline state.
+[15:56:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:25] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:28] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:56:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:57:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[15:57:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
