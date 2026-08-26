@@ -27,7 +27,7 @@ def flood_worker(target_ip: str, target_port: int, worker_id: int):
             pass
         time.sleep(0.01)
 
-def start_traffic_flood(target_ip: str, target_port: int = 8000, threads: int = 25, duration: int = 15):
+def start_traffic_flood(target_ip: str, target_port: int = 8000, threads: int = 12, duration: int = 10):
     print(f"==================================================")
     print(f"[ATTACK SIMULATION] Launching High-Density Traffic Surge on {target_ip}:{target_port}")
     print(f"Workers: {threads} | Duration: {duration}s")

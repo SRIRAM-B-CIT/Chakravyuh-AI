@@ -142,7 +142,8 @@ def isolate_endpoint(req: HostActionRequest):
     # Execute SOAR isolation
     soar_agent.isolate_host(ip)
     write_audit_log(f"ALERT: Intercepting threat from {ip}! Triggering host micro-isolation...")
-    write_audit_log(f"ACTION: iptables -A INPUT -s {ip} -j DROP")
+    action_str = soar_agent.get_firewall_action_string(ip, "block")
+    write_audit_log(f"ACTION: {action_str}")
 
     # Update state file
     state = load_current_state()
@@ -164,7 +165,7 @@ def isolate_endpoint(req: HostActionRequest):
         "status": "success",
         "action": "isolated",
         "ip": ip,
-        "message": f"Host {ip} isolated successfully via iptables."
+        "message": f"Host {ip} isolated successfully."
     }
 
 @app.post("/api/soar/rollback")
@@ -175,7 +176,8 @@ def rollback_endpoint(req: HostActionRequest):
     
     # Execute SOAR rollback
     soar_agent.rollback_isolation(ip)
-    write_audit_log(f"ACTION: 1-Click Rollback Restored. iptables -D INPUT -s {ip} -j DROP")
+    action_str = soar_agent.get_firewall_action_string(ip, "unblock")
+    write_audit_log(f"ACTION: 1-Click Rollback Restored. {action_str}")
 
     # Update state file
     state = load_current_state()
@@ -257,7 +259,8 @@ def simulate_attack_scenario(req: SimulationRequest):
 
     write_audit_log(f"State: {attack} | ML Conf: 98.0% | RSSM K-Horizon Risk: {risk*100:.1f}% | Source IP: {ip}")
     write_audit_log(f"ALERT: Intercepting threat from {ip}! Triggering host micro-isolation...")
-    write_audit_log(f"ACTION: iptables -A INPUT -s {ip} -j DROP")
+    action_str = soar_agent.get_firewall_action_string(ip, "block")
+    write_audit_log(f"ACTION: {action_str}")
     return {"status": "success", "message": f"Simulation initiated for {attack} on {ip}"}
 
 @app.post("/api/simulate/reset")
