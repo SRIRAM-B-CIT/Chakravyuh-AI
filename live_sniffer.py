@@ -503,26 +503,29 @@ def start_live_defense(interface=None, window_seconds=3):
                             pred_proba = float(mitre_probs[pred_idx])
                             label_name = MITRE_CLASSES[pred_idx]
                             rollout_list = k_risks.squeeze(0).cpu().tolist()
-
-                        # 3. SOC Heuristic Safeguards (override ML when traffic patterns are unambiguous)
-                        # App system ports (frontend/backend self-traffic) — excluded from attack rate
+                        # App ports: our own server (8000), frontend dev (3000), common web ports
+                        # Traffic to/from these ports is excluded from attack rate calculation
                         APP_PORTS = {8000, 3000, 80, 443, 8080, 8443}
 
-                        # Count distinct destination ports that are NOT our own app ports
+                        # Distinct destination ports (all, and non-app only)
                         all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
                         meaningful_ports = all_dst_ports - {None} - APP_PORTS
 
-                        # Attack-rate = packets/sec that are NOT hitting our own app ports
-                        # This filters out Next.js <-> FastAPI polling on lo interface
+                        # Attack packets = packets to ports OTHER than our own app ports
+                        # This filters out Next.js <-> FastAPI WebSocket/HTTP polling on loopback
                         attack_packets = [p for p in target_packets
                                           if p.get('dst_port') not in APP_PORTS
                                           and p.get('dst_port') is not None]
                         conn_rate = len(attack_packets) / window_seconds
 
-                        # DoS/Flood: high NON-app packet rate (e.g. traffic_flood.py hitting a custom port)
-                        # OR very high total packet rate suggesting a flood even on app ports
-                        is_dos = (conn_rate >= 10) or (len(attack_packets) >= 30) or \
-                                 (len(target_packets) >= 80 and len(all_dst_ports) <= 2)
+                        # Debug: log what we're seeing each window
+                        write_log(f"DEBUG: src={src_ip} total_pkts={len(target_packets)} "
+                                  f"attack_pkts={len(attack_packets)} rate={conn_rate:.1f}/s "
+                                  f"ports={sorted(all_dst_ports)[:6]}")
+
+                        # DoS/Flood: only triggered by high-rate non-app traffic
+                        # (traffic_flood.py attacking a non-standard port, or port scanning)
+                        is_dos = (conn_rate >= 10) or (len(attack_packets) >= 30)
                         if is_dos:
                             label_name = "DoS/Flood"
                             pred_proba = max(pred_proba, 0.98)
