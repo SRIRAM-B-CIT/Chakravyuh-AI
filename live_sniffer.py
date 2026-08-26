@@ -311,16 +311,8 @@ def start_live_defense(interface=None, window_seconds=3):
             if packet_buffer:
                 ip_counts = Counter()
                 for p in packet_buffer:
-                    if 'IP' in p and p.ip.src != DEFENSE_IP and p.ip.src != GATEWAY_IP and p.ip.src != "127.0.0.1":
+                    if 'IP' in p and p.ip.src != DEFENSE_IP and p.ip.src != GATEWAY_IP:
                         ip_counts[p.ip.src] += 1
-                    elif 'IP' in p and p.ip.src == "127.0.0.1":
-                        # For localhost, only count packets on non-web ports or high rate
-                        if 'TCP' in p and hasattr(p.tcp, 'dstport'):
-                            port = int(p.tcp.dstport)
-                            if port not in (8000, 3000):
-                                ip_counts["127.0.0.1"] += 1
-                        else:
-                            ip_counts["127.0.0.1"] += 1
                 
                 src_ip = ip_counts.most_common(1)[0][0] if ip_counts else None
                 
@@ -342,8 +334,8 @@ def start_live_defense(interface=None, window_seconds=3):
                         pred_proba = np.max(clf.predict_proba(scaled_feats)[0])
                         label_name = encoder.inverse_transform([pred_class])[0]
                         
-                        # 1. High-Volume Flood Attack (>200 pkts in 3s window)
-                        if len(target_packets) > 200:
+                        # 1. High-Volume Flood Attack (>60 pkts in 3s window)
+                        if len(target_packets) > 60:
                             label_name = "DoS/Flood"
                             pred_proba = 0.98
                             future_threat_score = 0.96
