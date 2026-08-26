@@ -4336,3 +4336,168 @@
 [22:13:39] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
 [22:13:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
 [22:13:45] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[23:16:01] ==================================================
+[23:16:01] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0, wlx00e0202fda61
+[23:16:01] ==================================================
+[23:16:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[23:16:01] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[23:16:01] INFO: Capture thread started on interface: lo
+[23:16:01] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[23:16:01] INFO: Capture thread started on interface: enp0s31f6
+[23:16:01] INFO: Capture thread started on interface: wlp3s0
+[23:16:01] INFO: Capture thread started on interface: wlx00e0202fda61
+[23:16:02] State: Benign | ML Conf: 91.1% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:16:02] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 101.0 pkts/s
+[23:16:02] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:16:03] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 107.0 pkts/s
+[23:16:03] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:16:03] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 118.0 pkts/s
+[23:16:03] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:16:04] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 118.0 pkts/s
+[23:16:04] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:16:04] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 44.0 pkts/s
+[23:16:04] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
+[23:16:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:16:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.66
+[23:16:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:16:14] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:16:17] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:16:18] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 25.5 pkts/s
+[23:16:18] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.193
+[23:16:18] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:18] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:18] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.193
+[23:16:18] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.193
+[23:16:18] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[23:16:18] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[23:16:19] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 47.5 pkts/s
+[23:16:19] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.193
+[23:16:19] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:19] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:19] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.193
+[23:16:19] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.193
+[23:16:19] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[23:16:19] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[23:16:20] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 64.0 pkts/s
+[23:16:20] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.193
+[23:16:20] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:20] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:20] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.193
+[23:16:20] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.193
+[23:16:20] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[23:16:20] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[23:16:21] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 17.5 pkts/s
+[23:16:21] State: Recon/BruteForce | ML Conf: 100.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:21] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:21] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:21] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:16:21] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:16:21] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:16:21] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:16:21] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:16:22] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 14.5 pkts/s
+[23:16:22] State: Recon/BruteForce | ML Conf: 96.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:22] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:22] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:22] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:16:22] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:16:22] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:16:22] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:16:22] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:16:23] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 17.0 pkts/s
+[23:16:23] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.193
+[23:16:23] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:23] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:23] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.193
+[23:16:23] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.193
+[23:16:23] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[23:16:23] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[23:16:24] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 14.0 pkts/s
+[23:16:24] State: Recon/BruteForce | ML Conf: 96.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:24] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:24] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:24] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:16:24] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:16:24] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:16:24] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:16:24] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:16:25] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 15.0 pkts/s
+[23:16:25] State: Recon/BruteForce | ML Conf: 96.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:25] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:25] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:25] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:16:25] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:16:25] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:16:25] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:16:25] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:16:26] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 16.0 pkts/s
+[23:16:26] State: Recon/BruteForce | ML Conf: 96.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:26] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:26] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:26] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:16:26] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:16:26] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:16:26] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:16:26] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:16:27] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 14.5 pkts/s
+[23:16:27] State: Recon/BruteForce | ML Conf: 96.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:27] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:27] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:27] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:16:27] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:16:27] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:16:27] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:16:27] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:16:27] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 14.0 pkts/s
+[23:16:27] State: Recon/BruteForce | ML Conf: 96.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:27] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:27] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:16:28] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 192.168.29.193
+[23:16:28] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[23:16:28] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 192.168.29.193]
+[23:16:28] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[23:16:28] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[23:16:28] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 24.0 pkts/s
+[23:16:28] State: Recon/BruteForce | ML Conf: 100.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 192.168.29.193
+[23:16:28] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[23:16:28] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[23:17:59] ACTION: 1-Click Rollback Restored. iptables -D INPUT -s 192.168.29.193 -j DROP
+[23:18:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[23:18:02] ACTION: Network telemetry reset to nominal baseline state.
+[23:21:22] ==================================================
+[23:21:22] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0, wlx00e0202fda61
+[23:21:22] ==================================================
+[23:21:22] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[23:21:22] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[23:21:22] INFO: Capture thread started on interface: lo
+[23:21:22] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[23:21:22] INFO: Capture thread started on interface: enp0s31f6
+[23:21:22] INFO: Capture thread started on interface: wlp3s0
+[23:21:22] INFO: Capture thread started on interface: wlx00e0202fda61
+[23:21:23] State: Benign | ML Conf: 99.6% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:21:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:21:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:21:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.218
+[23:21:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:21:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2405:201:e006:f81a:a836:9b9e:86e4:691f
+[23:21:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.218
+[23:21:46] State: Benign | ML Conf: 86.1% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:21:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 146.190.225.48
+[23:21:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.218
+[23:21:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.218
+[23:21:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.218
+[23:22:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.218
+[23:22:06] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.218
+[23:22:10] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2405:201:e006:f81a:a836:9b9e:86e4:691f
+[23:22:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 34.54.84.110
+[23:22:16] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2.64.116.224
+[23:22:19] State: Benign | ML Conf: 96.6% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:22:23] State: Benign | ML Conf: 93.6% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:22:27] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:22:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:22:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 2405:201:e006:f81a:a836:9b9e:86e4:691f
+[23:22:37] State: Benign | ML Conf: 91.3% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[23:22:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 35.85.242.151
+[23:22:44] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:22:47] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[23:22:51] State: Benign | ML Conf: 99.8% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
