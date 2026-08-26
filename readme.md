@@ -105,29 +105,33 @@ npm install
 
 ## 🖥️ Running the Project
 
-### On Linux (Ubuntu / Debian / Zorin OS)
+### 🚀 Multi-Terminal Run Commands (Linux / Ubuntu)
 
-Open 3 terminal tabs:
+#### Terminal 1 — FastAPI Backend:
+```bash
+cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
+../.venv/bin/python server.py
+```
+*(Running on `http://localhost:8000` | API Docs: `http://localhost:8000/docs`)*
 
-1. **Terminal 1 — FastAPI Backend**:
-   ```bash
-   cd Chakravyuh-AI
-   uv run server.py
-   ```
-   *(Running on `http://localhost:8000` | API Docs: `http://localhost:8000/docs`)*
+#### Terminal 2 — Next.js Cyber Dashboard:
+```bash
+cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI/frontend"
+npm run dev
+```
+*(Open [http://localhost:3000](http://localhost:3000/) in your browser)*
 
-2. **Terminal 2 — Next.js Cyber Dashboard**:
-   ```bash
-   cd Chakravyuh-AI/frontend
-   npm run dev
-   ```
-   *(Open **`http://localhost:3000`** in your browser)*
+#### Terminal 3 — Live AI Sniffer & SOAR Defense:
+```bash
+cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
+sudo /home/sriram/Desktop/"SIH 2026"/.venv/bin/python live_sniffer.py
+```
 
-3. **Terminal 3 — Live Packet Sniffer (Superuser for Wi-Fi / Raw Capture)**:
-   ```bash
-   cd Chakravyuh-AI
-   sudo .venv/bin/python live_sniffer.py
-   ```
+#### Terminal 4 (Optional) — Interactive Attack Suite:
+```bash
+cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
+../.venv/bin/python attack_suite.py
+```
 
 ---
 
