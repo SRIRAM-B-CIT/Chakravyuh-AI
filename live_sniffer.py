@@ -599,16 +599,16 @@ def start_live_defense(interface=None, window_seconds=1.5):
     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
     write_log(f"INFO: Telemetry initialized to NOMINAL SAFE baseline.")
 
-    # 1. Start high-speed native AF_PACKET raw socket thread on Linux
+    # 1. Start high-speed native AF_PACKET raw socket engine on Linux (captures all interfaces simultaneously)
     if not IS_WINDOWS and hasattr(socket, "AF_PACKET"):
         raw_t = threading.Thread(target=native_raw_socket_capture_thread, daemon=True)
         raw_t.start()
-
-    # 2. Start PyShark capture threads for multi-interface redundancy
-    for iface in interfaces_to_capture:
-        t = threading.Thread(target=pyshark_capture_thread, args=(iface,), daemon=True)
-        t.start()
-        write_log(f"INFO: Capture thread started on interface: {iface}")
+    else:
+        # 2. PyShark capture threads for Windows or non-root fallback
+        for iface in interfaces_to_capture:
+            t = threading.Thread(target=pyshark_capture_thread, args=(iface,), daemon=True)
+            t.start()
+            write_log(f"INFO: PyShark capture thread started on interface: {iface}")
 
     last_log_time = 0
     last_threat_state = "Benign"
@@ -663,6 +663,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         53, 5353, 5355,       # DNS (systemd-resolved), mDNS, LLMNR
                         67, 68,               # DHCP
                         123,                  # NTP time sync
+                        1900,                 # SSDP / UPnP
                         5037,                 # ADB
                         8000, 3000,           # FastAPI / Next.js
                         80, 443, 8080, 8443   # Standard Web
@@ -675,10 +676,17 @@ def start_live_defense(interface=None, window_seconds=1.5):
                                        and p.get('dst_port') < 32768]
                     non_app_rate = len(non_app_packets) / rolling_window
 
+                    # Exclude multicast & broadcast addresses from lateral movement candidate targets
+                    dst_ips = set(p.get('dst') for p in target_packets if p.get('dst'))
+                    real_dst_ips = {ip for ip in dst_ips if ip and not ip.startswith(("224.", "239.", "255.", "ff02::", "fe80:"))}
+                    dst_ip_count = len(real_dst_ips)
+
                     is_protected = is_internal_or_loopback(src_ip)
-                    
-                    # Attack velocity trigger requiring substantial burst
-                    fast_attack_trigger = (pkt_velocity >= 50.0) or (syn_rate >= 15.0) or (syn_ratio >= 0.50 and pkt_count >= 30) or (len(meaningful_ports) >= 8) or (dst_ip_count >= 3)
+
+                    nn_risk = 0.05
+                    pred_proba = 0.98
+                    ml_label = "Benign"
+                    rollout_list = [0.02, 0.03, 0.04, 0.05]
 
                     if feature_array is not None:
                         # 1. Normalize with train_scaler & PyTorch World Model inference
@@ -697,83 +705,82 @@ def start_live_defense(interface=None, window_seconds=1.5):
                                 ml_label = MITRE_CLASSES[pred_idx]
                                 rollout_list = [round(float(v), 4) for v in k_risks.squeeze(0).cpu().tolist()]
                         except Exception:
-                            ml_label = "DoS/Flood" if fast_attack_trigger else "Benign"
-                            pred_proba = 0.98
-                            nn_risk = 0.96 if fast_attack_trigger else 0.05
-                            rollout_list = [0.15, 0.40, 0.75, 0.96] if fast_attack_trigger else [0.02, 0.03, 0.04, 0.05]
+                            pass
 
-                        # 2. Decision Tree across all 5 MITRE classes:
-                        if syn_rate >= 20.0 or (pkt_count >= 60 and len(all_dst_ports) <= 2) or (ml_label == "DoS/Flood" and pkt_count >= 40):
-                            # Vector: DoS / Flood
-                            label_name = "DoS/Flood"
-                            pred_proba = max(pred_proba, 0.98)
-                            future_threat_score = 0.96
-                            rollout_list = [0.15, 0.40, 0.75, 0.96]
-                        elif len(meaningful_ports) >= 8 or (ml_label == "Recon/PortScan" and len(meaningful_ports) >= 6):
-                            # Vector: Recon / Port Scan
-                            label_name = "Recon/PortScan"
-                            pred_proba = max(pred_proba, 0.96)
-                            future_threat_score = 0.92
-                            rollout_list = [0.12, 0.35, 0.68, 0.92]
-                        elif (syn_rate >= 8.0 and pkt_count >= 30) or (ml_label == "Recon/BruteForce" and pkt_count >= 25 and syn_rate >= 5.0):
-                            # Vector: Credential Brute-Force
-                            label_name = "Recon/BruteForce"
-                            pred_proba = max(pred_proba, 0.96)
-                            future_threat_score = 0.94
-                            rollout_list = [0.14, 0.38, 0.70, 0.94]
-                        elif (ml_label == "Infiltration" and pkt_count >= 25 and not is_protected) or (pkt_count >= 25 and nn_risk >= 0.80 and not is_protected):
-                            # Vector: Infiltration / RCE Payload
-                            label_name = "Infiltration"
-                            pred_proba = max(pred_proba, 0.97)
-                            future_threat_score = 0.98
-                            rollout_list = [0.20, 0.50, 0.82, 0.98]
-                        elif (dst_ip_count >= 3 and not is_protected and pkt_count >= 25) or (ml_label == "Bot/LateralMovement" and pkt_count >= 30):
-                            # Vector: Botnet / Lateral Spread
-                            label_name = "Bot/LateralMovement"
-                            pred_proba = max(pred_proba, 0.95)
-                            future_threat_score = 0.93
-                            rollout_list = [0.14, 0.38, 0.72, 0.93]
-                        elif pkt_count < 20 and syn_rate < 4.0 and non_app_rate < 4.0:
-                            # Nominal safe background baseline
-                            label_name = "Benign"
-                            pred_proba = 0.98
-                            future_threat_score = 0.05
-                            rollout_list = [0.02, 0.03, 0.04, 0.05]
-                        else:
-                            label_name = ml_label
-                            if label_name != "Benign" and not is_protected and pkt_count >= 20:
-                                future_threat_score = float(nn_risk)
-                            else:
-                                label_name = "Benign"
-                                future_threat_score = 0.05
-                                rollout_list = [0.02, 0.03, 0.04, 0.05]
+                    # 2. Precise Adversarial Attack Verification
+                    # - DoS / Flood: High packet velocity or SYN flood surge
+                    is_dos_attack = (pkt_velocity >= 120.0) or (syn_rate >= 30.0 and pkt_count >= 50) or (syn_ratio >= 0.70 and pkt_count >= 60)
+                    
+                    # - SYN Recon Port Scan: Sweeping 10+ distinct ports
+                    is_recon_port_scan = (len(meaningful_ports) >= 10 and pkt_count >= 20)
+                    
+                    # - Credential Brute-Force: High-frequency authentication probing
+                    is_brute_force_attack = (syn_rate >= 15.0 and pkt_count >= 40) or (syn_ratio >= 0.60 and pkt_count >= 50 and non_app_rate >= 10.0)
+                    
+                    # - Infiltration: Exploit delivery targeting vulnerable endpoints
+                    is_infiltration_attack = (not is_protected and pkt_count >= 30 and non_app_rate >= 10.0 and nn_risk >= 0.85 and (ml_label == "Infiltration" or len(meaningful_ports) >= 3))
+                    
+                    # - Botnet C2 & Lateral Spread: Internal spread across multiple unique hosts
+                    is_bot_lateral_attack = (not is_protected and dst_ip_count >= 4 and len(non_app_packets) >= 25 and (ml_label == "Bot/LateralMovement" or syn_rate >= 10.0))
 
-                        is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_protected)
-                        
-                        # Save state atomically on every cycle
-                        save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
+                    if is_dos_attack:
+                        label_name = "DoS/Flood"
+                        pred_proba = max(pred_proba, 0.98)
+                        future_threat_score = 0.96
+                        rollout_list = [0.15, 0.40, 0.75, 0.96]
+                    elif is_recon_port_scan:
+                        label_name = "Recon/PortScan"
+                        pred_proba = max(pred_proba, 0.96)
+                        future_threat_score = 0.92
+                        rollout_list = [0.12, 0.35, 0.68, 0.92]
+                    elif is_brute_force_attack:
+                        label_name = "Recon/BruteForce"
+                        pred_proba = max(pred_proba, 0.96)
+                        future_threat_score = 0.94
+                        rollout_list = [0.14, 0.38, 0.70, 0.94]
+                    elif is_infiltration_attack:
+                        label_name = "Infiltration"
+                        pred_proba = max(pred_proba, 0.97)
+                        future_threat_score = 0.98
+                        rollout_list = [0.20, 0.50, 0.82, 0.98]
+                    elif is_bot_lateral_attack:
+                        label_name = "Bot/LateralMovement"
+                        pred_proba = max(pred_proba, 0.95)
+                        future_threat_score = 0.93
+                        rollout_list = [0.14, 0.38, 0.72, 0.93]
+                    else:
+                        # Nominal Safe Baseline (Browsing, Next.js, FastAPI, ordinary LAN traffic)
+                        label_name = "Benign"
+                        pred_proba = 0.98
+                        future_threat_score = 0.05
+                        rollout_list = [0.02, 0.03, 0.04, 0.05]
 
-                        # Write logs on threat change or periodic interval (every 3.0s)
-                        is_threat = (label_name != "Benign")
-                        if is_threat or (now - last_log_time >= 3.0) or (label_name != last_threat_state):
-                            if is_threat:
-                                write_log(f"[SNIFFER ALERT] High packet rate detected from {src_ip} | Threat: {label_name} | RSSM Risk: {future_threat_score*100:.1f}% | Packet Velocity: {pkt_velocity:.1f} pkts/s")
-                            write_log(f"State: {label_name} | ML Conf: {pred_proba*100:.1f}% | RSSM K-Horizon Risk: {future_threat_score*100:.1f}% | Source IP: {src_ip}")
-                            last_log_time = now
-                            last_threat_state = label_name
+                    is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_protected)
+                    
+                    # Save state atomically on every cycle
+                    save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
 
-                        if not is_threat:
-                            remediated_threats.clear()
+                    # Write logs on threat change or periodic interval (every 3.0s)
+                    is_threat = (label_name != "Benign")
+                    if is_threat or (now - last_log_time >= 3.0) or (label_name != last_threat_state):
+                        if is_threat:
+                            write_log(f"[SNIFFER ALERT] High packet rate detected from {src_ip} | Threat: {label_name} | RSSM Risk: {future_threat_score*100:.1f}% | Packet Velocity: {pkt_velocity:.1f} pkts/s")
+                        write_log(f"State: {label_name} | ML Conf: {pred_proba*100:.1f}% | RSSM K-Horizon Risk: {future_threat_score*100:.1f}% | Source IP: {src_ip}")
+                        last_log_time = now
+                        last_threat_state = label_name
 
-                        threat_key = (src_ip, label_name)
-                        if is_isolated and threat_key not in remediated_threats:
-                            remediated_threats.add(threat_key)
-                            write_log(f"ALERT: Intercepting threat from {src_ip}! Triggering host micro-isolation & active neutralization...")
-                            action_str = get_firewall_action_string(src_ip, "block")
-                            write_log(f"ACTION: {action_str}")
-                            playbook_res = execute_remediation_playbook(label_name, src_ip)
-                            for step in playbook_res.get("steps", []):
-                                write_log(f"SOAR REMEDIATION: {step}")
+                    if not is_threat:
+                        remediated_threats.clear()
+
+                    threat_key = (src_ip, label_name)
+                    if is_isolated and threat_key not in remediated_threats:
+                        remediated_threats.add(threat_key)
+                        write_log(f"ALERT: Intercepting threat from {src_ip}! Triggering host micro-isolation & active neutralization...")
+                        action_str = get_firewall_action_string(src_ip, "block")
+                        write_log(f"ACTION: {action_str}")
+                        playbook_res = execute_remediation_playbook(label_name, src_ip)
+                        for step in playbook_res.get("steps", []):
+                            write_log(f"SOAR REMEDIATION: {step}")
                 else:
                     if now - last_log_time >= 3.0:
                         save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
