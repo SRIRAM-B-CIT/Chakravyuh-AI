@@ -83,17 +83,17 @@ export function MetricGrid({
             className="p-4 flex flex-col justify-between space-y-3 relative overflow-hidden group rounded-xl border border-[#D9E3EF] bg-white shadow-sm hover:shadow-md transition-all duration-200"
           >
             <div className="flex items-center justify-between">
-              <span className="font-sans text-[10px] font-extrabold tracking-wider text-[#2563EB] uppercase">
+              <span className="font-sans text-[10px] font-black tracking-wider text-[#2563EB] uppercase">
                 {card.label}
               </span>
               <Icon className="h-4 w-4 text-[#2563EB] transition-colors" />
             </div>
 
             <div>
-              <div className="font-sans text-xl font-extrabold text-[#0F2747] tracking-tight">
+              <div className="font-sans text-xl font-black text-[#0F2747] tracking-tight">
                 {card.value}
               </div>
-              <div className="mt-0.5 text-[11px] text-[#7A8CA0] font-sans font-medium">
+              <div className="mt-0.5 text-[11px] text-[#52677F] font-sans font-semibold">
                 {card.detail}
               </div>
             </div>
@@ -112,7 +112,7 @@ export function MetricGrid({
                     ? "bg-red-50 text-[#EF4444]" 
                     : "bg-blue-50 text-[#2563EB]"
                 }`}>
-                  ● {card.trend}
+                  <span aria-hidden="true">●</span> {card.trend}
                 </span>
               )}
               <ArrowUpRight className="h-3.5 w-3.5 text-[#7A8CA0] group-hover:text-[#2563EB] transition" />

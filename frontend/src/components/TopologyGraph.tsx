@@ -11,10 +11,18 @@ interface TopologyGraphProps {
 }
 
 const coordinates = [
-  { x: 18, y: 48 },
-  { x: 40, y: 32 },
-  { x: 45, y: 72 },
-  { x: 78, y: 50 },
+  { x: 10, y: 42 },
+  { x: 38, y: 18 },
+  { x: 44, y: 64 },
+  { x: 86, y: 42 },
+];
+
+const fallbackEdges = [
+  { id: "fallback-gateway-defense", sourceIndex: 0, targetIndex: 1, threat: false },
+  { id: "fallback-gateway-server", sourceIndex: 0, targetIndex: 2, threat: false },
+  { id: "fallback-defense-server", sourceIndex: 1, targetIndex: 2, threat: false },
+  { id: "fallback-defense-threat", sourceIndex: 1, targetIndex: 3, threat: true },
+  { id: "fallback-server-threat", sourceIndex: 2, targetIndex: 3, threat: true },
 ];
 
 function nodeColor(node: TopologyNode) {
@@ -41,7 +49,15 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
     [nodes]
   );
   const selected = nodes.find((node) => node.id === selectedId);
-  const threatEdges = topology?.edges?.filter((edge) => edge.threat) || [];
+  const graphEdges = topology?.edges?.length
+    ? topology.edges
+    : fallbackEdges.map((edge) => ({
+        id: edge.id,
+        source: nodes[edge.sourceIndex]?.id || "",
+        target: nodes[edge.targetIndex]?.id || "",
+        threat: edge.threat,
+      }));
+  const threatEdges = graphEdges.filter((edge) => edge.threat);
   const positionFor = (id: string) =>
     positions.find(({ node }) => node.id === id);
 
@@ -56,7 +72,7 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
               ST-GNN SPATIAL GRAPH TOPOLOGY
             </h2>
             <p className="mt-0.5 text-[10px] text-[#7A8CA0] font-sans font-medium">
-              Live Graph · 4 Nodes · 148 Active Flows
+              Live Graph · {nodes.length} Nodes · {topology?.stats?.active_flows || 0} Active Flows
             </p>
           </div>
         </div>
@@ -75,13 +91,13 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
       </div>
 
       {/* Grid: Topology View (Col 8) & Threats/Events Side Panel (Col 4) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      <div className="grid grid-cols-1 gap-6 items-stretch">
         <div
-          className="relative min-h-[360px] lg:col-span-8 overflow-hidden rounded-xl border border-[#D9E3EF] bg-[#F4F7FB] shadow-inner flex flex-col"
+          className="relative min-h-[360px] overflow-hidden rounded-xl border border-[#D9E3EF] bg-[#F4F7FB] shadow-inner flex flex-col"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
+              "radial-gradient(circle, rgba(37, 99, 235, 0.12) 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
           }}
         >
           <svg
@@ -92,38 +108,30 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
           >
             <defs>
               <marker
-                id="arrow"
+                id="threatArrow"
                 markerWidth="3.5"
                 markerHeight="3.5"
                 refX="3.5"
                 refY="1.75"
                 orient="auto"
               >
-                <path d="M0,0 L3.5,1.75 L0,3.5" fill="none" stroke="#2563EB" strokeWidth="0.8" />
+                <path d="M0,0 L3.5,1.75 L0,3.5" fill="none" stroke="#EF4444" strokeWidth="0.8" />
               </marker>
             </defs>
 
             {/* Graph Edges */}
-            {topology?.edges?.map((edge) => {
+            {graphEdges.map((edge) => {
               const source = positionFor(edge.source);
               const target = positionFor(edge.target);
               if (!source || !target) return null;
               const threat = Boolean(
                 edge.threat || (edge.weight && edge.weight > 50)
               );
-              return (
-                <line
-                  key={edge.id}
-                  x1={source.x}
-                  y1={source.y}
-                  x2={target.x}
-                  y2={target.y}
-                  stroke={threat ? "#EF4444" : "#2563EB"}
-                  strokeWidth={threat ? 0.75 : 0.35}
-                  strokeDasharray={threat ? "2 1" : undefined}
-                  className={threat ? "threat-edge-animated" : ""}
-                  markerEnd="url(#arrow)"
-                />
+              const controlY = source.y < target.y ? Math.min(source.y, target.y) - 18 : Math.max(source.y, target.y) + 18;
+              return threat ? (
+                <path key={edge.id} d={`M ${source.x} ${source.y} Q ${(source.x + target.x) / 2} ${controlY} ${target.x} ${target.y}`} fill="none" stroke="#EF4444" strokeWidth="0.7" strokeDasharray="2 1" className="threat-edge-animated" markerEnd="url(#threatArrow)" />
+              ) : (
+                <line key={edge.id} x1={source.x} y1={source.y} x2={target.x} y2={target.y} stroke="#10B981" strokeWidth="0.45" strokeOpacity="0.8" />
               );
             })}
 
@@ -204,6 +212,15 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
           </div>
 
           {threatEdges.length > 0 && (
+            <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 font-mono text-[10px] font-bold text-[#EF4444]">
+              Threat Flow ({topology?.stats?.active_flows || 0} pkts/s)
+            </div>
+          )}
+          <div className="absolute bottom-3 right-3 flex items-center gap-1.5 font-sans text-[9px] text-[#7A8CA0]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" /> Last updated: just now
+          </div>
+
+          {threatEdges.length > 0 && (
             <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded border border-[#EF4444]/50 bg-red-50/95 px-2.5 py-1 font-sans text-[9px] text-[#EF4444] shadow-sm">
               <ShieldAlert className="h-3.5 w-3.5 text-[#EF4444]" />
               <span>{threatEdges.length} THREAT VECTOR ACTIVE</span>
@@ -211,52 +228,6 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
           )}
         </div>
 
-        {/* Right Info Column (Col 4) */}
-        <div className="lg:col-span-4 flex flex-col justify-between space-y-4">
-          {/* Top Threats Widget */}
-          <div className="border border-[#D9E3EF] bg-[#F8FAFD] rounded-xl p-4 flex-1">
-            <h3 className="font-sans text-[10px] font-extrabold tracking-wider text-[#7A8CA0] mb-3 uppercase">
-              TOP THREATS
-            </h3>
-            <div className="space-y-2">
-              {[
-                ["Brute Force Login", "HIGH", "bg-red-50 border-red-200 text-[#EF4444]"],
-                ["C2 Communication", "HIGH", "bg-red-50 border-red-200 text-[#EF4444]"],
-                ["Port Scan Detected", "MEDIUM", "bg-amber-50 border-amber-200 text-[#F59E0B]"],
-                ["Unusual Data Exfil", "MEDIUM", "bg-amber-50 border-amber-200 text-[#F59E0B]"],
-                ["Policy Violation", "LOW", "bg-emerald-50 border-emerald-250 text-[#10B981]"],
-              ].map(([threat, severity, badgeStyle]) => (
-                <div key={threat} className="flex items-center justify-between text-xs py-1 border-b border-[#D9E3EF]/50 last:border-b-0">
-                  <span className="font-sans font-semibold text-[#0F2747]">{threat}</span>
-                  <span className={`px-2 py-0.5 rounded text-[8px] font-extrabold border ${badgeStyle}`}>
-                    {severity}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Recent Events Widget */}
-          <div className="border border-[#D9E3EF] bg-[#F8FAFD] rounded-xl p-4 flex-1">
-            <h3 className="font-sans text-[10px] font-extrabold tracking-wider text-[#7A8CA0] mb-3 uppercase">
-              RECENT EVENTS
-            </h3>
-            <div className="space-y-2">
-              {[
-                "Firewall rule updated",
-                "New connection blocked",
-                "Model inference completed",
-                "Threat feed updated",
-                "System posture nominal",
-              ].map((event, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-xs py-1 border-b border-[#D9E3EF]/50 last:border-b-0">
-                  <span className="h-1.5 w-1.5 rounded-full bg-blue-500 flex-shrink-0" />
-                  <span className="font-sans text-[#52677F] truncate">{event}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Selected Node Details Drawer */}

@@ -7,6 +7,8 @@ import { TopHeader } from "@/components/layout/TopHeader";
 import { MetricGrid } from "@/components/dashboard/MetricGrid";
 import { IncidentSummary } from "@/components/dashboard/IncidentSummary";
 import { ModelHealth } from "@/components/dashboard/ModelHealth";
+import { ThreatRail } from "@/components/dashboard/ThreatRail";
+import { HeroBanner } from "@/components/dashboard/HeroBanner";
 import { StatusStrip } from "@/components/StatusStrip";
 import { TopologyGraph } from "@/components/TopologyGraph";
 import { HorizonChart } from "@/components/HorizonChart";
@@ -210,6 +212,7 @@ export default function DashboardPage() {
             animate={viewState === "dashboard" ? "show" : "hidden"}
             className="mx-auto w-full max-w-[1800px] space-y-6 p-4 md:p-6 flex-1"
           >
+            <HeroBanner status={telemetry.status} onRefresh={telemetry.refresh} />
             {actions.error && (
               <motion.div
                 variants={itemVariants}
@@ -230,13 +233,13 @@ export default function DashboardPage() {
               <MetricGrid state={telemetry.state} uptime={uptime} />
             </motion.div>
 
-            {/* Spatial Topology */}
+            {/* Primary operations workspace */}
             <motion.div
               variants={itemVariants}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: "-80px" }}
-              className="w-full"
+              className="grid w-full grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_290px]"
             >
               <section id="topology" className="min-w-0">
                 <TopologyGraph
@@ -244,46 +247,16 @@ export default function DashboardPage() {
                   state={telemetry.state}
                 />
               </section>
-            </motion.div>
-            {/* Bottom Analytics Strip */}
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-              className="w-full"
-            >
-              <div className="bg-white border border-[#D9E3EF] rounded-xl p-5 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-6">
-                {[
-                  ["1,245", "Events Processed", "bg-[#2563EB]"],
-                  ["132", "Threats Blocked", "bg-[#10B981]"],
-                  ["23", "Alerts Generated", "bg-[#F59E0B]"],
-                  ["98.6%", "Model Accuracy", "bg-[#0ea5e9]"],
-                ].map(([val, desc, colorClass]) => (
-                  <div key={desc} className="flex items-center gap-3 font-sans">
-                    <div className={`h-8 w-8 rounded-full ${colorClass} text-white flex items-center justify-center font-bold text-xs`}>
-                      {desc[0]}
-                    </div>
-                    <div>
-                      <div className="text-lg font-extrabold text-[#0F2747] leading-none">
-                        {val}
-                      </div>
-                      <div className="text-[11px] font-medium text-[#7A8CA0] mt-1.5">
-                        {desc}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ThreatRail state={telemetry.state} />
             </motion.div>
 
-            {/* SOAR Console */}
+            {/* Operations and prediction */}
             <motion.div
               variants={itemVariants}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: "-80px" }}
-              className="w-full"
+              className="grid w-full grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(360px,.85fr)]"
             >
               <section id="soar" className="min-w-0">
                 <SoarControl
@@ -312,7 +285,7 @@ export default function DashboardPage() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: "-80px" }}
-              className="grid grid-cols-1 gap-6"
+              className="grid grid-cols-1 gap-5 lg:grid-cols-2"
             >
               <IncidentSummary state={telemetry.state} />
               <ModelHealth state={telemetry.state} />
