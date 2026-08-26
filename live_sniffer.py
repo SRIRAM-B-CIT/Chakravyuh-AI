@@ -507,20 +507,20 @@ def start_live_defense(interface=None, window_seconds=3):
                         # 3. SOC Heuristic Safeguards
                         syn_pkts = [p for p in target_packets if p.get('flags', 0) & 0x02]
                         syn_rate = len(syn_pkts) / window_seconds
-                        total_rate = len(target_packets) / window_seconds
-
                         APP_PORTS = {5037, 8000, 3000, 80, 443, 8080, 8443}
                         all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
-                        meaningful_ports = all_dst_ports - {None} - APP_PORTS
+                        # Only service ports below 32768 are considered target attack/scan ports (excludes ephemeral client responses)
+                        meaningful_ports = {p for p in all_dst_ports if p is not None and p not in APP_PORTS and p < 32768}
                         non_app_packets = [p for p in target_packets
                                            if p.get('dst_port') is not None
                                            and p.get('dst_port') not in APP_PORTS
                                            and p.get('dst_port') < 32768]
                         non_app_rate = len(non_app_packets) / window_seconds
 
-                        is_dos = (syn_rate >= 5.0) or (non_app_rate >= 10.0)
+                        is_dos = (syn_rate >= 20.0) or (non_app_rate >= 15.0)
                         is_recon = len(meaningful_ports) >= 6
                         is_bot = dst_ip_count > 5
+                        is_loopback = src_ip in ("127.0.0.1", "::1", "localhost")
 
                         if is_dos:
                             label_name = "DoS/Flood"
@@ -537,21 +537,20 @@ def start_live_defense(interface=None, window_seconds=3):
                             pred_proba = max(pred_proba, 0.95)
                             future_threat_score = 0.93
                             rollout_list = [0.14, 0.38, 0.72, 0.93]
-                        elif len(target_packets) < 20 and syn_rate < 3.0 and non_app_rate < 3.0:
-                            # Nominal safe background traffic (e.g. low-rate localhost/ADB/web polling)
+                        elif is_loopback or (len(target_packets) < 30 and syn_rate < 5.0 and non_app_rate < 5.0):
+                            # Nominal safe background traffic (e.g. localhost/ADB/web polling)
                             label_name = "Benign"
                             pred_proba = 0.98
                             future_threat_score = 0.05
                             rollout_list = [0.02, 0.03, 0.04, 0.05]
                         else:
-                            # Higher volume or neural network evaluation
+                            # Higher volume external traffic neural network evaluation
                             if label_name != "Benign":
                                 future_threat_score = float(nn_risk)
                             else:
                                 future_threat_score = 0.05
                                 rollout_list = [0.02, 0.03, 0.04, 0.05]
 
-                        is_loopback = src_ip in ("127.0.0.1", "::1", "localhost")
                         is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_loopback)
                         save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
 
