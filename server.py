@@ -36,13 +36,17 @@ class SimulationRequest(BaseModel):
     risk_level: Optional[float] = 0.96
 
 def load_current_state():
-    """Safely loads state.json with fallback defaults."""
+    """Safely loads state.json with retry on read concurrency."""
     if os.path.exists(STATE_JSON):
-        try:
-            with open(STATE_JSON, "r") as f:
-                return json.load(f)
-        except Exception:
-            pass
+        for _ in range(3):
+            try:
+                with open(STATE_JSON, "r") as f:
+                    data = json.load(f)
+                    if isinstance(data, dict) and "risk_score" in data:
+                        return data
+            except Exception:
+                time.sleep(0.01)
+                continue
     
     return {
         "src_ip": "192.168.29.124",
@@ -50,7 +54,7 @@ def load_current_state():
         "ml_conf": 0.98,
         "risk_score": 0.05,
         "isolated": False,
-        "netfilter_drops": "41.3k Drops",
+        "netfilter_drops": "0 Drops",
         "rollout": [0.02, 0.03, 0.04, 0.05],
         "rollout_series": {
             "Gateway": [0.02, 0.02, 0.02, 0.02],
@@ -469,7 +473,7 @@ async def websocket_stream_endpoint(websocket: WebSocket):
                 "logs": logs
             }
             await websocket.send_text(json.dumps(payload))
-            await asyncio.sleep(1.0)
+            await asyncio.sleep(0.25)
     except (WebSocketDisconnect, asyncio.CancelledError):
         pass
     except Exception as e:

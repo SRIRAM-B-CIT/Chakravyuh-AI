@@ -222,7 +222,7 @@ export default function Dashboard() {
       if (connStatus !== "ws") {
         fetchRestState();
       }
-    }, 1000);
+    }, 500);
 
     return () => {
       isUnmounted = true;
