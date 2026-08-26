@@ -223,26 +223,37 @@ def extract_flow_features(packets):
     dst_ips = set()
     dst_ports = set()
     
-    start_time = float(packets[0].sniff_timestamp)
-    end_time = float(packets[-1].sniff_timestamp)
+    start_time = float(packets[0]['time']) if isinstance(packets[0], dict) else float(packets[0].sniff_timestamp)
+    end_time = float(packets[-1]['time']) if isinstance(packets[-1], dict) else float(packets[-1].sniff_timestamp)
     flow_duration = max((end_time - start_time) * 1e6, 1.0)
     
     for p in packets:
-        try:
-            if 'IP' in p:
-                dst_ips.add(p.ip.dst)
-            lengths.append(int(p.length))
-            if 'TCP' in p:
-                if hasattr(p.tcp, 'dstport'):
-                    port = int(p.tcp.dstport)
-                    # Only track target service ports (1-1024 or common attack ports), ignore internal UI/API ports 8000 & 3000
-                    if port not in (8000, 3000) and (port <= 1024 or port in (8080, 8443, 9000, 27017, 3306, 5432)):
-                        dst_ports.add(port)
-                flags = int(p.tcp.flags, 16) if hasattr(p.tcp, 'flags') else 0
-                if flags & 0x02: syn_count += 1
-                if flags & 0x10: ack_count += 1
-        except AttributeError:
-            continue
+        if isinstance(p, dict):
+            if p.get('dst'):
+                dst_ips.add(p['dst'])
+            lengths.append(p.get('length', 64))
+            port = p.get('dst_port')
+            if port is not None:
+                if port not in (8000, 3000) and (port <= 1024 or port in (8080, 8443, 9000, 27017, 3306, 5432)):
+                    dst_ports.add(port)
+            flags = p.get('flags', 0)
+            if flags & 0x02: syn_count += 1
+            if flags & 0x10: ack_count += 1
+        else:
+            try:
+                if 'IP' in p:
+                    dst_ips.add(p.ip.dst)
+                lengths.append(int(p.length))
+                if 'TCP' in p:
+                    if hasattr(p.tcp, 'dstport'):
+                        port = int(p.tcp.dstport)
+                        if port not in (8000, 3000) and (port <= 1024 or port in (8080, 8443, 9000, 27017, 3306, 5432)):
+                            dst_ports.add(port)
+                    flags = int(p.tcp.flags, 16) if hasattr(p.tcp, 'flags') else 0
+                    if flags & 0x02: syn_count += 1
+                    if flags & 0x10: ack_count += 1
+            except AttributeError:
+                continue
 
     dst_ip_count = len(dst_ips)
     dst_port_count = len(dst_ports)
@@ -262,9 +273,41 @@ def extract_flow_features(packets):
     
     return pd.DataFrame([feature_dict])[feature_names], dst_ip_count, dst_port_count
 
+import threading
+from collections import deque
+
+live_packet_deque = deque(maxlen=4000)
+stop_sniffer_event = threading.Event()
+
+def packet_capture_thread(capture):
+    try:
+        for packet in capture.sniff_continuously():
+            if stop_sniffer_event.is_set():
+                break
+            try:
+                pkt_time = float(packet.sniff_timestamp)
+                src = packet.ip.src if 'IP' in packet else None
+                dst = packet.ip.dst if 'IP' in packet else None
+                length = int(packet.length) if hasattr(packet, 'length') else 64
+                dst_port = int(packet.tcp.dstport) if ('TCP' in packet and hasattr(packet.tcp, 'dstport')) else None
+                flags = int(packet.tcp.flags, 16) if ('TCP' in packet and hasattr(packet.tcp, 'flags')) else 0
+                
+                if src:
+                    live_packet_deque.append({
+                        'time': pkt_time,
+                        'src': src,
+                        'dst': dst,
+                        'length': length,
+                        'dst_port': dst_port,
+                        'flags': flags
+                    })
+            except Exception:
+                continue
+    except Exception:
+        pass
+
 def start_live_defense(interface=None, window_seconds=3):
     chosen_interface = interface or os.getenv("DEFENSE_INTERFACE")
-    
     if chosen_interface is None:
         chosen_interface = None if IS_WINDOWS else "any"
         
@@ -285,7 +328,6 @@ def start_live_defense(interface=None, window_seconds=3):
         else:
             capture = pyshark.LiveCapture()
     except Exception as e:
-        # Fallback to secondary adapter or simulated mode
         try:
             fallback_iface = "Wi-Fi" if IS_WINDOWS else "wlp3s0"
             capture = pyshark.LiveCapture(interface=fallback_iface)
@@ -293,46 +335,35 @@ def start_live_defense(interface=None, window_seconds=3):
             write_log(f"WARN: LiveCapture could not bind: {ex}. Fallback to simulated monitoring mode.")
             capture = None
 
-    packet_buffer = []
-    last_flush = time.time()
+    if capture is not None:
+        t = threading.Thread(target=packet_capture_thread, args=(capture,), daemon=True)
+        t.start()
+
     hidden_state = None
-    
-    if capture is None:
-        while True:
+
+    try:
+        while not stop_sniffer_event.is_set():
             time.sleep(window_seconds)
-            save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
-            write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
-        return
-
-    for packet in capture.sniff_continuously():
-        try:
-            pkt_time = float(packet.sniff_timestamp)
-            # Skip stale backlog packets if queue was delayed
-            if time.time() - pkt_time > 3.5:
-                continue
-        except Exception:
-            pass
-
-        packet_buffer.append(packet)
-        
-        if time.time() - last_flush >= window_seconds:
-            # Keep only fresh packets in window
             now = time.time()
-            try:
-                packet_buffer = [p for p in packet_buffer if now - float(p.sniff_timestamp) <= window_seconds + 1.0]
-            except Exception:
-                pass
+            
+            # Extract packets belonging to current sliding window
+            window_packets = []
+            while live_packet_deque:
+                p = live_packet_deque.popleft()
+                if now - p['time'] <= window_seconds + 1.0:
+                    window_packets.append(p)
 
-            if packet_buffer:
+            if window_packets:
                 ip_counts = Counter()
-                for p in packet_buffer:
-                    if 'IP' in p and p.ip.src != DEFENSE_IP and p.ip.src != GATEWAY_IP:
-                        ip_counts[p.ip.src] += 1
+                for p in window_packets:
+                    src = p['src']
+                    if src and src != DEFENSE_IP and src != GATEWAY_IP:
+                        ip_counts[src] += 1
                 
                 src_ip = ip_counts.most_common(1)[0][0] if ip_counts else None
                 
                 if src_ip:
-                    target_packets = [p for p in packet_buffer if 'IP' in p and p.ip.src == src_ip]
+                    target_packets = [p for p in window_packets if p['src'] == src_ip]
                     features_df, dst_ip_count, dst_port_count = extract_flow_features(target_packets)
                     
                     if features_df is not None:
@@ -385,11 +416,12 @@ def start_live_defense(interface=None, window_seconds=3):
                     save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
                     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
             else:
+                # No packets in window -> immediately restore to nominal baseline
                 save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
                 write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
-            
-            packet_buffer = []
-            last_flush = time.time()
+
+    except KeyboardInterrupt:
+        stop_sniffer_event.set()
 
 if __name__ == "__main__":
     start_live_defense()
