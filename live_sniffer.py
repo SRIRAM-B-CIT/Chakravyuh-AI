@@ -502,34 +502,41 @@ def start_live_defense(interface=None, window_seconds=3):
                             pred_idx = int(np.argmax(mitre_probs))
                             pred_proba = float(mitre_probs[pred_idx])
                             label_name = MITRE_CLASSES[pred_idx]
-                            rollout_list = k_risks.squeeze(0).cpu().tolist()
-                        # App ports: our own server (8000), frontend dev (3000), common web ports
-                        # Traffic to/from these ports is excluded from attack rate calculation
-                        APP_PORTS = {8000, 3000, 80, 443, 8080, 8443}
+                        # 3. SOC Heuristic Safeguards
+                        # Key insight: DoS floods open MANY new TCP connections (high SYN rate)
+                        # WebSocket/HTTP polling reuses persistent connections (SYN rate ~0)
+                        # This correctly distinguishes attack traffic from dashboard self-polling
+                        # on port 8000.
 
-                        # Distinct destination ports (all, and non-app only)
+                        # SYN rate = new TCP connection attempts per second (from this src)
+                        syn_pkts = [p for p in target_packets if p.get('flags', 0) & 0x02]
+                        syn_rate = len(syn_pkts) / window_seconds
+
+                        # Total packet rate (all ports, including app ports)
+                        total_rate = len(target_packets) / window_seconds
+
+                        # Non-app port packet rate (port-scan / lateral movement detection)
+                        APP_PORTS = {8000, 3000, 80, 443, 8080, 8443}
                         all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
                         meaningful_ports = all_dst_ports - {None} - APP_PORTS
+                        non_app_packets = [p for p in target_packets
+                                           if p.get('dst_port') not in APP_PORTS
+                                           and p.get('dst_port') is not None]
+                        non_app_rate = len(non_app_packets) / window_seconds
 
-                        # Attack packets = packets to ports OTHER than our own app ports
-                        # This filters out Next.js <-> FastAPI WebSocket/HTTP polling on loopback
-                        attack_packets = [p for p in target_packets
-                                          if p.get('dst_port') not in APP_PORTS
-                                          and p.get('dst_port') is not None]
-                        conn_rate = len(attack_packets) / window_seconds
+                        # Debug log (shows SYN rate, total rate, and ports)
+                        write_log(f"DEBUG: src={src_ip} total={len(target_packets)} "
+                                  f"syn={len(syn_pkts)} syn_rate={syn_rate:.1f}/s "
+                                  f"total_rate={total_rate:.1f}/s ports={sorted(all_dst_ports)[:6]}")
 
-                        # Debug: log what we're seeing each window
-                        write_log(f"DEBUG: src={src_ip} total_pkts={len(target_packets)} "
-                                  f"attack_pkts={len(attack_packets)} rate={conn_rate:.1f}/s "
-                                  f"ports={sorted(all_dst_ports)[:6]}")
-
-                        # DoS/Flood: only triggered by high-rate non-app traffic
-                        # (traffic_flood.py attacking a non-standard port, or port scanning)
-                        is_dos = (conn_rate >= 10) or (len(attack_packets) >= 30)
+                        # DoS/Flood: high SYN rate = many new connections = flood attack
+                        # Normal WebSocket polling: ~0-1 SYN/s | Attack (12 workers, 10ms): ~80+ SYN/s
+                        is_dos = (syn_rate >= 5) or (non_app_rate >= 10) or (len(non_app_packets) >= 30)
                         if is_dos:
                             label_name = "DoS/Flood"
                             pred_proba = max(pred_proba, 0.98)
                             future_threat_score = 0.96
+                            rollout_list = [0.15, 0.40, 0.75, 0.96]
                             rollout_list = [0.15, 0.40, 0.75, 0.96]
                         # Recon: many distinct destination ports scanned
                         elif len(meaningful_ports) >= 6:
