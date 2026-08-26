@@ -36,11 +36,12 @@ Chakravyuh-AI/
 ├── traffic_flood.py           # High-density DoS connection burst simulator
 ├── events.log                 # Real-time shared audit log stream
 ├── state.json                 # Real-time state exchange pipe
-├── models/                    # Serialized models, scalers, and encoders
-│   ├── scaler.pkl
-│   ├── threat_classifier.pkl
-│   ├── label_encoder.pkl
-│   └── feature_names.pkl
+├── models/                    # Serialized models, weights, metrics, and scalers
+│   ├── netdreamer_weights.pth # PyTorch NetDreamer RSSM Neural World Model
+│   ├── train_scaler.pkl       # 32-feature MinMaxScaler
+│   ├── feature_names.pkl      # 32 canonical schema feature definitions
+│   ├── label_encoder.pkl      # 5 MITRE multi-stage classes
+│   └── metrics/               # Official ROC/PR curves, confusion matrix & t-SNE evaluation plots
 └── frontend/                  # Next.js 14+ Cyber Command Center Dashboard
     ├── src/app/page.tsx       # Main dashboard layout & real-time WS manager
     ├── src/components/        # TopologyGraph, HorizonChart, MetricCards, SoarControl, LiveLogs

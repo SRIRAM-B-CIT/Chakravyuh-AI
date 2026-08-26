@@ -307,9 +307,31 @@ def reset_simulation():
             json.dump(reset_state, f, indent=2)
     except Exception:
         pass
-    write_audit_log("State: Benign | ML Conf: 91.0% | RSSM K-Horizon Risk: 54.2% | Source IP: 192.168.29.124")
+    write_audit_log("State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
     write_audit_log("ACTION: Network telemetry reset to nominal baseline state.")
     return {"status": "success", "message": "Baseline restored."}
+
+@app.get("/api/metrics")
+def get_model_metrics():
+    """Returns metadata and chart URLs for the newly evaluated NetDreamer World Model."""
+    metrics_dir = os.path.join(BASE_DIR, "models", "metrics")
+    charts = []
+    if os.path.exists(metrics_dir):
+        for fname in sorted(os.listdir(metrics_dir)):
+            if fname.endswith(".png"):
+                charts.append({
+                    "name": fname.replace(".png", "").replace("_", " ").title(),
+                    "file": fname,
+                    "url": f"/metrics/{fname}"
+                })
+    return {
+        "model_name": "NetDreamer RSSM Neural World Model",
+        "feature_dim": 32,
+        "latent_dim": 64,
+        "recurrent_dim": 64,
+        "classes": ["Benign", "Recon/BruteForce", "Infiltration", "Bot/LateralMovement", "DoS/Flood"],
+        "charts": charts
+    }
 
 @app.websocket("/ws/stream")
 async def websocket_stream_endpoint(websocket: WebSocket):
