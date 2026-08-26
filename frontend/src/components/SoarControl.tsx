@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
-import { Zap, Flame, RefreshCw, AlertOctagon, CheckCircle2, Terminal, ShieldAlert, Cpu, Activity, Play } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Zap, Flame, RefreshCw, AlertOctagon, CheckCircle2, Terminal, Shield, ShieldCheck, Cpu } from "lucide-react";
 import { SystemState } from "@/lib/types";
+import { api } from "@/lib/api";
+import { Dialog } from "@/components/ui/Dialog";
+import { Badge } from "@/components/ui/Badge";
 
 interface SoarControlProps {
   state: SystemState;
@@ -23,6 +26,11 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [lastPlaybookResult, setLastPlaybookResult] = useState<any>(null);
   const [notification, setNotification] = useState<{ message: string; type: "success" | "error" | "info" } | null>(null);
+  const [confirmAction, setConfirmAction] = useState<"isolate" | "rollback" | null>(null);
+
+  useEffect(() => {
+    if (state.src_ip) setTargetIp(state.src_ip);
+  }, [state.src_ip]);
 
   const showToast = (message: string, type: "success" | "error" | "info" = "info") => {
     setNotification({ message, type });
@@ -33,22 +41,14 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
     if (!targetIp) return;
     setLoadingAction("isolate");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/soar/isolate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ip: targetIp }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        showToast(`Targeted Micro-Isolation Engaged: ${targetIp} quarantined via netfilter/firewall`, "error");
-        onRefresh();
-      } else {
-        showToast(data.detail || "Failed to isolate host", "error");
-      }
+      await api.isolate(targetIp);
+      showToast(`Targeted Micro-Isolation Engaged: ${targetIp} dropped via iptables netfilter`, "error");
+      onRefresh();
     } catch (err: any) {
       showToast(`Connection error: ${err.message}`, "error");
     } finally {
       setLoadingAction(null);
+      setConfirmAction(null);
     }
   };
 
@@ -57,18 +57,11 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
     setLoadingAction("remediate");
     try {
       const threatToRemediate = state.label && state.label !== "Benign" ? state.label : selectedAttack;
-      const res = await fetch("http://127.0.0.1:8000/api/soar/remediate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ip: targetIp, threat_type: threatToRemediate }),
-      });
-      const data = await res.json();
-      if (res.ok) {
+      const data = await api.remediate(targetIp, threatToRemediate);
+      if (data && data.playbook_result) {
         setLastPlaybookResult(data.playbook_result);
         showToast(`SOAR Auto-Remediation: ${data.playbook_result?.playbook} applied successfully!`, "success");
         onRefresh();
-      } else {
-        showToast(data.detail || "Failed to execute playbook", "error");
       }
     } catch (err: any) {
       showToast(`Remediation failed: ${err.message}`, "error");
@@ -81,38 +74,24 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
     if (!targetIp) return;
     setLoadingAction("rollback");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/soar/rollback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ip: targetIp }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setLastPlaybookResult(null);
-        showToast(`1-Click Rollback Restored: Host ${targetIp} connectivity restored`, "success");
-        onRefresh();
-      } else {
-        showToast(data.detail || "Failed to rollback host", "error");
-      }
+      await api.rollback(targetIp);
+      setLastPlaybookResult(null);
+      showToast(`1-Click Rollback Restored: Host ${targetIp} connectivity restored`, "success");
+      onRefresh();
     } catch (err: any) {
       showToast(`Connection error: ${err.message}`, "error");
     } finally {
       setLoadingAction(null);
+      setConfirmAction(null);
     }
   };
 
   const handleSimulateAttack = async () => {
     setLoadingAction("simulate");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/simulate/attack", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ip: targetIp, attack_type: selectedAttack, risk_level: 0.96 }),
-      });
-      if (res.ok) {
-        showToast(`Simulation started: ${selectedAttack} threat vector triggered on ${targetIp}`, "error");
-        onRefresh();
-      }
+      await api.simulateAttack(targetIp, selectedAttack, 0.96);
+      showToast(`Simulation started: ${selectedAttack} threat vector triggered on ${targetIp}`, "error");
+      onRefresh();
     } catch (err: any) {
       showToast(`Simulation trigger failed: ${err.message}`, "error");
     } finally {
@@ -123,14 +102,10 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
   const handleReset = async () => {
     setLoadingAction("reset");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/simulate/reset", {
-        method: "POST",
-      });
-      if (res.ok) {
-        setLastPlaybookResult(null);
-        showToast("System telemetry returned to nominal baseline", "success");
-        onRefresh();
-      }
+      await api.reset();
+      setLastPlaybookResult(null);
+      showToast("System telemetry returned to nominal baseline", "success");
+      onRefresh();
     } catch (err: any) {
       showToast(`Reset failed: ${err.message}`, "error");
     } finally {
@@ -139,18 +114,23 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
   };
 
   return (
-    <div className="tactical-card p-4 flex flex-col space-y-3.5 h-full">
+    <div className="tactical-card p-4 flex flex-col space-y-4 h-full relative">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-defense-border/70 pb-2">
+      <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
         <div className="flex items-center gap-2">
-          <Zap className="w-4 h-4 text-amber-400" />
-          <h2 className="text-sm font-bold text-white tracking-wide">
-            SOAR Autonomous Defense & Playbook Console
-          </h2>
+          <Zap className="w-4 h-4 text-cyan-400" />
+          <div>
+            <h2 className="text-xs font-bold text-white tracking-wide uppercase font-mono">
+              SOAR Autonomous Defense Console
+            </h2>
+            <p className="text-[10px] text-slate-400 font-mono">
+              REAL-TIME NETFILTER & AUTO-REMEDIATION
+            </p>
+          </div>
         </div>
-        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-teal/10 text-tactical-teal border border-tactical-teal/30">
-          Auto-Mitigation Active
-        </span>
+        <Badge variant={state.isolated ? "critical" : "safe"}>
+          {state.isolated ? "CONTAINING" : "STANDBY"}
+        </Badge>
       </div>
 
       {/* Toast Notification */}
@@ -158,25 +138,25 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
         <div
           className={`p-2.5 rounded-lg text-xs font-mono flex items-center gap-2 border ${
             notification.type === "error"
-              ? "bg-red-950/70 border-red-500/70 text-red-200"
+              ? "bg-red-950/80 border-red-500/50 text-red-200"
               : notification.type === "success"
-              ? "bg-emerald-950/70 border-emerald-500/70 text-emerald-200"
-              : "bg-slate-900/90 border-slate-700 text-slate-200"
+              ? "bg-emerald-950/80 border-emerald-500/50 text-emerald-200"
+              : "bg-slate-900 border-slate-700 text-slate-200"
           }`}
         >
           {notification.type === "error" ? (
-            <AlertOctagon className="w-4 h-4 text-tactical-crimson flex-shrink-0" />
+            <AlertOctagon className="w-4 h-4 text-red-400 flex-shrink-0" />
           ) : (
-            <CheckCircle2 className="w-4 h-4 text-tactical-emerald flex-shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
           )}
           <span className="truncate">{notification.message}</span>
         </div>
       )}
 
-      {/* Target Host & Vector Controls */}
+      {/* Target Host & Vector Selection Controls */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
         <div>
-          <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+          <label className="block text-[11px] font-semibold text-slate-300 mb-1 font-mono">
             Target Host IP:
           </label>
           <div className="flex gap-1.5">
@@ -185,12 +165,12 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
               value={targetIp}
               onChange={(e) => setTargetIp(e.target.value)}
               placeholder="192.168.29.124"
-              className="flex-1 px-2.5 py-1.5 bg-slate-950 border border-defense-border focus:border-tactical-teal rounded-lg font-mono text-xs text-white outline-none"
+              className="flex-1 px-2.5 py-1.5 bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-lg font-mono text-xs text-white outline-none"
             />
             <button
               onClick={() => setTargetIp(state.src_ip || "192.168.29.124")}
               title="Auto-detect active threat IP"
-              className="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-[11px] font-medium border border-slate-700 transition"
+              className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-[11px] font-mono border border-slate-700 transition"
             >
               Detect
             </button>
@@ -198,13 +178,13 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
         </div>
 
         <div>
-          <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-            Adversarial Vector (Trained MITRE Class):
+          <label className="block text-[11px] font-semibold text-slate-300 mb-1 font-mono">
+            Adversarial Vector (MITRE Class):
           </label>
           <select
             value={selectedAttack}
             onChange={(e) => setSelectedAttack(e.target.value)}
-            className="w-full px-2.5 py-1.5 bg-slate-950 border border-defense-border focus:border-tactical-teal rounded-lg text-xs text-white font-medium outline-none"
+            className="w-full px-2.5 py-1.5 bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-lg text-xs text-white font-mono outline-none"
           >
             {ATTACK_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -218,30 +198,30 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
       {/* Main Defense Actions */}
       <div className="grid grid-cols-3 gap-2 pt-1">
         <button
-          onClick={handleIsolate}
+          onClick={() => setConfirmAction("isolate")}
           disabled={loadingAction === "isolate"}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-lg font-semibold text-xs text-red-200 border border-red-500/80 bg-red-950/40 hover:bg-red-900/60 transition disabled:opacity-50"
+          className="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg font-mono font-bold text-xs text-red-200 border border-red-500/80 bg-red-950/50 hover:bg-red-900/70 transition disabled:opacity-50"
         >
-          <ShieldAlert className="w-3.5 h-3.5" />
-          {loadingAction === "isolate" ? "Isolating..." : "Micro-Isolate"}
+          <Shield className="w-3.5 h-3.5 text-red-400" />
+          <span>{loadingAction === "isolate" ? "ISOLATING..." : "MICRO-ISOLATE"}</span>
         </button>
 
         <button
           onClick={handleRemediatePlaybook}
           disabled={loadingAction === "remediate"}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-lg font-semibold text-xs text-amber-200 border border-amber-500/80 bg-amber-950/40 hover:bg-amber-900/60 transition disabled:opacity-50"
+          className="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg font-mono font-bold text-xs text-amber-200 border border-amber-500/80 bg-amber-950/50 hover:bg-amber-900/70 transition disabled:opacity-50"
         >
           <Cpu className="w-3.5 h-3.5 text-amber-400" />
-          {loadingAction === "remediate" ? "Fixing..." : "Auto-Remediate"}
+          <span>{loadingAction === "remediate" ? "FIXING..." : "AUTO-REMEDIATE"}</span>
         </button>
 
         <button
-          onClick={handleRollback}
+          onClick={() => setConfirmAction("rollback")}
           disabled={loadingAction === "rollback"}
-          className="flex items-center justify-center gap-1 px-2.5 py-2 rounded-lg font-semibold text-xs text-emerald-200 border border-emerald-500/80 bg-emerald-950/40 hover:bg-emerald-900/60 transition disabled:opacity-50"
+          className="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg font-mono font-bold text-xs text-cyan-200 border border-cyan-500/80 bg-cyan-950/50 hover:bg-cyan-900/70 transition disabled:opacity-50"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
-          {loadingAction === "rollback" ? "Restoring..." : "1-Click Rollback"}
+          <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+          <span>{loadingAction === "rollback" ? "RESTORING..." : "1-CLICK ROLLBACK"}</span>
         </button>
       </div>
 
@@ -265,42 +245,86 @@ export const SoarControl: React.FC<SoarControlProps> = ({ state, onRefresh }) =>
         </div>
       )}
 
-      {/* Interactive Simulation & Test Suite */}
-      <div className="pt-2 border-t border-defense-border/70">
-        <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2 text-center">
-          Hackathon / SOC Live Simulation Suite
+      {/* Interactive Simulation Suite */}
+      <div className="pt-2 border-t border-slate-800/80 space-y-2">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono text-center">
+          SOC Live Simulation Suite
         </p>
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={handleSimulateAttack}
             disabled={loadingAction === "simulate"}
-            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-amber-950/40 hover:bg-amber-900/50 text-amber-300 border border-amber-800/60 transition"
+            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono text-red-300 bg-red-950/40 hover:bg-red-900/50 border border-red-800/50 transition"
           >
             <Flame className="w-3.5 h-3.5 text-amber-400" />
-            Simulate {selectedAttack}
+            <span>Simulate {selectedAttack}</span>
           </button>
 
           <button
             onClick={handleReset}
             disabled={loadingAction === "reset"}
-            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
+            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono text-slate-300 bg-slate-900 hover:bg-slate-800 border border-slate-700 transition"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
-            Reset Nominal State
+            <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+            <span>Reset Baseline</span>
           </button>
         </div>
       </div>
 
-      {/* Netfilter Command Reference */}
-      <div className="bg-[#060a11] p-2.5 rounded-lg border border-defense-border/80 text-[11px] font-mono text-slate-400 space-y-1 mt-auto">
-        <div className="flex items-center gap-1 text-slate-300 font-semibold">
-          <Terminal className="w-3 h-3 text-tactical-teal" />
-          <span>Active Kernel Netfilter Action:</span>
+      {/* Netfilter Kernel Rule Preview */}
+      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 font-mono text-[11px] text-slate-400 space-y-1 mt-auto">
+        <div className="flex items-center gap-1.5 text-slate-200 font-semibold">
+          <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Active Kernel Rule Preview:</span>
         </div>
-        <code className="text-slate-300 block truncate">
+        <code className="text-cyan-300 block truncate bg-slate-900 p-1.5 rounded border border-slate-800">
           sudo iptables -A INPUT -s {targetIp} -j DROP
         </code>
       </div>
+
+      {/* Radix UI Confirmation Modal Dialog */}
+      <Dialog
+        isOpen={confirmAction !== null}
+        onClose={() => setConfirmAction(null)}
+        title={`CONFIRM ${confirmAction === "isolate" ? "MICRO-ISOLATION" : "CONNECTIVITY RESTORATION"}`}
+        description={
+          confirmAction === "isolate"
+            ? "Engage automated kernel netfilter drop rule on target IP."
+            : "Remove active netfilter drop rule and restore host traffic."
+        }
+      >
+        <div className="space-y-4 font-mono text-xs">
+          <div className="rounded-lg border border-slate-800 bg-slate-950 p-3 space-y-1">
+            <div className="text-slate-400">Target Host IP:</div>
+            <div className="text-base font-bold text-white">{targetIp}</div>
+            {confirmAction === "isolate" && (
+              <code className="block mt-2 bg-slate-900 p-2 rounded border border-slate-800 text-[10px] text-red-300">
+                iptables -A INPUT -s {targetIp} -j DROP
+              </code>
+            )}
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              onClick={() => setConfirmAction(null)}
+              className="rounded border border-slate-700 px-4 py-2 text-slate-300 hover:text-white"
+            >
+              CANCEL
+            </button>
+            <button
+              onClick={confirmAction === "isolate" ? handleIsolate : handleRollback}
+              disabled={loadingAction !== null}
+              className={`rounded border px-4 py-2 font-bold ${
+                confirmAction === "isolate"
+                  ? "border-red-500 bg-red-950 text-red-200 hover:bg-red-900"
+                  : "border-cyan-500 bg-cyan-950 text-cyan-200 hover:bg-cyan-900"
+              }`}
+            >
+              {loadingAction ? "EXECUTING..." : confirmAction === "isolate" ? "CONFIRM ISOLATION" : "RESTORE"}
+            </button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 {
-  "src_ip": "192.168.29.175",
+  "src_ip": "192.168.29.124",
   "label": "Benign",
   "ml_conf": 0.98,
   "risk_score": 0.05,
@@ -76,13 +76,13 @@
         "is_isolated": false
       },
       {
-        "id": "192.168.29.175",
-        "ip": "192.168.29.175",
+        "id": "192.168.29.124",
+        "ip": "192.168.29.124",
         "label": "Attacker",
         "role": "External Node",
         "risk_score": 0.05,
         "status": "SAFE",
-        "packet_count": 3,
+        "packet_count": 28,
         "byte_rate": "340 KB/s",
         "is_defense": false,
         "is_isolated": false
@@ -121,9 +121,9 @@
       },
       {
         "id": "e-att-def",
-        "source": "192.168.29.175",
+        "source": "192.168.29.124",
         "target": "192.168.29.104",
-        "weight": 3,
+        "weight": 16,
         "traffic": "Safe Path",
         "protocol": "TCP/SYN",
         "animated": false,
@@ -131,9 +131,9 @@
       },
       {
         "id": "e-att-srv",
-        "source": "192.168.29.175",
+        "source": "192.168.29.124",
         "target": "192.168.29.42",
-        "weight": 34,
+        "weight": 6,
         "traffic": "Internal Route",
         "protocol": "TCP/SYN",
         "animated": false,
@@ -144,8 +144,8 @@
       "total_nodes": 4,
       "total_edges": 5,
       "threat_level": "NORMAL",
-      "active_flows": 5268
+      "active_flows": 148
     }
   },
-  "last_updated": 1787753310.482621
+  "last_updated": 1787753310.0
 }

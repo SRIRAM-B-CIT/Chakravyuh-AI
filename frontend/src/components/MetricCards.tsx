@@ -48,7 +48,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ state }) => {
                 ? "bg-red-500 animate-ping"
                 : isAttack
                 ? "bg-red-500 animate-pulse"
-                : "bg-emerald-400 animate-pulse"
+                : "bg-cyan-400 animate-pulse"
             }`}
           />
           <span className="text-xs font-bold text-slate-100 truncate">
@@ -63,7 +63,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ state }) => {
           <span
             className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border ${
               statusBadge === "SAFE"
-                ? "bg-emerald-950/60 text-emerald-300 border-emerald-500/60"
+                ? "bg-cyan-950/60 text-cyan-300 border-cyan-500/60"
                 : "bg-red-950/60 text-red-300 border-red-500/80 shadow-tactical-crimson"
             }`}
           >
@@ -106,7 +106,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ state }) => {
             className={`font-mono font-semibold ${
               state.label && state.label !== "Benign"
                 ? "text-red-400"
-                : "text-emerald-400"
+                : "text-cyan-400"
             }`}
           >
             {state.label || "Benign"}
@@ -127,7 +127,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ state }) => {
 
         <div className="mt-3 pt-2 border-t border-slate-800/80 text-xs text-slate-400 flex items-center justify-between">
           <span>Baseline F1:</span>
-          <span className="font-mono text-emerald-400 font-semibold">~0.890</span>
+          <span className="font-mono text-cyan-400 font-semibold font-bold">~0.890</span>
         </div>
       </div>
     </div>
