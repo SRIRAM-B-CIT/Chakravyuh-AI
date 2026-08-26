@@ -334,12 +334,12 @@ def start_live_defense(interface=None, window_seconds=3):
                         pred_proba = np.max(clf.predict_proba(scaled_feats)[0])
                         label_name = encoder.inverse_transform([pred_class])[0]
                         
-                        # 1. High-Volume Flood Attack (>60 pkts in 3s window)
-                        if len(target_packets) > 60:
+                        # 1. High-Volume Flood Attack (>300 pkts in 3s window from stress tools like traffic_flood.py)
+                        if len(target_packets) > 300:
                             label_name = "DoS/Flood"
                             pred_proba = 0.98
                             future_threat_score = 0.96
-                        # 2. Port Reconnaissance Scanner (scanning >= 6 target service ports)
+                        # 2. Port Reconnaissance Scanner (scanning >= 6 target service ports like recon_scan.py)
                         elif dst_port_count >= 6:
                             label_name = "Recon/PortScan"
                             pred_proba = 0.96
@@ -350,7 +350,7 @@ def start_live_defense(interface=None, window_seconds=3):
                             pred_proba = 0.95
                             future_threat_score = 0.93
                         else:
-                            # Normal background network traffic & dashboard polling
+                            # Normal background network traffic & dashboard polling (<300 pkts)
                             label_name = "Benign"
                             pred_proba = 0.98
                             future_threat_score = 0.05

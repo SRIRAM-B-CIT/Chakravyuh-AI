@@ -1,15 +1,15 @@
 {
   "src_ip": "127.0.0.1",
-  "label": "Benign",
+  "label": "DoS/Flood",
   "ml_conf": 0.98,
-  "risk_score": 0.05,
+  "risk_score": 0.96,
   "isolated": false,
   "netfilter_drops": "0 Drops",
   "rollout": [
-    0.01,
-    0.02,
-    0.04,
-    0.05
+    0.14,
+    0.38,
+    0.72,
+    0.96
   ],
   "rollout_series": {
     "Gateway": [
@@ -31,10 +31,10 @@
       0.12
     ],
     "Threat Node": [
-      0.01,
-      0.02,
-      0.04,
-      0.05
+      0.14,
+      0.38,
+      0.72,
+      0.96
     ]
   },
   "topology": {
@@ -79,11 +79,11 @@
         "id": "127.0.0.1",
         "ip": "127.0.0.1",
         "label": "Attacker",
-        "role": "External Node",
-        "risk_score": 0.05,
-        "status": "SAFE",
-        "packet_count": 15,
-        "byte_rate": "340 KB/s",
+        "role": "Threat Host",
+        "risk_score": 0.96,
+        "status": "ATTACKER",
+        "packet_count": 163,
+        "byte_rate": "18.4 MB/s",
         "is_defense": false,
         "is_isolated": false
       }
@@ -123,29 +123,29 @@
         "id": "e-att-def",
         "source": "127.0.0.1",
         "target": "192.168.29.104",
-        "weight": 15,
-        "traffic": "Safe Path",
+        "weight": 163,
+        "traffic": "Threat Flow (148 pkts/s)",
         "protocol": "TCP/SYN",
-        "animated": false,
-        "threat": false
+        "animated": true,
+        "threat": true
       },
       {
         "id": "e-att-srv",
         "source": "127.0.0.1",
         "target": "192.168.29.42",
         "weight": 34,
-        "traffic": "Internal Route",
+        "traffic": "Lateral Probe",
         "protocol": "TCP/SYN",
-        "animated": false,
-        "threat": false
+        "animated": true,
+        "threat": true
       }
     ],
     "stats": {
       "total_nodes": 4,
       "total_edges": 5,
-      "threat_level": "NORMAL",
-      "active_flows": 21
+      "threat_level": "CRITICAL",
+      "active_flows": 163
     }
   },
-  "last_updated": 1787725591.4792643
+  "last_updated": 1787726300.639617
 }
