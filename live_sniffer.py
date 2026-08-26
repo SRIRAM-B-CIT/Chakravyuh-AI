@@ -37,7 +37,26 @@ INTERNAL_SERVER_IP = os.getenv("INTERNAL_SERVER_IP", "192.168.29.42")
 DEFAULT_INTERFACES = ["lo", "any"] if not IS_WINDOWS else []
 
 live_packet_deque = deque(maxlen=8000)
+deque_lock = threading.Lock()
 stop_sniffer_event = threading.Event()
+
+
+def push_packet(pkt):
+    """Thread-safe packet push into circular deque."""
+    with deque_lock:
+        live_packet_deque.append(pkt)
+
+
+def get_recent_packets(cutoff_time):
+    """Thread-safe snapshot extraction of rolling-window packets."""
+    with deque_lock:
+        return [p for p in live_packet_deque if p.get('time', 0) >= cutoff_time]
+
+
+def clear_packets():
+    """Thread-safe deque flush."""
+    with deque_lock:
+        live_packet_deque.clear()
 
 
 def write_log(message):
@@ -464,7 +483,7 @@ def native_raw_socket_capture_thread():
                 data, _ = raw_sock.recvfrom(65535)
                 pkt = decode_raw_frame(data, time.time())
                 if pkt and pkt['src']:
-                    live_packet_deque.append(pkt)
+                    push_packet(pkt)
             except socket.timeout:
                 continue
             except Exception:
@@ -516,7 +535,7 @@ def pyshark_capture_thread(iface):
                         dst_port = int(packet.udp.dstport)
 
                 if src:
-                    live_packet_deque.append({
+                    push_packet({
                         'time': pkt_time,
                         'src': str(src),
                         'dst': str(dst) if dst else None,
@@ -573,7 +592,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
     write_log(f"==================================================")
 
     # Flush any stale packets from previous runs before starting
-    live_packet_deque.clear()
+    clear_packets()
 
     # Initialize fresh nominal baseline on start
     save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
@@ -602,8 +621,8 @@ def start_live_defense(interface=None, window_seconds=1.5):
             now = time.time()
             cutoff = now - rolling_window
             
-            # Extract packets belonging to current rolling window
-            window_packets = [p for p in live_packet_deque if p['time'] >= cutoff]
+            # Extract packets belonging to current rolling window thread-safely
+            window_packets = get_recent_packets(cutoff)
 
             if window_packets:
                 ip_counts = Counter()
