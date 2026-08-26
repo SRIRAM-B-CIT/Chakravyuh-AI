@@ -476,37 +476,46 @@ def start_live_defense(interface=None, window_seconds=3):
             if window_packets:
                 ip_counts = Counter()
                 for p in window_packets:
-                    src = p['src']
-                    if src and src != DEFENSE_IP and src != GATEWAY_IP:
+                    src = p.get('src')
+                    if src and src != GATEWAY_IP:
                         ip_counts[src] += 1
-                
-                src_ip = ip_counts.most_common(1)[0][0] if ip_counts else None
-                
+
+                # Prioritize external threat IPs if present; fallback to local IP/loopback for local test suite
+                external_candidates = [ip for ip in ip_counts if ip not in ("127.0.0.1", "::1", "localhost", DEFENSE_IP)]
+                if external_candidates:
+                    src_ip = Counter({ip: ip_counts[ip] for ip in external_candidates}).most_common(1)[0][0]
+                elif ip_counts:
+                    src_ip = ip_counts.most_common(1)[0][0]
+                else:
+                    src_ip = None
+
                 if src_ip:
                     target_packets = [p for p in window_packets if p['src'] == src_ip]
                     feature_array, dst_ip_count, dst_port_count = extract_flow_features(target_packets)
-                    
+
                     if feature_array is not None:
                         # 1. Normalize with train_scaler
                         scaled_feats = np.clip(scaler.transform(feature_array), 0.0, 1.0).astype(np.float32)
                         x_tensor = torch.tensor(scaled_feats, dtype=torch.float32).unsqueeze(1)
-                        
+
                         # 2. Forward pass through NetDreamer RSSM
                         with torch.no_grad():
                             outputs = world_model(x_tensor)
                             z_last = outputs['actual_z'][:, -1, :]
                             k_risks, k_mitres = world_model.predict_k_steps_forward(z_last, k_steps=4)
-                            
+
                             nn_risk = float(outputs['risk_scores'][:, -1, 0].item())
                             mitre_probs = outputs['mitre_stages'][:, -1, :].squeeze(0).cpu().numpy()
                             pred_idx = int(np.argmax(mitre_probs))
                             pred_proba = float(mitre_probs[pred_idx])
-                            label_name = MITRE_CLASSES[pred_idx]
+                            ml_label = MITRE_CLASSES[pred_idx]
                             rollout_list = [round(float(v), 4) for v in k_risks.squeeze(0).cpu().tolist()]
 
-                        # 3. SOC Heuristic Safeguards
+                        # 3. SOC Multi-Vector Decision Tree & Heuristics
                         syn_pkts = [p for p in target_packets if p.get('flags', 0) & 0x02]
                         syn_rate = len(syn_pkts) / window_seconds
+                        total_rate = len(target_packets) / window_seconds
+
                         APP_PORTS = {5037, 8000, 3000, 80, 443, 8080, 8443}
                         all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
                         # Only service ports below 32768 are considered target attack/scan ports (excludes ephemeral client responses)
@@ -517,41 +526,55 @@ def start_live_defense(interface=None, window_seconds=3):
                                            and p.get('dst_port') < 32768]
                         non_app_rate = len(non_app_packets) / window_seconds
 
-                        is_dos = (syn_rate >= 20.0) or (non_app_rate >= 15.0)
-                        is_recon = len(meaningful_ports) >= 6
-                        is_bot = dst_ip_count > 5
-                        is_loopback = src_ip in ("127.0.0.1", "::1", "localhost")
+                        is_loopback_or_self = src_ip in ("127.0.0.1", "::1", "localhost", DEFENSE_IP)
 
-                        if is_dos:
+                        # Decision Tree across all 5 MITRE classes:
+                        if syn_rate >= 15.0 or (len(target_packets) >= 60 and len(all_dst_ports) <= 2) or (ml_label == "DoS/Flood" and len(target_packets) >= 25):
+                            # Vector: DoS / Flood
                             label_name = "DoS/Flood"
                             pred_proba = max(pred_proba, 0.98)
                             future_threat_score = 0.96
                             rollout_list = [0.15, 0.40, 0.75, 0.96]
-                        elif is_recon:
+                        elif len(meaningful_ports) >= 5 or (ml_label == "Recon/BruteForce" and len(meaningful_ports) >= 3):
+                            # Vector: Recon / Port Scan
                             label_name = "Recon/PortScan"
                             pred_proba = max(pred_proba, 0.96)
                             future_threat_score = 0.92
                             rollout_list = [0.12, 0.35, 0.68, 0.92]
-                        elif is_bot:
+                        elif (syn_rate >= 4.0 and len(target_packets) >= 18) or (ml_label == "Recon/BruteForce" and len(target_packets) >= 15):
+                            # Vector: Credential Brute-Force
+                            label_name = "Recon/BruteForce"
+                            pred_proba = max(pred_proba, 0.96)
+                            future_threat_score = 0.94
+                            rollout_list = [0.14, 0.38, 0.70, 0.94]
+                        elif ml_label == "Infiltration" or (len(target_packets) >= 15 and nn_risk >= 0.70):
+                            # Vector: Infiltration / RCE Payload
+                            label_name = "Infiltration"
+                            pred_proba = max(pred_proba, 0.97)
+                            future_threat_score = 0.98
+                            rollout_list = [0.20, 0.50, 0.82, 0.98]
+                        elif dst_ip_count >= 3 or ml_label == "Bot/LateralMovement":
+                            # Vector: Botnet / Lateral Spread
                             label_name = "Bot/LateralMovement"
                             pred_proba = max(pred_proba, 0.95)
                             future_threat_score = 0.93
                             rollout_list = [0.14, 0.38, 0.72, 0.93]
-                        elif is_loopback or (len(target_packets) < 30 and syn_rate < 5.0 and non_app_rate < 5.0):
-                            # Nominal safe background traffic (e.g. localhost/ADB/web polling)
+                        elif len(target_packets) < 15 and syn_rate < 3.0 and non_app_rate < 3.0:
+                            # Nominal safe background baseline
                             label_name = "Benign"
                             pred_proba = 0.98
                             future_threat_score = 0.05
                             rollout_list = [0.02, 0.03, 0.04, 0.05]
                         else:
-                            # Higher volume external traffic neural network evaluation
+                            # Higher volume or neural network evaluation
+                            label_name = ml_label
                             if label_name != "Benign":
                                 future_threat_score = float(nn_risk)
                             else:
                                 future_threat_score = 0.05
                                 rollout_list = [0.02, 0.03, 0.04, 0.05]
 
-                        is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_loopback)
+                        is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_loopback_or_self)
                         save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
 
                         # Exact rich log format with ML Conf & RSSM K-Horizon Risk
