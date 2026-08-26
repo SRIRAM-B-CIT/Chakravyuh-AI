@@ -516,13 +516,14 @@ def start_live_defense(interface=None, window_seconds=3):
                         total_rate = len(target_packets) / window_seconds
 
                         # Non-app port packet rate (port-scan / lateral movement detection)
-                        APP_PORTS = {8000, 3000, 80, 443, 8080, 8443}
+                        APP_PORTS = {5037, 8000, 3000, 80, 443, 8080, 8443}  # app + ADB + common
                         all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
                         meaningful_ports = all_dst_ports - {None} - APP_PORTS
                         non_app_packets = [p for p in target_packets
                                            if p.get('dst_port') is not None
                                            and p.get('dst_port') not in APP_PORTS
                                            and p.get('dst_port') < 32768]  # exclude ephemeral response ports
+                        non_app_rate = len(non_app_packets) / window_seconds
 
                         # Debug log (shows SYN rate, total rate, and ports)
                         write_log(f"DEBUG: src={src_ip} total={len(target_packets)} "
