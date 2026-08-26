@@ -12,11 +12,24 @@ html {
   --card-surface: #FFFFFF;
   --border-muted: #D9E3EF;
   --secondary-bg: #EEF3F8;
-  --elevated-card: #EEF3F8;
+  --elevated-card: #F8FAFC;
   --primary-text: #0F2747;
   --secondary-text: #52677F;
   --muted-text: #7A8CA0;
   --cyber-blue: #2563EB;
+}
+
+.dark {
+  --background: #070B14;
+  --foreground: #F1F5F9;
+  --card-surface: #0E1626;
+  --border-muted: #1E293B;
+  --secondary-bg: #131E33;
+  --elevated-card: #0A101D;
+  --primary-text: #F8FAFC;
+  --secondary-text: #94A3B8;
+  --muted-text: #64748B;
+  --cyber-blue: #38BDF8;
 }
 
 body {
@@ -24,11 +37,12 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
   background-image: 
-    radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.03) 0%, transparent 60%),
-    radial-gradient(circle at 90% 100%, rgba(14, 165, 233, 0.02) 0%, transparent 50%),
-    linear-gradient(to right, rgba(15, 39, 71, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 39, 71, 0.015) 1px, transparent 1px);
+    radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 90% 100%, rgba(14, 165, 233, 0.03) 0%, transparent 50%),
+    linear-gradient(to right, rgba(100, 116, 139, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 116, 139, 0.04) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
 }
 
@@ -36,14 +50,14 @@ body {
 .tactical-card {
   background: var(--card-surface);
   border: 1px solid var(--border-muted);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
-  transition: all 0.2s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease;
 }
 
 .tactical-card:hover {
   border-color: var(--cyber-blue);
-  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
 }
 
 .panel {
@@ -62,9 +76,9 @@ body {
   color: var(--secondary-text);
   padding: 0.45rem 0.8rem;
   font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   border-radius: 6px;
   transition: all 0.15s ease-in-out;
 }
@@ -100,20 +114,20 @@ body {
 
 .status-safe {
   border-color: rgba(34, 197, 94, 0.4);
-  background: rgba(34, 197, 94, 0.08);
-  color: #15803d;
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
 }
 
 .status-critical {
   border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.08);
-  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
 }
 
 .status-warning {
   border-color: rgba(245, 158, 11, 0.4);
-  background: rgba(245, 158, 11, 0.08);
-  color: #b45309;
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
 }
 
 /* Clean cyber scrollbar */
@@ -174,20 +188,4 @@ body {
     rgba(0, 0, 0, 0.05)
   );
   background-size: 100% 4px;
-}
-
-/* Global Light Theme Text Color Overrides */
-.text-white, 
-.text-slate-50,
-.text-slate-100 {
-  color: var(--foreground) !important;
-}
-
-.text-slate-200,
-.text-slate-300 {
-  color: var(--secondary-text) !important;
-}
-
-.text-slate-400 {
-  color: var(--muted-text) !important;
 }

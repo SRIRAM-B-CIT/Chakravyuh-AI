@@ -3473,3 +3473,866 @@
 [19:38:29] [SNIFFER ALERT] High packet rate detected from 127.0.0.1 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 2926.0 pkts/s
 [19:38:29] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 127.0.0.1
 [19:38:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.175
+[21:58:53] ==================================================
+[21:58:53] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0, wlx00e0202fda61
+[21:58:53] ==================================================
+[21:58:53] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[21:58:53] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[21:58:53] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[21:58:53] INFO: Capture thread started on interface: lo
+[21:58:53] INFO: Capture thread started on interface: enp0s31f6
+[21:58:53] INFO: Capture thread started on interface: wlp3s0
+[21:58:53] INFO: Capture thread started on interface: wlx00e0202fda61
+[21:58:54] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.141
+[21:58:56] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:58:59] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:02] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:04] [SNIFFER ALERT] High packet rate detected from 44.252.158.227 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 23.0 pkts/s
+[21:59:04] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 44.252.158.227
+[21:59:04] ALERT: Intercepting threat from 44.252.158.227! Triggering host micro-isolation & active neutralization...
+[21:59:04] ACTION: iptables -A INPUT -s 44.252.158.227 -j DROP
+[21:59:04] SOAR REMEDIATION: Netfilter drop rule applied for 44.252.158.227
+[21:59:04] SOAR REMEDIATION: Active connection tracking entries purged for 44.252.158.227
+[21:59:04] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[21:59:05] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[21:59:05] [SNIFFER ALERT] High packet rate detected from 44.252.158.227 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 36.0 pkts/s
+[21:59:05] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 44.252.158.227
+[21:59:05] ALERT: Intercepting threat from 44.252.158.227! Triggering host micro-isolation & active neutralization...
+[21:59:05] ACTION: iptables -A INPUT -s 44.252.158.227 -j DROP
+[21:59:06] SOAR REMEDIATION: Netfilter drop rule applied for 44.252.158.227
+[21:59:06] SOAR REMEDIATION: Active connection tracking entries purged for 44.252.158.227
+[21:59:06] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[21:59:06] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[21:59:07] [SNIFFER ALERT] High packet rate detected from 44.252.158.227 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 42.5 pkts/s
+[21:59:07] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 44.252.158.227
+[21:59:07] ALERT: Intercepting threat from 44.252.158.227! Triggering host micro-isolation & active neutralization...
+[21:59:07] ACTION: iptables -A INPUT -s 44.252.158.227 -j DROP
+[21:59:08] SOAR REMEDIATION: Netfilter drop rule applied for 44.252.158.227
+[21:59:08] SOAR REMEDIATION: Active connection tracking entries purged for 44.252.158.227
+[21:59:08] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[21:59:08] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[21:59:08] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 54.214.153.210
+[21:59:10] [SNIFFER ALERT] High packet rate detected from 44.252.158.227 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 12.0 pkts/s
+[21:59:10] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 44.252.158.227
+[21:59:10] ALERT: Intercepting threat from 44.252.158.227! Triggering host micro-isolation & active neutralization...
+[21:59:10] ACTION: iptables -A INPUT -s 44.252.158.227 -j DROP
+[21:59:10] SOAR REMEDIATION: Netfilter drop rule applied for 44.252.158.227
+[21:59:10] SOAR REMEDIATION: Active connection tracking entries purged for 44.252.158.227
+[21:59:10] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[21:59:10] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[21:59:11] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 23.0 pkts/s
+[21:59:11] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[21:59:11] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[21:59:11] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[21:59:12] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[21:59:12] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[21:59:12] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[21:59:12] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[21:59:12] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[21:59:13] [SNIFFER ALERT] High packet rate detected from 44.252.158.227 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 16.5 pkts/s
+[21:59:13] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 44.252.158.227
+[21:59:13] ALERT: Intercepting threat from 44.252.158.227! Triggering host micro-isolation & active neutralization...
+[21:59:13] ACTION: iptables -A INPUT -s 44.252.158.227 -j DROP
+[21:59:13] SOAR REMEDIATION: Netfilter drop rule applied for 44.252.158.227
+[21:59:13] SOAR REMEDIATION: Active connection tracking entries purged for 44.252.158.227
+[21:59:13] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[21:59:13] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[21:59:14] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:17] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:20] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:22] [SNIFFER ALERT] High packet rate detected from 44.252.158.227 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 11.0 pkts/s
+[21:59:22] State: Recon/BruteForce | ML Conf: 100.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 44.252.158.227
+[21:59:22] ALERT: Intercepting threat from 44.252.158.227! Triggering host micro-isolation & active neutralization...
+[21:59:22] ACTION: iptables -A INPUT -s 44.252.158.227 -j DROP
+[21:59:22] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 44.252.158.227
+[21:59:22] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[21:59:22] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 44.252.158.227]
+[21:59:22] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[21:59:22] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[21:59:23] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:26] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:27] [SNIFFER ALERT] High packet rate detected from 4.150.223.98 | Threat: Infiltration | RSSM Risk: 98.0% | Packet Velocity: 6.0 pkts/s
+[21:59:27] State: Infiltration | ML Conf: 100.0% | RSSM K-Horizon Risk: 98.0% | Source IP: 4.150.223.98
+[21:59:27] ALERT: Intercepting threat from 4.150.223.98! Triggering host micro-isolation & active neutralization...
+[21:59:27] ACTION: iptables -A INPUT -s 4.150.223.98 -j DROP
+[21:59:27] SOAR REMEDIATION: Host micro-isolation engaged against exploit vector 4.150.223.98
+[21:59:27] SOAR REMEDIATION: Terminated rogue child sockets and interactive shell pipes for 4.150.223.98
+[21:59:27] SOAR REMEDIATION: Integrity hash check completed on sensitive system binaries (/etc/passwd, /bin/sh)
+[21:59:27] SOAR REMEDIATION: Privilege escalation vectors blocked: session sandbox policy enforced
+[21:59:27] SOAR REMEDIATION: Forensic telemetry snapshot saved to audit events log
+[21:59:28] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:31] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:34] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:36] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:39] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:42] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[21:59:45] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:46] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 11.0 pkts/s
+[21:59:46] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[21:59:46] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[21:59:47] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[21:59:47] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[21:59:47] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[21:59:47] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[21:59:47] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[21:59:47] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[21:59:48] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:51] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[21:59:54] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[21:59:57] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:00:00] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:02] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:00:05] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:09] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:11] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:14] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:00:17] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:22] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:23] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 20.5 pkts/s
+[22:00:23] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:00:24] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:00:24] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:00:24] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:00:24] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:00:24] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:00:24] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:00:24] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:00:26] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:28] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 6.5 pkts/s
+[22:00:28] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:00:28] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:00:29] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:00:30] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:00:30] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:00:30] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:00:30] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:00:33] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:36] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:00:39] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 7.0 pkts/s
+[22:00:39] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:00:39] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:00:39] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:00:40] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:00:40] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:00:40] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:00:41] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:00:43] State: Benign | ML Conf: 94.1% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[22:00:48] [SNIFFER ALERT] High packet rate detected from 192.168.29.193 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 12.5 pkts/s
+[22:00:48] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.193
+[22:00:49] ALERT: Intercepting threat from 192.168.29.193! Triggering host micro-isolation & active neutralization...
+[22:00:49] ACTION: iptables -A INPUT -s 192.168.29.193 -j DROP
+[22:00:50] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.193
+[22:00:51] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.193
+[22:00:51] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:00:51] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:00:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
+[22:01:00] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:01:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:01:13] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:01:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:01:26] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:01:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:02:50] ==================================================
+[22:02:50] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0, wlx00e0202fda61
+[22:02:50] ==================================================
+[22:02:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[22:02:50] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[22:02:50] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[22:02:50] INFO: Capture thread started on interface: lo
+[22:02:50] INFO: Capture thread started on interface: enp0s31f6
+[22:02:50] INFO: Capture thread started on interface: wlp3s0
+[22:02:50] INFO: Capture thread started on interface: wlx00e0202fda61
+[22:02:50] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:02:53] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:02:56] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:02:58] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 10.0 pkts/s
+[22:02:58] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:02:58] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:02:58] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:02:58] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:02:58] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:02:58] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:02:58] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:02:58] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:03:00] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 32.0 pkts/s
+[22:03:00] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:03:00] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:03:00] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:03:00] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:03:00] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:03:00] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:03:00] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:03:00] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:03:01] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:04] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:03:06] [SNIFFER ALERT] High packet rate detected from 2405:201:e006:f81a:88d6:886b:983:8bbc | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 23.5 pkts/s
+[22:03:06] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 2405:201:e006:f81a:88d6:886b:983:8bbc
+[22:03:06] ALERT: Intercepting threat from 2405:201:e006:f81a:88d6:886b:983:8bbc! Triggering host micro-isolation & active neutralization...
+[22:03:06] ACTION: iptables -A INPUT -s 2405:201:e006:f81a:88d6:886b:983:8bbc -j DROP
+[22:03:06] SOAR REMEDIATION: Netfilter drop rule applied for 2405:201:e006:f81a:88d6:886b:983:8bbc
+[22:03:07] SOAR REMEDIATION: Active connection tracking entries purged for 2405:201:e006:f81a:88d6:886b:983:8bbc
+[22:03:07] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:03:07] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:03:08] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:10] [SNIFFER ALERT] High packet rate detected from 192.168.29.124 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 5.0 pkts/s
+[22:03:11] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.124
+[22:03:11] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation & active neutralization...
+[22:03:11] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[22:03:11] SOAR REMEDIATION: Segmented node 192.168.29.124 from internal lateral propagation paths
+[22:03:11] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:03:11] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:03:11] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:03:12] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:15] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:18] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:20] [SNIFFER ALERT] High packet rate detected from 192.168.29.124 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 6.5 pkts/s
+[22:03:20] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.124
+[22:03:20] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation & active neutralization...
+[22:03:20] ACTION: iptables -A INPUT -s 192.168.29.124 -j DROP
+[22:03:21] SOAR REMEDIATION: Segmented node 192.168.29.124 from internal lateral propagation paths
+[22:03:21] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:03:21] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:03:21] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:03:22] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 21.0 pkts/s
+[22:03:22] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:03:22] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:03:22] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:03:22] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:03:23] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:03:23] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:03:23] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:03:23] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:03:24] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 29.0 pkts/s
+[22:03:24] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:03:24] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:03:24] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:03:24] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:03:24] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:03:24] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:03:24] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:03:24] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:03:25] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:29] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.175
+[22:03:34] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 9.5 pkts/s
+[22:03:34] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:03:34] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:03:34] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:03:35] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:03:35] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:03:35] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:03:35] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:03:36] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:38] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 5.0 pkts/s
+[22:03:38] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:03:39] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:03:39] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:03:39] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:03:39] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:03:39] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:03:39] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:03:40] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 16.0 pkts/s
+[22:03:40] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:03:40] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:03:40] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:03:41] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:03:41] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:03:41] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:03:41] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:03:41] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:03:42] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:45] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:03:48] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:51] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:03:54] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 3.0 pkts/s
+[22:03:54] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:03:54] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:03:54] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:03:54] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:03:54] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:03:54] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:03:54] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:03:55] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 0.0.32.58
+[22:03:57] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 20.0 pkts/s
+[22:03:57] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:03:57] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:03:57] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:03:58] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:03:58] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:03:58] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:03:58] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:03:58] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:06:41] ACTION: 1-Click Rollback Restored. iptables -D INPUT -s 127.0.0.53 -j DROP
+[22:06:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[22:06:43] ACTION: Network telemetry reset to nominal baseline state.
+[22:09:40] ==================================================
+[22:09:40] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0, wlx00e0202fda61
+[22:09:40] ==================================================
+[22:09:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[22:09:40] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[22:09:40] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[22:09:40] INFO: Capture thread started on interface: lo
+[22:09:40] INFO: Capture thread started on interface: enp0s31f6
+[22:09:40] INFO: Capture thread started on interface: wlp3s0
+[22:09:40] INFO: Capture thread started on interface: wlx00e0202fda61
+[22:09:41] State: Benign | ML Conf: 99.7% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.1
+[22:09:43] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:09:46] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:09:49] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:09:50] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 26.5 pkts/s
+[22:09:50] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:09:50] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:09:50] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:09:50] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:09:50] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:09:50] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:09:50] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:09:50] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:09:51] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:09:53] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:09:56] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:09:58] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:01] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:04] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:06] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:09] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:11] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:13] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 19.0 pkts/s
+[22:10:13] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.215
+[22:10:13] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:13] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:13] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.215
+[22:10:13] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.215
+[22:10:13] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:10:13] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:10:14] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 21.5 pkts/s
+[22:10:14] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.215
+[22:10:14] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:14] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:14] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.215
+[22:10:14] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.215
+[22:10:14] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:10:14] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:10:15] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 14.0 pkts/s
+[22:10:15] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:10:15] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:15] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:15] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:10:15] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:10:15] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:10:15] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:10:15] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:18] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:10:21] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:23] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:26] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:27] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 7.0 pkts/s
+[22:10:27] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:10:27] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:10:27] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:10:27] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:10:27] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:10:27] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:10:27] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:10:28] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 17.5 pkts/s
+[22:10:28] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.215
+[22:10:28] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:28] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:28] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.215
+[22:10:28] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.215
+[22:10:28] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:10:28] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:10:29] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 22.5 pkts/s
+[22:10:29] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.215
+[22:10:29] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:29] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:29] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.215
+[22:10:29] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.215
+[22:10:29] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:10:29] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:10:29] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:10:32] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:34] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:37] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:10:42] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:43] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 16.5 pkts/s
+[22:10:43] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:10:43] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:43] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:43] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:10:43] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:10:43] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:10:43] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:10:44] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 20.5 pkts/s
+[22:10:44] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.215
+[22:10:44] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:44] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:44] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.215
+[22:10:44] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.215
+[22:10:44] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:10:44] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:10:45] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:10:47] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:50] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:53] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:55] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:10:57] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 19.0 pkts/s
+[22:10:57] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.215
+[22:10:57] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:10:57] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:10:58] SOAR REMEDIATION: Netfilter drop rule applied for 192.168.29.215
+[22:10:58] SOAR REMEDIATION: Active connection tracking entries purged for 192.168.29.215
+[22:10:58] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:10:58] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:10:58] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 24.0 pkts/s
+[22:10:58] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:10:58] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:10:58] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:10:58] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:10:58] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:10:58] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:10:58] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:10:58] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:10:59] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:00] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 12.0 pkts/s
+[22:11:00] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:11:00] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:11:00] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:11:01] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:11:01] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:01] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:01] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:11:04] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:05] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 11.5 pkts/s
+[22:11:05] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:11:05] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:11:05] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:11:05] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:11:05] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:05] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:05] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:06] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:11:09] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:12] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 2.5 pkts/s
+[22:11:12] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:11:12] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:11:12] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:11:12] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:11:12] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:12] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:12] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:12] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 9.0 pkts/s
+[22:11:12] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:11:12] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:11:12] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:11:12] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:11:12] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:12] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:12] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:13] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 15.0 pkts/s
+[22:11:13] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:11:13] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:11:13] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:11:13] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:11:13] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:13] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:13] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:14] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:11:16] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:11:19] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:20] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 34.5 pkts/s
+[22:11:20] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:11:20] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:11:20] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:11:20] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:11:20] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:11:20] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:11:20] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:11:20] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:11:21] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 0.0.32.58
+[22:11:26] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:28] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 6.0 pkts/s
+[22:11:28] State: Bot/LateralMovement | ML Conf: 99.9% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:11:28] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:11:28] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:11:28] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:11:28] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:28] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:28] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:28] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 12.5 pkts/s
+[22:11:28] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:11:28] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:11:28] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:11:29] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:11:29] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:29] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:29] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:29] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 15.0 pkts/s
+[22:11:29] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:11:29] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:11:29] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:11:29] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:11:29] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:29] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:29] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:30] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:11:32] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:35] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:11:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:40] [SNIFFER ALERT] High packet rate detected from 192.168.29.215 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 5.0 pkts/s
+[22:11:40] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.215
+[22:11:40] ALERT: Intercepting threat from 192.168.29.215! Triggering host micro-isolation & active neutralization...
+[22:11:40] ACTION: iptables -A INPUT -s 192.168.29.215 -j DROP
+[22:11:40] SOAR REMEDIATION: Segmented node 192.168.29.215 from internal lateral propagation paths
+[22:11:40] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:11:40] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:11:40] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:11:40] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:43] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:45] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:51] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:53] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:56] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:11:58] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:01] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:04] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 3.5 pkts/s
+[22:12:04] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:12:04] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:12:04] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:12:04] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:12:04] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:12:04] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:12:04] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:12:04] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:05] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 12.0 pkts/s
+[22:12:05] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:05] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:05] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:05] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:05] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:05] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:05] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:05] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:06] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:08] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:12:11] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:13] [SNIFFER ALERT] High packet rate detected from 192.168.29.177 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 6.5 pkts/s
+[22:12:13] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.177
+[22:12:13] ALERT: Intercepting threat from 192.168.29.177! Triggering host micro-isolation & active neutralization...
+[22:12:13] ACTION: iptables -A INPUT -s 192.168.29.177 -j DROP
+[22:12:13] SOAR REMEDIATION: Segmented node 192.168.29.177 from internal lateral propagation paths
+[22:12:13] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:12:13] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:12:13] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:12:13] [SNIFFER ALERT] High packet rate detected from 192.168.29.177 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 5.0 pkts/s
+[22:12:13] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 192.168.29.177
+[22:12:13] ALERT: Intercepting threat from 192.168.29.177! Triggering host micro-isolation & active neutralization...
+[22:12:13] ACTION: iptables -A INPUT -s 192.168.29.177 -j DROP
+[22:12:14] SOAR REMEDIATION: Segmented node 192.168.29.177 from internal lateral propagation paths
+[22:12:14] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:12:14] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:12:14] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:12:14] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.177
+[22:12:17] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:19] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:12:22] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:23] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 9.5 pkts/s
+[22:12:23] State: Recon/PortScan | ML Conf: 99.9% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:23] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:23] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:24] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:24] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:24] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:24] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:24] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:24] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 34.5 pkts/s
+[22:12:24] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:24] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:24] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:25] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:25] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:25] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:25] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:25] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:25] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 63.0 pkts/s
+[22:12:25] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:25] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:25] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:25] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:25] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:25] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:25] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:25] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:26] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:27] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 21.5 pkts/s
+[22:12:27] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 134.221.96.0
+[22:12:27] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:12:27] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:12:27] SOAR REMEDIATION: Netfilter drop rule applied for 134.221.96.0
+[22:12:27] SOAR REMEDIATION: Active connection tracking entries purged for 134.221.96.0
+[22:12:27] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:12:27] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:12:28] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 13.5 pkts/s
+[22:12:28] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:28] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:28] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:28] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:28] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:28] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:28] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:28] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:29] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 34.5 pkts/s
+[22:12:29] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:29] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:29] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:29] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:29] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:29] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:29] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:29] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:29] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:32] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:32] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 27.0 pkts/s
+[22:12:32] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:32] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:32] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:32] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:32] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:33] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:33] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:33] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:33] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 70.0 pkts/s
+[22:12:33] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:33] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:33] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:33] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:33] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:33] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:33] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:33] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:34] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 127.0 pkts/s
+[22:12:34] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:34] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:34] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:34] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:34] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:34] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:34] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:34] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:35] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 112.5 pkts/s
+[22:12:35] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:35] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:35] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:35] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:35] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:35] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:35] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:35] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:36] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 105.5 pkts/s
+[22:12:36] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:36] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:36] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:36] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:36] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:36] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:36] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:36] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:37] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 104.5 pkts/s
+[22:12:37] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:37] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:37] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:37] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:37] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:37] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:37] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:37] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:38] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 104.5 pkts/s
+[22:12:38] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:38] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:38] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:38] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:38] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:38] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:38] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:38] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:39] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 126.5 pkts/s
+[22:12:39] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:39] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:39] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:39] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:39] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:39] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:39] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:39] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:40] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 116.5 pkts/s
+[22:12:40] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:40] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:40] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:40] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:40] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:40] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:40] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:40] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:40] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 94.5 pkts/s
+[22:12:40] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:41] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:41] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:41] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:41] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:41] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:41] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:41] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:42] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 89.5 pkts/s
+[22:12:42] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:42] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:42] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:42] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:42] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:42] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:42] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:42] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:43] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 90.0 pkts/s
+[22:12:43] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:43] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:43] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:43] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:43] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:43] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:43] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:43] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:44] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 101.0 pkts/s
+[22:12:44] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:44] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:44] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:44] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:44] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:44] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:44] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:44] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:45] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 98.5 pkts/s
+[22:12:45] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:12:45] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:12:45] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:12:45] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:12:45] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:12:45] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:12:45] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:12:45] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:12:46] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:48] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 6.0 pkts/s
+[22:12:48] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:12:48] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:12:48] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:12:48] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:12:48] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:12:48] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:12:48] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:12:49] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:51] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:54] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:12:56] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:12:57] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 21.0 pkts/s
+[22:12:57] State: DoS/Flood | ML Conf: 100.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 134.221.96.0
+[22:12:57] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:12:57] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:12:57] SOAR REMEDIATION: Netfilter drop rule applied for 134.221.96.0
+[22:12:57] SOAR REMEDIATION: Active connection tracking entries purged for 134.221.96.0
+[22:12:57] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[22:12:57] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[22:12:58] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:00] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 43.0 pkts/s
+[22:13:00] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:00] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:00] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:00] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:00] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:00] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:00] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:00] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:01] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 111.0 pkts/s
+[22:13:01] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:01] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:01] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:01] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:01] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:01] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:01] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:01] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:02] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 111.5 pkts/s
+[22:13:02] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:02] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:02] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:02] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:02] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:02] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:02] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:02] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:03] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 77.5 pkts/s
+[22:13:03] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:03] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:03] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:03] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:03] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:03] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:03] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:03] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:04] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:09] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:11] [SNIFFER ALERT] High packet rate detected from 134.221.96.0 | Threat: Bot/LateralMovement | RSSM Risk: 93.0% | Packet Velocity: 3.0 pkts/s
+[22:13:11] State: Bot/LateralMovement | ML Conf: 100.0% | RSSM K-Horizon Risk: 93.0% | Source IP: 134.221.96.0
+[22:13:11] ALERT: Intercepting threat from 134.221.96.0! Triggering host micro-isolation & active neutralization...
+[22:13:11] ACTION: iptables -A INPUT -s 134.221.96.0 -j DROP
+[22:13:12] SOAR REMEDIATION: Segmented node 134.221.96.0 from internal lateral propagation paths
+[22:13:12] SOAR REMEDIATION: Severed outbound C2 Command & Control heartbeat beacons
+[22:13:12] SOAR REMEDIATION: ST-GNN neighbor routing table updated: rerouting traffic away from compromised host
+[22:13:12] SOAR REMEDIATION: Endpoint agent memory scan queued to detect lateral dropper artifacts
+[22:13:12] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:16] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 28.0 pkts/s
+[22:13:16] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:16] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:16] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:16] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:16] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:16] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:16] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:16] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:18] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:13:24] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 45.0 pkts/s
+[22:13:24] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:24] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:24] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:24] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:24] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:25] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:25] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:25] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:26] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 49.0 pkts/s
+[22:13:26] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:26] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:26] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:27] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:27] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:27] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:27] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:27] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:28] State: Benign | ML Conf: 99.9% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:32] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.215
+[22:13:35] [SNIFFER ALERT] High packet rate detected from 127.0.0.53 | Threat: Recon/PortScan | RSSM Risk: 92.0% | Packet Velocity: 38.0 pkts/s
+[22:13:35] State: Recon/PortScan | ML Conf: 100.0% | RSSM K-Horizon Risk: 92.0% | Source IP: 127.0.0.53
+[22:13:35] ALERT: Intercepting threat from 127.0.0.53! Triggering host micro-isolation & active neutralization...
+[22:13:35] ACTION: iptables -A INPUT -s 127.0.0.53 -j DROP
+[22:13:36] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 127.0.0.53
+[22:13:36] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[22:13:36] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 127.0.0.53]
+[22:13:36] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[22:13:36] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[22:13:39] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53
+[22:13:45] State: Benign | ML Conf: 100.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 127.0.0.53

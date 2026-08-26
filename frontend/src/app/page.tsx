@@ -7,17 +7,14 @@ import { TopHeader } from "@/components/layout/TopHeader";
 import { MetricGrid } from "@/components/dashboard/MetricGrid";
 import { IncidentSummary } from "@/components/dashboard/IncidentSummary";
 import { ModelHealth } from "@/components/dashboard/ModelHealth";
-import { ThreatRail } from "@/components/dashboard/ThreatRail";
-import { HeroBanner } from "@/components/dashboard/HeroBanner";
 import { StatusStrip } from "@/components/StatusStrip";
 import { TopologyGraph } from "@/components/TopologyGraph";
 import { HorizonChart } from "@/components/HorizonChart";
-import { SoarControl } from "@/components/SoarControl";
 import { LiveLogs } from "@/components/LiveLogs";
+import { CompactSoarBar } from "@/components/CompactSoarBar";
 import { CommandMenu } from "@/components/ui/CommandMenu";
 import { CinematicLanding } from "@/components/landing/CinematicLanding";
 import { BlockchainTransition } from "@/components/landing/BlockchainTransition";
-import { CyberPuzzleLoader } from "@/components/landing/CyberPuzzleLoader";
 
 import { useSoarActions } from "@/hooks/useSoarActions";
 import { useTelemetryStream } from "@/hooks/useTelemetryStream";
@@ -28,20 +25,20 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.12,
+      staggerChildren: 0.08,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 15 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
       type: "spring",
-      stiffness: 90,
-      damping: 14,
+      stiffness: 100,
+      damping: 15,
     },
   },
 };
@@ -131,8 +128,8 @@ export default function DashboardPage() {
   const actions = useSoarActions(telemetry.refresh);
   const [uptimeSeconds, setUptimeSeconds] = useState(1540);
 
-  // View States: "puzzle-loader" (default 5s instant loader) | "landing" | "transitioning" | "dashboard"
-  const [viewState, setViewState] = useState<"puzzle-loader" | "landing" | "transitioning" | "dashboard">("puzzle-loader");
+  // Directly starts on dashboard (no puzzle loader)
+  const [viewState, setViewState] = useState<"landing" | "transitioning" | "dashboard">("dashboard");
   const [isCommandMenuOpen, setIsCommandMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -172,17 +169,12 @@ export default function DashboardPage() {
 
   return (
     <>
-      {/* 1. Initial 5-Second 3D Cyber Puzzle Decryption Loader Overlay */}
-      {viewState === "puzzle-loader" && (
-        <CyberPuzzleLoader onComplete={() => setViewState("dashboard")} />
-      )}
-
-      {/* 2. Blockchain Consensus Sequence Overlay */}
+      {/* 1. Blockchain Consensus Sequence Overlay */}
       {viewState === "transitioning" && (
         <BlockchainTransition onComplete={() => setViewState("dashboard")} />
       )}
 
-      {/* 3. Platform Overview / Landing View Overlay */}
+      {/* 2. Platform Overview / Landing View Overlay */}
       {viewState === "landing" && (
         <DashboardShell state={telemetry.state}>
           <CinematicLanding
@@ -192,7 +184,7 @@ export default function DashboardPage() {
         </DashboardShell>
       )}
 
-      {/* 4. Production-Grade Enterprise SOC Command Center Dashboard (Pre-mounted for ZERO lag transition) */}
+      {/* 3. SOC Command Center Dashboard */}
       <div
         className={
           viewState === "dashboard"
@@ -217,97 +209,66 @@ export default function DashboardPage() {
             variants={containerVariants}
             initial="hidden"
             animate={viewState === "dashboard" ? "show" : "hidden"}
-            className="mx-auto w-full max-w-[1800px] space-y-6 p-4 md:p-6 flex-1"
+            className="mx-auto w-full max-w-[1800px] space-y-4 p-3 md:p-5 flex-1"
           >
-            <HeroBanner status={telemetry.status} onRefresh={telemetry.refresh} />
             {actions.error && (
               <motion.div
                 variants={itemVariants}
                 role="alert"
-                className="rounded-lg border border-red-200 bg-red-50 p-4 font-mono text-xs text-red-700 shadow-sm"
+                className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 font-mono text-xs text-red-400 shadow-sm"
               >
                 SOAR ACTION FAILED: {actions.error}
               </motion.div>
             )}
 
-            {/* Enterprise KPI Grid */}
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-            >
+            {/* Row 1: Enterprise KPI Grid */}
+            <motion.div variants={itemVariants}>
               <MetricGrid state={telemetry.state} uptime={uptime} />
             </motion.div>
 
-            {/* Primary operations workspace */}
+            {/* Row 2: Side-by-Side Graphical Node Part (Left) + Terminal & Controls (Right) */}
             <motion.div
               variants={itemVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-              className="grid w-full grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_290px]"
+              className="grid w-full grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] items-stretch"
             >
-              <section id="topology" className="min-w-0">
+              {/* Left Column: ST-GNN Spatial Graph Topology */}
+              <section id="topology" className="min-w-0 flex flex-col">
                 <TopologyGraph
                   topology={telemetry.state.topology}
                   state={telemetry.state}
                 />
               </section>
-              <ThreatRail state={telemetry.state} />
-            </motion.div>
 
-            {/* Operations and prediction */}
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-              className="grid w-full grid-cols-1 gap-5"
-            >
-              <section id="soar" className="min-w-0">
-                <SoarControl
+              {/* Right Column: Compact SOAR Controls (Top) + Live Event Terminal Logs (Bottom) */}
+              <section id="terminal-soar" className="min-w-0 flex flex-col gap-3">
+                {/* Attack type, Rollback, Reset Baseline & SOAR actions bar */}
+                <CompactSoarBar
                   state={telemetry.state}
                   onRefresh={telemetry.refresh}
+                  onAction={runHeaderAction}
                 />
+
+                {/* Live Event Terminal Logs */}
+                <div id="logs" className="flex-1 min-h-[220px]">
+                  <LiveLogs logs={telemetry.logs} />
+                </div>
               </section>
             </motion.div>
 
-            {/* Horizon Chart */}
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-              className="w-full"
-            >
+            {/* Row 3: Horizon Chart Full Width */}
+            <motion.div variants={itemVariants} className="w-full">
               <section id="horizon">
                 <HorizonChart state={telemetry.state} />
               </section>
             </motion.div>
 
-            {/* Incident Summary & Model Health */}
+            {/* Row 4: Incident Summary & World Model Health */}
             <motion.div
               variants={itemVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-              className="grid grid-cols-1 gap-5 lg:grid-cols-2"
+              className="grid grid-cols-1 gap-4 lg:grid-cols-2"
             >
               <IncidentSummary state={telemetry.state} />
               <ModelHealth state={telemetry.state} />
-            </motion.div>
-
-            {/* Live Event Terminal Logs */}
-            <motion.div
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-80px" }}
-            >
-              <section id="logs">
-                <LiveLogs logs={telemetry.logs} />
-              </section>
             </motion.div>
           </motion.main>
 

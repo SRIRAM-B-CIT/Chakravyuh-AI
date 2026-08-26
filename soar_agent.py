@@ -14,6 +14,20 @@ IS_LINUX = platform.system() == "Linux"
 # Active isolated host registry
 ACTIVE_ISOLATIONS = set()
 
+def is_protected_ip(ip: str) -> bool:
+    """Checks if an IP is local loopback, infrastructure, or system daemon."""
+    if not ip:
+        return True
+    ip = str(ip).strip().lower()
+    if ip.startswith("127.") or ip in ("::1", "localhost", "0.0.0.0", "fe80::", "::"):
+        return True
+    defense_ip = os.getenv("DEFENSE_IP", "192.168.29.104")
+    gateway_ip = os.getenv("GATEWAY_IP", "192.168.29.1")
+    internal_srv = os.getenv("INTERNAL_SERVER_IP", "192.168.29.42")
+    if ip in (defense_ip, gateway_ip, internal_srv):
+        return True
+    return False
+
 def get_firewall_action_string(attacker_ip: str, action: str = "block") -> str:
     """Returns human-readable OS-specific firewall action string."""
     if IS_WINDOWS:
@@ -32,8 +46,8 @@ def kill_active_connections(attacker_ip: str) -> bool:
     Active socket severing: Drops all established TCP/UDP connections from the attacking IP.
     Ensures that active data exfiltration or flood streams are terminated immediately.
     """
-    if attacker_ip in ("127.0.0.1", "::1", "localhost", "127.0.0.0/8"):
-        logging.info(f"[SAFEGUARD] Loopback socket termination skipped for {attacker_ip}.")
+    if is_protected_ip(attacker_ip):
+        logging.info(f"[SAFEGUARD] Protected/Loopback socket termination skipped for {attacker_ip}.")
         return True
 
     logging.info(f"[SOAR] Terminating active TCP/UDP socket sessions for {attacker_ip}...")
@@ -57,8 +71,8 @@ def kill_active_connections(attacker_ip: str) -> bool:
 
 def isolate_host(attacker_ip: str) -> bool:
     """Executes targeted micro-isolation on a single attacker IP across Windows and Linux."""
-    if attacker_ip in ("127.0.0.1", "::1", "localhost", "127.0.0.0/8"):
-        logging.info(f"[SAFEGUARD] Host {attacker_ip} is loopback; skipping system firewall isolation rule.")
+    if is_protected_ip(attacker_ip):
+        logging.info(f"[SAFEGUARD] Host {attacker_ip} is protected/loopback; skipping system firewall isolation rule.")
         return True
 
     logging.warning(f"[CHAKRAVYUH AI] Isolating malicious host: {attacker_ip} on {platform.system()}")
