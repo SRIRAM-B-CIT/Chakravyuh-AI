@@ -8,7 +8,7 @@ import numpy as np
 import pyshark
 import torch
 from collections import Counter, defaultdict
-from soar_agent import isolate_host
+from soar_agent import isolate_host, get_firewall_action_string, IS_WINDOWS
 from model_rssm_gnn import RSSMWorldModel
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -260,19 +260,27 @@ def extract_flow_features(packets):
     return pd.DataFrame([feature_dict])[feature_names], dst_ip_count, dst_port_count
 
 def start_live_defense(interface=None, window_seconds=3):
-    chosen_interface = interface or os.getenv("DEFENSE_INTERFACE", "any")
+    chosen_interface = interface or os.getenv("DEFENSE_INTERFACE")
     
+    if chosen_interface is None:
+        chosen_interface = None if IS_WINDOWS else "any"
+        
+    display_iface = chosen_interface or ("Default Windows Adapter" if IS_WINDOWS else "any")
     write_log(f"==================================================")
-    write_log(f"INFO: Live ST-GNN + RSSM Defense Active on {chosen_interface}")
+    write_log(f"INFO: Live ST-GNN + RSSM Defense Active on {display_iface}")
     write_log(f"==================================================")
     
+    capture = None
     try:
-        capture = pyshark.LiveCapture(interface=chosen_interface)
-    except Exception as e:
-        # Fallback to wlp3s0 or default if 'any' is restricted
-        try:
-            chosen_interface = "wlp3s0"
+        if chosen_interface:
             capture = pyshark.LiveCapture(interface=chosen_interface)
+        else:
+            capture = pyshark.LiveCapture()
+    except Exception as e:
+        # Fallback to secondary adapter or simulated mode
+        try:
+            fallback_iface = "Wi-Fi" if IS_WINDOWS else "wlp3s0"
+            capture = pyshark.LiveCapture(interface=fallback_iface)
         except Exception as ex:
             write_log(f"WARN: LiveCapture could not bind: {ex}. Fallback to simulated monitoring mode.")
             capture = None
@@ -350,15 +358,13 @@ def start_live_defense(interface=None, window_seconds=3):
                         
                         if is_isolated:
                             write_log(f"ALERT: Intercepting threat from {src_ip}! Triggering host micro-isolation...")
-                            write_log(f"ACTION: iptables -A INPUT -s {src_ip} -j DROP")
+                            action_str = get_firewall_action_string(src_ip, "block")
+                            write_log(f"ACTION: {action_str}")
                             if src_ip != "127.0.0.1":
                                 isolate_host(src_ip)
             
             packet_buffer = []
             last_flush = time.time()
-
-if __name__ == "__main__":
-    start_live_defense()
 
 if __name__ == "__main__":
     start_live_defense()
