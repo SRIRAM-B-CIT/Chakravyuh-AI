@@ -2,6 +2,8 @@ import os
 import sys
 import time
 import json
+import socket
+import struct
 import pickle
 import threading
 from collections import Counter, deque, defaultdict
@@ -380,8 +382,100 @@ def extract_flow_features(packets):
 
 
 
-def packet_capture_thread(iface):
-    """Captures live packets on a single interface in a dedicated asyncio event loop."""
+def decode_raw_frame(data, pkt_time):
+    """Fast pure-Python decoder for Ethernet II, Linux SLL, and Raw IPv4 frames."""
+    if len(data) < 14:
+        return None
+
+    offset = 0
+    if len(data) >= 14:
+        try:
+            eth_proto = struct.unpack('!H', data[12:14])[0]
+            if eth_proto == 0x0800:  # Ethernet IPv4
+                offset = 14
+            elif len(data) >= 16 and struct.unpack('!H', data[14:16])[0] == 0x0800:  # Linux SLL IPv4
+                offset = 16
+            elif (data[0] >> 4) == 4:  # Raw IPv4
+                offset = 0
+            else:
+                # Scan first 20 bytes for IPv4 header signature (0x45)
+                found = False
+                for i in range(min(16, len(data) - 20)):
+                    if (data[i] >> 4) == 4 and (data[i] & 0x0F) >= 5:
+                        offset = i
+                        found = True
+                        break
+                if not found:
+                    return None
+        except Exception:
+            return None
+
+    if len(data) < offset + 20:
+        return None
+
+    try:
+        ip_hdr = data[offset:offset+20]
+        ver_ihl = ip_hdr[0]
+        ver = ver_ihl >> 4
+        if ver != 4:
+            return None
+        ihl = (ver_ihl & 0x0F) * 4
+        total_len = struct.unpack('!H', ip_hdr[2:4])[0]
+        proto = ip_hdr[9]
+        src_ip = socket.inet_ntoa(ip_hdr[12:16])
+        dst_ip = socket.inet_ntoa(ip_hdr[16:20])
+
+        dst_port = None
+        flags = 0
+        if proto == 6:  # TCP
+            tcp_offset = offset + ihl
+            if len(data) >= tcp_offset + 14:
+                tcp_hdr = data[tcp_offset:tcp_offset+14]
+                dst_port = struct.unpack('!H', tcp_hdr[2:4])[0]
+                flags = tcp_hdr[13]
+        elif proto == 17:  # UDP
+            udp_offset = offset + ihl
+            if len(data) >= udp_offset + 4:
+                dst_port = struct.unpack('!H', data[udp_offset+2:udp_offset+4])[0]
+
+        return {
+            'time': pkt_time,
+            'src': str(src_ip),
+            'dst': str(dst_ip),
+            'length': int(total_len) if total_len > 0 else len(data),
+            'dst_port': dst_port,
+            'flags': flags
+        }
+    except Exception:
+        return None
+
+
+def native_raw_socket_capture_thread():
+    """Ultra high-speed zero-latency native Linux AF_PACKET raw socket capture."""
+    try:
+        # ETH_P_ALL (0x0003) captures all frames on all interfaces (lo, wlp3s0, etc.) simultaneously
+        ETH_P_ALL = 0x0003
+        raw_sock = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(ETH_P_ALL))
+        raw_sock.settimeout(0.5)
+        write_log("INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).")
+        
+        while not stop_sniffer_event.is_set():
+            try:
+                data, _ = raw_sock.recvfrom(65535)
+                pkt = decode_raw_frame(data, time.time())
+                if pkt and pkt['src']:
+                    live_packet_deque.append(pkt)
+            except socket.timeout:
+                continue
+            except Exception:
+                continue
+        raw_sock.close()
+    except Exception as e:
+        write_log(f"WARN: Native raw socket unavailable ({e}), falling back to PyShark capture...")
+
+
+def pyshark_capture_thread(iface):
+    """Fallback PyShark packet capture thread for Windows or unprivileged environments."""
     import asyncio
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
@@ -433,7 +527,7 @@ def packet_capture_thread(iface):
             except Exception:
                 continue
     except Exception as e:
-        write_log(f"WARN: Capture thread [{iface}] error: {e}")
+        write_log(f"WARN: PyShark capture thread [{iface}] error: {e}")
 
 
 def start_live_defense(interface=None, window_seconds=1.5):
@@ -469,9 +563,14 @@ def start_live_defense(interface=None, window_seconds=1.5):
     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
     write_log(f"INFO: Telemetry initialized to NOMINAL SAFE baseline.")
 
-    # Spawn one capture thread per interface so we see loopback (lo) AND Wi-Fi
+    # 1. Start high-speed native AF_PACKET raw socket thread on Linux
+    if not IS_WINDOWS and hasattr(socket, "AF_PACKET"):
+        raw_t = threading.Thread(target=native_raw_socket_capture_thread, daemon=True)
+        raw_t.start()
+
+    # 2. Start PyShark capture threads for multi-interface redundancy
     for iface in interfaces_to_capture:
-        t = threading.Thread(target=packet_capture_thread, args=(iface,), daemon=True)
+        t = threading.Thread(target=pyshark_capture_thread, args=(iface,), daemon=True)
         t.start()
         write_log(f"INFO: Capture thread started on interface: {iface}")
 
