@@ -1,15 +1,15 @@
 {
   "src_ip": "127.0.0.1",
-  "label": "Recon/PortScan",
-  "ml_conf": 0.96,
-  "risk_score": 0.92,
-  "isolated": true,
-  "netfilter_drops": "41.3k Drops",
+  "label": "Benign",
+  "ml_conf": 0.98,
+  "risk_score": 0.05,
+  "isolated": false,
+  "netfilter_drops": "0 Drops",
   "rollout": [
-    0.14,
-    0.37,
-    0.69,
-    0.92
+    0.01,
+    0.02,
+    0.04,
+    0.05
   ],
   "rollout_series": {
     "Gateway": [
@@ -31,10 +31,10 @@
       0.12
     ],
     "Threat Node": [
-      0.14,
-      0.37,
-      0.69,
-      0.92
+      0.01,
+      0.02,
+      0.04,
+      0.05
     ]
   },
   "topology": {
@@ -79,13 +79,13 @@
         "id": "127.0.0.1",
         "ip": "127.0.0.1",
         "label": "Attacker",
-        "role": "Threat Host",
-        "risk_score": 0.92,
-        "status": "ISOLATED",
-        "packet_count": 42,
-        "byte_rate": "18.4 MB/s",
+        "role": "External Node",
+        "risk_score": 0.05,
+        "status": "SAFE",
+        "packet_count": 15,
+        "byte_rate": "340 KB/s",
         "is_defense": false,
-        "is_isolated": true
+        "is_isolated": false
       }
     ],
     "edges": [
@@ -123,29 +123,29 @@
         "id": "e-att-def",
         "source": "127.0.0.1",
         "target": "192.168.29.104",
-        "weight": 42,
-        "traffic": "Threat Flow (148 pkts/s)",
+        "weight": 15,
+        "traffic": "Safe Path",
         "protocol": "TCP/SYN",
-        "animated": true,
-        "threat": true
+        "animated": false,
+        "threat": false
       },
       {
         "id": "e-att-srv",
         "source": "127.0.0.1",
         "target": "192.168.29.42",
         "weight": 34,
-        "traffic": "Lateral Probe",
+        "traffic": "Internal Route",
         "protocol": "TCP/SYN",
-        "animated": true,
-        "threat": true
+        "animated": false,
+        "threat": false
       }
     ],
     "stats": {
       "total_nodes": 4,
       "total_edges": 5,
-      "threat_level": "CRITICAL",
-      "active_flows": 67
+      "threat_level": "NORMAL",
+      "active_flows": 21
     }
   },
-  "last_updated": 1787725352.7966087
+  "last_updated": 1787725591.4792643
 }
