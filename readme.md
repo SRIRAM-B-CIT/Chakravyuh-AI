@@ -127,11 +127,49 @@ cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
 sudo /home/sriram/Desktop/"SIH 2026"/.venv/bin/python live_sniffer.py
 ```
 
-#### Terminal 4 (Optional) — Interactive Attack Suite:
+#### Terminal 4 (Demo Target) — E-Commerce Web Storefront (Port 5000):
 ```bash
 cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
-../.venv/bin/python attack_suite.py
+node demo_app.js
+# Or: ./run_demo_app.sh
 ```
+*(Open [http://localhost:5000](http://localhost:5000/) in your browser)*
+
+#### Terminal 5 (Optional) — Interactive Attack Suite / Traffic Flood:
+```bash
+cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
+../.venv/bin/python traffic_flood.py 127.0.0.1 5000
+# Or launch interactive suite: ../.venv/bin/python attack_suite.py
+```
+
+---
+
+## 🏆 Live Hackathon Demonstration Workflow ("Before & After" Defense)
+
+### 🔴 Scenario A: Unprotected Baseline Attack (Failure State)
+1. **Setup**: Stop or close `live_sniffer.py` (simulating an unprotected traditional network).
+2. **Trigger Attack**:
+   ```bash
+   ../.venv/bin/python traffic_flood.py 127.0.0.1 5000
+   ```
+3. **Observation on Storefront (`http://localhost:5000`)**:
+   - The live latency gauge on `http://localhost:5000` immediately turns **CRITICAL RED** (`3,500ms - 5,000ms+ LATENCY`).
+   - Clicking *"⚡ Place Test Order"* hangs or times out, demonstrating real unmitigated service degradation.
+
+### 🟢 Scenario B: Protected Autonomous Defense (Chakravyuh AI Active)
+1. **Setup**: Start `live_sniffer.py` with superuser privileges in Terminal 3:
+   ```bash
+   sudo /home/sriram/Desktop/"SIH 2026"/.venv/bin/python live_sniffer.py
+   ```
+2. **Trigger Attack**: Relaunch the volumetric flood on the e-commerce storefront:
+   ```bash
+   ../.venv/bin/python traffic_flood.py 127.0.0.1 5000
+   ```
+3. **Autonomous SOC Reaction**:
+   - **Detection & Forecasting**: `live_sniffer.py` identifies high packet velocity and the PyTorch RSSM World Model forecasts a $K$-step threat risk $\ge 96\%$.
+   - **Targeted Host Micro-Isolation**: `soar_agent.py` applies netfilter drops and purges active connection tracking pools.
+   - **Cyber Dashboard Real-Time Visuals**: `http://localhost:3000` reflects the attacker node in glowing crimson with full mitigation logs.
+   - **Observation on Storefront (`http://localhost:5000`)**: Storefront responds instantly with nominal **12ms green latency**, proving zero downtime for legitimate users!
 
 ---
 

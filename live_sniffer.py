@@ -664,6 +664,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         67, 68,               # DHCP
                         123,                  # NTP time sync
                         1900,                 # SSDP / UPnP
+                        5000,                 # E-Commerce Demo Storefront
                         5037,                 # ADB
                         8000, 3000,           # FastAPI / Next.js
                         80, 443, 8080, 8443   # Standard Web
