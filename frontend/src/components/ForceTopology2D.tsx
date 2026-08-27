@@ -62,7 +62,7 @@ const CANONICAL_NODES = [
     fy: 75,
     label: "Attacker",
     role: "External Node",
-    ip: "10.42.0.181",
+    ip: "127.0.0.1",
     risk_score: 0.05,
     status: "SAFE",
     packet_count: 88,
@@ -73,11 +73,11 @@ const CANONICAL_NODES = [
 ];
 
 const CANONICAL_LINKS = [
-  { source: "node-gateway", target: "node-defense", threat: false, traffic: "Safe Path", protocol: "TCP/HTTPS" },
-  { source: "node-defense", target: "node-server", threat: false, traffic: "Safe Path", protocol: "gRPC/TLS" },
-  { source: "node-gateway", target: "node-server", threat: false, traffic: "Internal Route", protocol: "TCP/TLS" },
-  { source: "node-attacker", target: "node-defense", threat: false, traffic: "External Flow", protocol: "TCP/SYN" },
-  { source: "node-attacker", target: "node-server", threat: false, traffic: "External Flow", protocol: "TCP/SYN" },
+  { id: "e-gw-def", source: "node-gateway", target: "node-defense", threat: false },
+  { id: "e-def-srv", source: "node-defense", target: "node-server", threat: false },
+  { id: "e-gw-srv", source: "node-gateway", target: "node-server", threat: false },
+  { id: "e-att-def", source: "node-attacker", target: "node-defense", threat: false },
+  { id: "e-att-srv", source: "node-attacker", target: "node-server", threat: false },
 ];
 
 export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
@@ -101,7 +101,7 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
   const currentLabel = state?.label || "Benign";
   const isAttack = currentLabel !== "Benign" || (state?.risk_score || 0) >= 0.5;
   const isIsolated = Boolean(state?.isolated);
-  const attackerIp = state?.src_ip || "10.42.0.181";
+  const attackerIp = state?.src_ip || "127.0.0.1";
 
   // In-place update of node data without triggering physics reset or jitter
   useEffect(() => {
@@ -111,24 +111,17 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
     const serverNode = rawNodes.find((n) => n.label.toLowerCase() === "server");
     const defenseNode = rawNodes.find((n) => n.label.toLowerCase() === "defense" || n.is_defense);
     const gatewayNode = rawNodes.find((n) => n.label.toLowerCase() === "gateway");
-    const attackerNode = rawNodes.find((n) => n.label.toLowerCase() === "attacker" || n.status === "ATTACKER" || n.status === "ISOLATED");
 
     graphData.nodes.forEach((node) => {
-      if (node.id === "node-server") {
-        if (serverNode) {
-          node.ip = serverNode.ip || node.ip;
-          node.risk_score = serverNode.risk_score;
-        }
-      } else if (node.id === "node-defense") {
-        if (defenseNode) {
-          node.ip = defenseNode.ip || node.ip;
-          node.risk_score = defenseNode.risk_score;
-        }
-      } else if (node.id === "node-gateway") {
-        if (gatewayNode) {
-          node.ip = gatewayNode.ip || node.ip;
-          node.risk_score = gatewayNode.risk_score;
-        }
+      if (node.id === "node-server" && serverNode) {
+        node.ip = serverNode.ip || node.ip;
+        node.risk_score = serverNode.risk_score;
+      } else if (node.id === "node-defense" && defenseNode) {
+        node.ip = defenseNode.ip || node.ip;
+        node.risk_score = defenseNode.risk_score;
+      } else if (node.id === "node-gateway" && gatewayNode) {
+        node.ip = gatewayNode.ip || node.ip;
+        node.risk_score = gatewayNode.risk_score;
       } else if (node.id === "node-attacker") {
         node.ip = attackerIp;
         node.risk_score = isAttack ? (state?.risk_score || 0.96) : 0.05;
@@ -143,66 +136,65 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
       const tgtId = typeof link.target === "object" ? link.target.id : link.target;
       if (srcId === "node-attacker" || tgtId === "node-attacker") {
         link.threat = isAttack;
-        link.traffic = isAttack ? "Threat Surge" : "External Flow";
       }
     });
   }, [state, isAttack, isIsolated, attackerIp, graphData]);
 
-  // Dynamic particle visual configurations for each attack vector
+  // Dynamic attack-specific visual styles
   const attackConfig = useMemo(() => {
     switch (currentLabel) {
       case "DoS/Flood":
         return {
-          particleSpeed: 0.04,
-          particleWidth: 4.5,
-          particleColor: "#EF4444", // Crimson Laser
-          particleCount: 16,
-          beamColor: "rgba(239, 68, 68, 0.9)",
+          particleSpeed: 0.045,
+          particleColor: "#EF4444",
+          particleCount: 12,
+          particleSize: 4.5,
+          beamColor: "rgba(239, 68, 68, 0.95)",
           modeLabel: "⚡ DOS / HIGH-VELOCITY PLASMA FLOOD",
         };
       case "Recon/PortScan":
         return {
-          particleSpeed: 0.028,
-          particleWidth: 3.5,
-          particleColor: "#F59E0B", // Amber Radar
-          particleCount: 12,
-          beamColor: "rgba(245, 158, 11, 0.85)",
+          particleSpeed: 0.03,
+          particleColor: "#F59E0B",
+          particleCount: 8,
+          particleSize: 3.8,
+          beamColor: "rgba(245, 158, 11, 0.9)",
           modeLabel: "📡 SYN PORT RECONNAISSANCE SWEEP",
         };
       case "Recon/BruteForce":
         return {
-          particleSpeed: 0.032,
-          particleWidth: 4.0,
-          particleColor: "#F97316", // Orange Spark
-          particleCount: 14,
-          beamColor: "rgba(249, 115, 22, 0.85)",
+          particleSpeed: 0.035,
+          particleColor: "#F97316",
+          particleCount: 10,
+          particleSize: 4.0,
+          beamColor: "rgba(249, 115, 22, 0.9)",
           modeLabel: "🔑 AUTH CREDENTIAL BRUTE-FORCE BURST",
         };
       case "Infiltration":
         return {
-          particleSpeed: 0.018,
-          particleWidth: 5.0,
-          particleColor: "#A855F7", // Toxic Purple Droplet
-          particleCount: 8,
-          beamColor: "rgba(168, 85, 247, 0.85)",
+          particleSpeed: 0.022,
+          particleColor: "#A855F7",
+          particleCount: 6,
+          particleSize: 5.2,
+          beamColor: "rgba(168, 85, 247, 0.9)",
           modeLabel: "☣️ RCE INFILTRATION & PAYLOAD DROP",
         };
       case "Botnet/LateralMovement":
         return {
-          particleSpeed: 0.022,
-          particleWidth: 4.0,
-          particleColor: "#10B981", // Biohazard Green
-          particleCount: 10,
-          beamColor: "rgba(16, 185, 129, 0.85)",
+          particleSpeed: 0.026,
+          particleColor: "#10B981",
+          particleCount: 8,
+          particleSize: 4.2,
+          beamColor: "rgba(16, 185, 129, 0.9)",
           modeLabel: "🕸️ BOTNET C2 & LATERAL SPREAD",
         };
       default:
         return {
-          particleSpeed: 0.007,
-          particleWidth: 2.5,
-          particleColor: "#38BDF8", // Cyan Data Stream
+          particleSpeed: 0.012,
+          particleColor: "#38BDF8",
           particleCount: 4,
-          beamColor: "rgba(56, 189, 248, 0.35)",
+          particleSize: 3.0,
+          beamColor: "rgba(56, 189, 248, 0.4)",
           modeLabel: "🟢 NOMINAL SAFE HARMONIC STREAM",
         };
     }
@@ -228,17 +220,19 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
       const isServer = node.id === "node-server";
       const nodeIsolated = isAttacker && isIsolated;
 
-      const r = isAttacker ? (isAttack ? 9 : 7.5) : isDefense ? 8.5 : 7.5;
+      const r = isAttacker ? (isAttack ? 9.5 : 7.5) : isDefense ? 8.5 : 7.5;
+      const nowTime = Date.now() / 1000;
 
       ctx.save();
 
-      // 1. Glowing outer halo
+      // 1. Glowing outer halo / pulse
       ctx.beginPath();
-      ctx.arc(node.x, node.y, r + 4, 0, 2 * Math.PI, false);
+      const pulse = isAttack && isAttacker ? 4 + Math.sin(nowTime * 6) * 2 : 3;
+      ctx.arc(node.x, node.y, r + pulse, 0, 2 * Math.PI, false);
       if (nodeIsolated) {
-        ctx.fillStyle = "rgba(239, 68, 68, 0.25)";
+        ctx.fillStyle = "rgba(239, 68, 68, 0.3)";
       } else if (isAttacker && isAttack) {
-        ctx.fillStyle = "rgba(239, 68, 68, 0.35)";
+        ctx.fillStyle = "rgba(239, 68, 68, 0.4)";
       } else if (isDefense) {
         ctx.fillStyle = "rgba(56, 189, 248, 0.25)";
       } else if (isGateway || isServer) {
@@ -251,10 +245,10 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
       // 2. Micro-Isolation Hexagonal Shield Barrier
       if (nodeIsolated) {
         ctx.strokeStyle = "#EF4444";
-        ctx.lineWidth = 1.8;
-        ctx.setLineDash([3, 2]);
+        ctx.lineWidth = 2.0;
+        ctx.setLineDash([4, 2]);
         ctx.beginPath();
-        const hexR = r + 9;
+        const hexR = r + 10;
         for (let i = 0; i < 6; i++) {
           const angle = (Math.PI / 3) * i;
           const hx = node.x + hexR * Math.cos(angle);
@@ -298,7 +292,7 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
 
       // Label
       ctx.fillStyle = "#FFFFFF";
-      ctx.fillText(node.label.toUpperCase(), node.x, node.y - r - 4);
+      ctx.fillText(node.label.toUpperCase(), node.x, node.y - r - 4.5);
 
       // IP Address
       ctx.font = `${fontSize * 0.8}px "JetBrains Mono", monospace`;
@@ -321,7 +315,7 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
     [selectedNodeId, isAttack, isIsolated, currentLabel]
   );
 
-  // Custom Edge Canvas Renderer
+  // Custom Link & 60 FPS Comet Particle Canvas Renderer
   const linkCanvasObject = useCallback(
     (link: any, ctx: CanvasRenderingContext2D) => {
       const isThreatLink = link.threat || isAttack;
@@ -329,14 +323,19 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
       const end = link.target;
       if (!start || !end || typeof start.x !== "number" || typeof end.x !== "number") return;
 
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist === 0) return;
+
       ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(start.x, start.y);
-      ctx.lineTo(end.x, end.y);
 
       if (isIsolated && isThreatLink) {
         // Broken link style
-        ctx.strokeStyle = "rgba(239, 68, 68, 0.45)";
+        ctx.beginPath();
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.strokeStyle = "rgba(239, 68, 68, 0.4)";
         ctx.lineWidth = 1.2;
         ctx.setLineDash([4, 4]);
         ctx.stroke();
@@ -346,16 +345,34 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
         ctx.fillStyle = "#EF4444";
         ctx.font = "bold 3.8px monospace";
         ctx.fillText("✕ SEVERED", midX - 8, midY);
-      } else if (isThreatLink) {
-        // Active attack beam
-        ctx.strokeStyle = attackConfig.beamColor;
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
       } else {
-        // Safe link
-        ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
-        ctx.lineWidth = 1.0;
+        // Base Link Line
+        ctx.beginPath();
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.strokeStyle = isThreatLink ? attackConfig.beamColor : "rgba(56, 189, 248, 0.35)";
+        ctx.lineWidth = isThreatLink ? 2.2 : 1.0;
         ctx.stroke();
+
+        // 60 FPS Fluid Time-Based Particle Stream (Never freezes!)
+        const nowSec = Date.now() / 1000;
+        const particleCount = isThreatLink ? attackConfig.particleCount : 3;
+        const speed = isThreatLink ? attackConfig.particleSpeed : 0.012;
+        const pSize = isThreatLink ? attackConfig.particleSize : 2.8;
+
+        for (let i = 0; i < particleCount; i++) {
+          const offset = (nowSec * speed * 25 + (i / particleCount)) % 1.0;
+          const px = start.x + dx * offset;
+          const py = start.y + dy * offset;
+
+          // Draw Glowing Comet Particle
+          ctx.beginPath();
+          ctx.arc(px, py, pSize, 0, 2 * Math.PI);
+          ctx.fillStyle = isThreatLink ? attackConfig.particleColor : "#38BDF8";
+          ctx.shadowColor = isThreatLink ? attackConfig.particleColor : "#38BDF8";
+          ctx.shadowBlur = isThreatLink ? 8 : 4;
+          ctx.fill();
+        }
       }
 
       ctx.restore();
@@ -379,7 +396,7 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
         </span>
       </div>
 
-      {/* ForceGraph2D Canvas */}
+      {/* ForceGraph2D Canvas with continuous 60fps rendering */}
       <ForceGraph2D
         ref={fgRef}
         width={width}
@@ -388,10 +405,7 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
         backgroundColor="#040814"
         nodeCanvasObject={nodeCanvasObject}
         linkCanvasObject={linkCanvasObject}
-        linkDirectionalParticles={isIsolated ? 0 : (link) => (link.threat || isAttack ? attackConfig.particleCount : 3)}
-        linkDirectionalParticleSpeed={isIsolated ? 0 : (link) => (link.threat || isAttack ? attackConfig.particleSpeed : 0.007)}
-        linkDirectionalParticleWidth={isIsolated ? 0 : (link) => (link.threat || isAttack ? attackConfig.particleWidth : 2.4)}
-        linkDirectionalParticleColor={(link) => (link.threat || isAttack ? attackConfig.particleColor : "#38BDF8")}
+        cooldownTicks={Infinity}
         onNodeClick={(node) => onSelectNode(node as unknown as TopologyNode)}
         nodePointerAreaPaint={(node, color, ctx) => {
           ctx.fillStyle = color;
@@ -399,9 +413,6 @@ export const ForceTopology2D: React.FC<ForceTopology2DProps> = ({
           ctx.arc(node.x || 0, node.y || 0, 12, 0, 2 * Math.PI, false);
           ctx.fill();
         }}
-        cooldownTicks={0}
-        d3AlphaDecay={0.05}
-        d3VelocityDecay={0.4}
         enableNodeDrag={true}
         enableZoomInteraction={true}
         enablePanInteraction={true}

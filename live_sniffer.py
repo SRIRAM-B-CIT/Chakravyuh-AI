@@ -419,36 +419,31 @@ def extract_flow_features(packets):
     return feature_array, len(dst_ips), len(dst_ports)
 
 
-
 def decode_raw_frame(data, pkt_time):
-    """Fast pure-Python decoder for Ethernet II, Linux SLL, and Raw IPv4 frames."""
-    if len(data) < 14:
+    """Robust zero-copy parser supporting Ethernet (14B), Linux Cooked SLL (16B on lo), and raw IPv4."""
+    if len(data) < 20:
         return None
 
-    offset = 0
-    if len(data) >= 14:
-        try:
-            eth_proto = struct.unpack('!H', data[12:14])[0]
-            if eth_proto == 0x0800:  # Ethernet IPv4
-                offset = 14
-            elif len(data) >= 16 and struct.unpack('!H', data[14:16])[0] == 0x0800:  # Linux SLL IPv4
-                offset = 16
-            elif (data[0] >> 4) == 4:  # Raw IPv4
-                offset = 0
-            else:
-                # Scan first 20 bytes for IPv4 header signature (0x45)
-                found = False
-                for i in range(min(16, len(data) - 20)):
-                    if (data[i] >> 4) == 4 and (data[i] & 0x0F) >= 5:
-                        offset = i
-                        found = True
-                        break
-                if not found:
-                    return None
-        except Exception:
-            return None
+    offset = None
+    # 1. Standard Ethernet frame (14 bytes) - check EtherType for IPv4 (0x0800)
+    if len(data) >= 34 and data[12:14] == b'\x08\x00':
+        offset = 14
+    # 2. Linux Cooked Capture / SLL frame on loopback 'lo' (16 bytes) - check protocol at 14:16
+    elif len(data) >= 36 and data[14:16] == b'\x08\x00':
+        offset = 16
+    # 3. Raw IPv4 packet starting at byte 0
+    elif (data[0] >> 4) == 4 and (data[0] & 0x0F) >= 5:
+        offset = 0
+    else:
+        # Fallback scan up to 32 bytes for IPv4 header signature (0x45)
+        for i in range(min(32, len(data) - 20)):
+            if (data[i] >> 4) == 4 and (data[i] & 0x0F) >= 5:
+                tlen = struct.unpack('!H', data[i+2:i+4])[0]
+                if tlen <= len(data) - i:
+                    offset = i
+                    break
 
-    if len(data) < offset + 20:
+    if offset is None or len(data) < offset + 20:
         return None
 
     try:
