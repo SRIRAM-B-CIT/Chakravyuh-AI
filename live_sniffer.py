@@ -756,7 +756,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         future_threat_score = 0.05
                         rollout_list = [0.02, 0.03, 0.04, 0.05]
 
-                    is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_protected)
+                    is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90)
                     
                     # Save state atomically on every cycle
                     save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)

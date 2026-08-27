@@ -9,9 +9,12 @@
 
 const http = require('http');
 const url = require('url');
+const fs = require('fs');
+const path = require('path');
 
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
+const STATE_FILE = path.join(__dirname, 'state.json');
 
 // In-memory product catalog
 const PRODUCTS = [
@@ -96,10 +99,35 @@ function recordRequestAndGetRps() {
   return requestTimestamps.length / 2.5; // Current requests per second
 }
 
+// Check Chakravyuh AI Defense & Isolation state from state.json
+function getDefenseState() {
+  try {
+    if (fs.existsSync(STATE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+      const ageSeconds = (Date.now() / 1000) - (data.last_updated || 0);
+      const isSnifferLive = ageSeconds < 5.0;
+      const isIsolated = Boolean(data.isolated);
+      const isThreat = data.label && data.label !== "Benign";
+
+      return {
+        active: isSnifferLive,
+        isolated: isIsolated,
+        threat: isThreat ? data.label : "None",
+        risk: data.risk_score || 0.05,
+        src_ip: data.src_ip || "127.0.0.1"
+      };
+    }
+  } catch (e) {
+    // Fallback if file read fails during atomic write
+  }
+  return { active: false, isolated: false, threat: "None", risk: 0.05, src_ip: "127.0.0.1" };
+}
+
 // Server definition
 const server = http.createServer((req, res) => {
   const reqStart = Date.now();
   const currentRps = recordRequestAndGetRps();
+  const defense = getDefenseState();
 
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
@@ -115,10 +143,14 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Attack threshold: RPS >= 30 req/s represents volumetric attack surge
-  const isUnderAttack = currentRps >= 30;
-  const simulatedQueueDelay = isUnderAttack 
-    ? Math.min(4800, Math.floor(600 + (currentRps - 30) * 15))
+  // Attack threshold: RPS >= 25 req/s represents volumetric flood
+  const isAttackVolume = currentRps >= 25;
+  // If defense is active and threat is isolated, attack is mitigated!
+  const isMitigated = defense.active && defense.isolated;
+  const isServerOverwhelmed = isAttackVolume && !isMitigated;
+
+  const simulatedQueueDelay = isServerOverwhelmed
+    ? Math.min(5000, Math.floor(800 + (currentRps - 25) * 15))
     : 0;
 
   // 1. Health & Ping Endpoint (Used by latency gauge)
@@ -127,15 +159,18 @@ const server = http.createServer((req, res) => {
 
     const respond = () => {
       const respLatency = Date.now() - reqStart;
-      res.writeHead(isUnderAttack ? 503 : 200, { 'Content-Type': 'application/json' });
+      res.writeHead(isServerOverwhelmed ? 504 : 200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
-        status: isUnderAttack ? "DEGRADED_DOS_ATTACK" : "HEALTHY",
+        status: isServerOverwhelmed ? "DEGRADED_DOS_ATTACK" : (isMitigated ? "PROTECTED_BY_SOAR" : "HEALTHY"),
         service: "Chakravyuh E-Commerce Storefront",
         port: PORT,
         uptimeSeconds: uptimeSec,
         totalRequests: requestCount,
         currentRps: Math.round(currentRps),
-        isUnderAttack: isUnderAttack,
+        isUnderAttack: isServerOverwhelmed,
+        isDefenseActive: defense.active,
+        isIsolated: defense.isolated,
+        threatLabel: defense.threat,
         serverLatencyMs: respLatency,
         timestamp: Date.now()
       }));
@@ -152,12 +187,18 @@ const server = http.createServer((req, res) => {
   // 2. Products API
   if (pathname === '/api/products') {
     const respond = () => {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ 
-        products: PRODUCTS,
-        currentRps: Math.round(currentRps),
-        isUnderAttack: isUnderAttack 
-      }));
+      if (isServerOverwhelmed) {
+        res.writeHead(504, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: "GATEWAY_TIMEOUT", message: "Target service overwhelmed by volumetric DoS traffic." }));
+      } else {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ 
+          products: PRODUCTS,
+          currentRps: Math.round(currentRps),
+          isUnderAttack: isServerOverwhelmed,
+          isMitigated: isMitigated
+        }));
+      }
     };
 
     if (simulatedQueueDelay > 0) {
@@ -171,12 +212,12 @@ const server = http.createServer((req, res) => {
   // 3. Checkout Transaction API (Simulates transactional processing)
   if (pathname === '/api/checkout') {
     const respond = () => {
-      if (isUnderAttack && Math.random() < 0.7) {
-        // High load causes transaction failures / timeouts
+      if (isServerOverwhelmed) {
+        // High load without defense causes immediate 504 Gateway Timeout / 503 Outage
         res.writeHead(504, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           error: "GATEWAY_TIMEOUT",
-          message: "Transaction timed out due to volumetric server congestion (DoS).",
+          message: "Transaction timed out due to volumetric server congestion (DoS). Target server queue exhausted.",
           latencyMs: Date.now() - reqStart,
           currentRps: Math.round(currentRps)
         }));
@@ -187,7 +228,8 @@ const server = http.createServer((req, res) => {
           orderId: "ORD-" + Math.floor(100000 + Math.random() * 900000),
           processedAt: new Date().toISOString(),
           latencyMs: Date.now() - reqStart,
-          currentRps: Math.round(currentRps)
+          currentRps: Math.round(currentRps),
+          protectedBy: isMitigated ? "Chakravyuh AI Autonomous SOAR" : "Standard"
         }));
       }
     };
@@ -300,6 +342,12 @@ function getStorefrontHtml() {
       box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
       animation: alertPulse 0.8s infinite;
     }
+    .latency-pill.protected {
+      border-color: #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.2) !important;
+      color: #7dd3fc !important;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
     .pulse-dot {
       width: 9px;
       height: 9px;
@@ -310,6 +358,68 @@ function getStorefrontHtml() {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.5; transform: scale(1.2); }
     }
+    
+    /* 504 Critical Crash Overlay */
+    .dos-outage-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(5, 8, 18, 0.94);
+      backdrop-filter: blur(16px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .outage-box {
+      background: #0e1628;
+      border: 2px solid #ef4444;
+      box-shadow: 0 0 50px rgba(239, 68, 68, 0.5), inset 0 0 20px rgba(239, 68, 68, 0.2);
+      border-radius: 16px;
+      max-width: 650px;
+      width: 100%;
+      padding: 2.5rem;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+    }
+    .outage-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: alertPulse 1s infinite;
+    }
+    .outage-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #ef4444;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 0.75rem;
+    }
+    .outage-desc {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .outage-stats {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #fca5a5;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
     .alert-banner {
       display: none;
       max-width: 1400px;
@@ -328,6 +438,25 @@ function getStorefrontHtml() {
       align-items: center;
       gap: 1rem;
       box-shadow: 0 0 25px rgba(239, 68, 68, 0.2);
+    }
+    .soar-protected-banner {
+      display: none;
+      max-width: 1400px;
+      margin: 1rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .soar-protected-box {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1.5px solid rgba(56, 189, 248, 0.6);
+      border-radius: 10px;
+      padding: 0.9rem 1.3rem;
+      color: #7dd3fc;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
     }
     .hero {
       max-width: 1400px;
@@ -480,6 +609,29 @@ function getStorefrontHtml() {
   </style>
 </head>
 <body>
+  <!-- Fullscreen 504 DoS Crash Freeze Overlay -->
+  <div id="dosOutageModal" class="dos-outage-modal">
+    <div class="outage-box">
+      <div class="outage-icon">💥</div>
+      <div class="outage-title">504 GATEWAY TIMEOUT</div>
+      <div style="font-size: 1.1rem; font-weight: 800; color: #fca5a5; margin-bottom: 0.75rem;">
+        CRITICAL SERVICE OUTAGE: SERVER OVERWHELMED
+      </div>
+      <p class="outage-desc">
+        The storefront on <strong>Port 5000</strong> is completely frozen and unresponsive due to unmitigated high-density DoS assault. Server socket queue is exhausted (100% capacity).
+      </p>
+      <div class="outage-stats">
+        <div>• STATUS: 504 GATEWAY TIMEOUT / CONNECTION BACKLOG FULL</div>
+        <div id="outageRps">• ATTACK VELOCITY: 450 req/s</div>
+        <div>• DEFENSE STATUS: <span style="color:#ef4444; font-weight:800;">INACTIVE (UNPROTECTED)</span></div>
+        <div>• REMEDY: Start Chakravyuh AI Sniffer (Terminal 3) to trigger SOAR Micro-Isolation</div>
+      </div>
+      <p style="font-size:0.75rem; color:var(--text-muted);">
+        * Once Chakravyuh AI SOAR detects & isolates the attacker, this page will automatically unfreeze and restore 4ms instant access.
+      </p>
+    </div>
+  </div>
+
   <header>
     <div class="header-inner">
       <div class="logo">
@@ -501,6 +653,16 @@ function getStorefrontHtml() {
       <div>
         <strong style="color:#ef4444;">CRITICAL SERVICE DEGRADATION (ACTIVE DoS SURGE):</strong> 
         Volumetric traffic overload detected! High response latency & transaction timeouts active until Chakravyuh AI micro-isolates the threat source.
+      </div>
+    </div>
+  </div>
+
+  <div id="soarBanner" class="soar-protected-banner">
+    <div class="soar-protected-box">
+      <span style="font-size: 1.5rem;">🛡️</span>
+      <div>
+        <strong style="color:#38bdf8;">AUTONOMOUS SOAR ACTIVE:</strong> 
+        Attacker host isolated via dynamic Netfilter kernel rules! Storefront operating at 4ms nominal latency with zero customer downtime.
       </div>
     </div>
   </div>
@@ -582,7 +744,7 @@ function getStorefrontHtml() {
           showToast(\`✓ Order Placed for \${name}! (\${latency}ms response)\`);
         }
       } catch (err) {
-        showToast(\`⚠️ Order Failed! Connection timed out during DoS surge.\`, true);
+        showToast(\`⚠️ Error 504 Gateway Timeout! Connection timed out during DoS surge.\`, true);
       } finally {
         btn.innerText = originalText;
         btn.disabled = false;
@@ -604,7 +766,7 @@ function getStorefrontHtml() {
           showToast(\`✓ Checkout processed in \${latency}ms (Order: \${data.orderId})\`);
         }
       } catch (e) {
-        showToast(\`⚠️ Checkout timed out! Server is experiencing severe DoS load.\`, true);
+        showToast(\`⚠️ Error 504 Gateway Timeout! Server is experiencing severe DoS load.\`, true);
       } finally {
         btn.innerText = originalText;
         btn.disabled = false;
@@ -638,6 +800,9 @@ function getStorefrontHtml() {
       const text = document.getElementById('latencyText');
       const reqCount = document.getElementById('reqCounter');
       const banner = document.getElementById('alertBanner');
+      const soarBanner = document.getElementById('soarBanner');
+      const outageModal = document.getElementById('dosOutageModal');
+      const outageRps = document.getElementById('outageRps');
 
       try {
         const res = await fetch('/api/health');
@@ -647,19 +812,36 @@ function getStorefrontHtml() {
         reqCount.innerText = data.totalRequests || 0;
         const rps = data.currentRps || 0;
 
-        if (data.isUnderAttack || latency > 200 || !res.ok) {
+        if (data.isUnderAttack) {
+          // Scenario A: Defense is OFF / Attack unmitigated -> Freezes UI with 504 Modal
           gauge.className = 'latency-pill degraded';
-          text.innerText = \`LATENCY: \${latency}ms · SEVERE DOS ATTACK (\${rps} req/s)\`;
+          text.innerText = \`504 TIMEOUT: \${latency}ms · DOS ATTACK (\${rps} req/s)\`;
           banner.style.display = 'block';
+          soarBanner.style.display = 'none';
+          outageModal.style.display = 'flex';
+          outageRps.innerText = \`• ATTACK VELOCITY: \${rps} req/s (PORT 5000 OVERWHELMED)\`;
+        } else if (data.status === "PROTECTED_BY_SOAR" || data.isIsolated) {
+          // Scenario B: Defense is ON -> Attacker Isolated by SOAR
+          gauge.className = 'latency-pill protected';
+          text.innerText = \`PING: \${latency}ms · PROTECTED BY SOAR (\${rps} req/s)\`;
+          banner.style.display = 'none';
+          soarBanner.style.display = 'block';
+          outageModal.style.display = 'none';
         } else {
+          // Nominal Safe
           gauge.className = 'latency-pill';
           text.innerText = \`PING: \${latency}ms · NOMINAL HEALTH (\${rps} req/s)\`;
           banner.style.display = 'none';
+          soarBanner.style.display = 'none';
+          outageModal.style.display = 'none';
         }
       } catch (err) {
         gauge.className = 'latency-pill degraded';
         text.innerText = 'PING: TIMEOUT (5000ms+) · SERVER UNRESPONSIVE';
         banner.style.display = 'block';
+        soarBanner.style.display = 'none';
+        outageModal.style.display = 'flex';
+        outageRps.innerText = '• STATUS: SERVER CRASHED (504 GATEWAY TIMEOUT)';
       }
     }, 1000);
   </script>
