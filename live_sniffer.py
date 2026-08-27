@@ -96,10 +96,10 @@ def write_log(message):
 
 
 def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_counts, edge_traffic_map):
-    """Builds rich dynamic node and edge topology structure for real-time visualization."""
+    """Builds rich dynamic node and edge topology structure with stable canonical IDs."""
     nodes = [
         {
-            "id": GATEWAY_IP,
+            "id": "node-gateway",
             "ip": GATEWAY_IP,
             "label": "Gateway",
             "role": "Gateway Router",
@@ -111,7 +111,7 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "is_isolated": False
         },
         {
-            "id": DEFENSE_IP,
+            "id": "node-defense",
             "ip": DEFENSE_IP,
             "label": "Defense",
             "role": "Defense Controller",
@@ -123,7 +123,7 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "is_isolated": False
         },
         {
-            "id": INTERNAL_SERVER_IP,
+            "id": "node-server",
             "ip": INTERNAL_SERVER_IP,
             "label": "Server",
             "role": "Internal Core Server",
@@ -133,29 +133,26 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "byte_rate": "850 KB/s",
             "is_defense": False,
             "is_isolated": False
+        },
+        {
+            "id": "node-attacker",
+            "ip": attacker_ip,
+            "label": "Attacker",
+            "role": "Threat Host" if attacker_risk > 0.70 else "External Node",
+            "risk_score": round(float(attacker_risk), 2),
+            "status": "ISOLATED" if is_isolated else ("ATTACKER" if attacker_risk > 0.70 else "SAFE"),
+            "packet_count": active_ip_counts.get(attacker_ip, 88),
+            "byte_rate": "18.4 MB/s" if attacker_risk > 0.70 else "340 KB/s",
+            "is_defense": False,
+            "is_isolated": is_isolated
         }
     ]
-
-    # Add attacker / external node
-    attacker_status = "ISOLATED" if is_isolated else ("ATTACKER" if attacker_risk > 0.70 else "SAFE")
-    nodes.append({
-        "id": attacker_ip,
-        "ip": attacker_ip,
-        "label": "Attacker",
-        "role": "Threat Host" if attacker_risk > 0.70 else "External Node",
-        "risk_score": round(float(attacker_risk), 2),
-        "status": attacker_status,
-        "packet_count": active_ip_counts.get(attacker_ip, 148),
-        "byte_rate": "18.4 MB/s" if attacker_risk > 0.70 else "340 KB/s",
-        "is_defense": False,
-        "is_isolated": is_isolated
-    })
 
     edges = [
         {
             "id": "e-gw-def",
-            "source": GATEWAY_IP,
-            "target": DEFENSE_IP,
+            "source": "node-gateway",
+            "target": "node-defense",
             "weight": max(1, active_ip_counts.get(GATEWAY_IP, 14)),
             "traffic": "Safe Path",
             "protocol": "TCP/HTTPS",
@@ -163,9 +160,9 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "threat": False
         },
         {
-            "id": "e-def-internal",
-            "source": DEFENSE_IP,
-            "target": INTERNAL_SERVER_IP,
+            "id": "e-def-server",
+            "source": "node-defense",
+            "target": "node-server",
             "weight": max(1, active_ip_counts.get(INTERNAL_SERVER_IP, 8)),
             "traffic": "Safe Path",
             "protocol": "gRPC/TLS",
@@ -173,9 +170,9 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "threat": False
         },
         {
-            "id": "e-gw-internal",
-            "source": GATEWAY_IP,
-            "target": INTERNAL_SERVER_IP,
+            "id": "e-gw-server",
+            "source": "node-gateway",
+            "target": "node-server",
             "weight": 6,
             "traffic": "Internal Route",
             "protocol": "TCP/TLS",
@@ -184,18 +181,18 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
         },
         {
             "id": "e-att-def",
-            "source": attacker_ip,
-            "target": DEFENSE_IP,
+            "source": "node-attacker",
+            "target": "node-defense",
             "weight": max(1, active_ip_counts.get(attacker_ip, 86)),
-            "traffic": "Threat Flow (148 pkts/s)" if attacker_risk > 0.60 else "Safe Path",
+            "traffic": "Threat Flow" if attacker_risk > 0.60 else "Safe Path",
             "protocol": "TCP/SYN",
             "animated": attacker_risk > 0.60,
             "threat": attacker_risk > 0.60
         },
         {
-            "id": "e-att-srv",
-            "source": attacker_ip,
-            "target": INTERNAL_SERVER_IP,
+            "id": "e-att-server",
+            "source": "node-attacker",
+            "target": "node-server",
             "weight": 34,
             "traffic": "Lateral Probe" if attacker_risk > 0.60 else "Internal Route",
             "protocol": "TCP/SYN",
