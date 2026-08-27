@@ -3,7 +3,8 @@
  * Chakravyuh AI - Demo E-Commerce Target Application (Port 5000)
  * 
  * Used for live "Before & After" cyber attack & SOAR micro-isolation demonstrations.
- * Zero external dependencies (uses native Node.js HTTP).
+ * Features dynamic load-reactive latency modeling to visually demonstrate service degradation
+ * during volumetric DoS attacks, and instant recovery once Chakravyuh AI neutralizes the attacker.
  */
 
 const http = require('http');
@@ -76,15 +77,29 @@ const PRODUCTS = [
   }
 ];
 
-// Metrics for live latency display
+// Rolling request tracker for real-time RPS & attack velocity
 let requestCount = 0;
-let lastReset = Date.now();
-let serverStartTime = Date.now();
+const requestTimestamps = [];
+const serverStartTime = Date.now();
+
+function recordRequestAndGetRps() {
+  const now = Date.now();
+  requestCount++;
+  requestTimestamps.push(now);
+
+  // Keep sliding window of last 2.5 seconds
+  const cutoff = now - 2500;
+  while (requestTimestamps.length > 0 && requestTimestamps[0] < cutoff) {
+    requestTimestamps.shift();
+  }
+
+  return requestTimestamps.length / 2.5; // Current requests per second
+}
 
 // Server definition
 const server = http.createServer((req, res) => {
   const reqStart = Date.now();
-  requestCount++;
+  const currentRps = recordRequestAndGetRps();
 
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
@@ -100,47 +115,88 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Attack threshold: RPS >= 30 req/s represents volumetric attack surge
+  const isUnderAttack = currentRps >= 30;
+  const simulatedQueueDelay = isUnderAttack 
+    ? Math.min(4800, Math.floor(600 + (currentRps - 30) * 15))
+    : 0;
+
   // 1. Health & Ping Endpoint (Used by latency gauge)
   if (pathname === '/api/health' || pathname === '/health') {
     const uptimeSec = Math.floor((Date.now() - serverStartTime) / 1000);
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      status: "HEALTHY",
-      service: "Chakravyuh E-Commerce Storefront",
-      port: PORT,
-      uptimeSeconds: uptimeSec,
-      totalRequests: requestCount,
-      timestamp: Date.now()
-    }));
+
+    const respond = () => {
+      const respLatency = Date.now() - reqStart;
+      res.writeHead(isUnderAttack ? 503 : 200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        status: isUnderAttack ? "DEGRADED_DOS_ATTACK" : "HEALTHY",
+        service: "Chakravyuh E-Commerce Storefront",
+        port: PORT,
+        uptimeSeconds: uptimeSec,
+        totalRequests: requestCount,
+        currentRps: Math.round(currentRps),
+        isUnderAttack: isUnderAttack,
+        serverLatencyMs: respLatency,
+        timestamp: Date.now()
+      }));
+    };
+
+    if (simulatedQueueDelay > 0) {
+      setTimeout(respond, simulatedQueueDelay);
+    } else {
+      respond();
+    }
     return;
   }
 
   // 2. Products API
   if (pathname === '/api/products') {
-    // Under attack, simulate realistic database / cryptographic query work
-    let x = 0;
-    for (let i = 0; i < 50000; i++) {
-      x += Math.sin(i);
+    const respond = () => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ 
+        products: PRODUCTS,
+        currentRps: Math.round(currentRps),
+        isUnderAttack: isUnderAttack 
+      }));
+    };
+
+    if (simulatedQueueDelay > 0) {
+      setTimeout(respond, simulatedQueueDelay);
+    } else {
+      respond();
     }
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ products: PRODUCTS, queryResult: x }));
     return;
   }
 
   // 3. Checkout Transaction API (Simulates transactional processing)
   if (pathname === '/api/checkout') {
-    // Transactional workload
-    let hash = 0;
-    for (let i = 0; i < 200000; i++) {
-      hash = (hash + Math.sqrt(i)) % 1000000;
+    const respond = () => {
+      if (isUnderAttack && Math.random() < 0.7) {
+        // High load causes transaction failures / timeouts
+        res.writeHead(504, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          error: "GATEWAY_TIMEOUT",
+          message: "Transaction timed out due to volumetric server congestion (DoS).",
+          latencyMs: Date.now() - reqStart,
+          currentRps: Math.round(currentRps)
+        }));
+      } else {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          status: "ORDER_PLACED_SUCCESS",
+          orderId: "ORD-" + Math.floor(100000 + Math.random() * 900000),
+          processedAt: new Date().toISOString(),
+          latencyMs: Date.now() - reqStart,
+          currentRps: Math.round(currentRps)
+        }));
+      }
+    };
+
+    if (simulatedQueueDelay > 0) {
+      setTimeout(respond, simulatedQueueDelay);
+    } else {
+      respond();
     }
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      status: "ORDER_PLACED_SUCCESS",
-      orderId: "ORD-" + Math.floor(100000 + Math.random() * 900000),
-      processedAt: new Date().toISOString(),
-      latencyMs: Date.now() - reqStart
-    }));
     return;
   }
 
@@ -197,7 +253,7 @@ function getStorefrontHtml() {
       top: 0;
       z-index: 50;
       backdrop-filter: blur(12px);
-      background: rgba(14, 22, 40, 0.85);
+      background: rgba(14, 22, 40, 0.9);
       border-bottom: 1px solid var(--card-border);
       padding: 0.75rem 1.5rem;
     }
@@ -229,7 +285,7 @@ function getStorefrontHtml() {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.35rem 0.8rem;
+      padding: 0.45rem 1rem;
       border-radius: 9999px;
       border: 1px solid rgba(16, 185, 129, 0.4);
       background: rgba(16, 185, 129, 0.1);
@@ -238,20 +294,40 @@ function getStorefrontHtml() {
       transition: all 0.3s ease;
     }
     .latency-pill.degraded {
-      border-color: rgba(239, 68, 68, 0.6);
-      background: rgba(239, 68, 68, 0.2);
-      color: #f87171;
-      animation: pulse 1s infinite;
+      border-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.3) !important;
+      color: #fca5a5 !important;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
+      animation: alertPulse 0.8s infinite;
     }
     .pulse-dot {
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: currentColor;
     }
-    @keyframes pulse {
+    @keyframes alertPulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.5; transform: scale(1.2); }
+    }
+    .alert-banner {
+      display: none;
+      max-width: 1400px;
+      margin: 1rem auto 0;
+      padding: 0 1.5rem;
+    }
+    .alert-box {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1.5px solid rgba(239, 68, 68, 0.7);
+      border-radius: 10px;
+      padding: 1rem 1.4rem;
+      color: #fca5a5;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.2);
     }
     .hero {
       max-width: 1400px;
@@ -285,7 +361,7 @@ function getStorefrontHtml() {
       background: linear-gradient(135deg, rgba(14, 22, 40, 0.9), rgba(20, 32, 58, 0.9));
       border: 1px solid rgba(56, 189, 248, 0.3);
       border-radius: 12px;
-      padding: 1rem 1.5rem;
+      padding: 1.2rem 1.5rem;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -311,7 +387,7 @@ function getStorefrontHtml() {
       border-radius: 12px;
       padding: 1.5rem;
       display: flex;
-      flex-col: column;
+      flex-direction: column;
       justify-content: space-between;
       transition: all 0.2s ease;
       position: relative;
@@ -363,7 +439,7 @@ function getStorefrontHtml() {
       background: linear-gradient(135deg, #2563eb, #38bdf8);
       color: #ffffff;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.55rem 1.1rem;
       border-radius: 6px;
       font-weight: 700;
       font-size: 0.75rem;
@@ -378,6 +454,9 @@ function getStorefrontHtml() {
     .btn:active {
       transform: scale(0.98);
     }
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626, #f87171) !important;
+    }
     .toast {
       position: fixed;
       bottom: 24px;
@@ -385,11 +464,11 @@ function getStorefrontHtml() {
       background: #0f172a;
       border: 1px solid #38bdf8;
       color: #f8fafc;
-      padding: 12px 20px;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      padding: 14px 22px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       display: none;
       z-index: 100;
       animation: slideUp 0.3s ease;
@@ -409,12 +488,22 @@ function getStorefrontHtml() {
       <div class="status-panel">
         <div id="latencyGauge" class="latency-pill">
           <div class="pulse-dot"></div>
-          <span id="latencyText">PING: 14ms · NOMINAL</span>
+          <span id="latencyText">PING: 4ms · NOMINAL HEALTH (0 req/s)</span>
         </div>
-        <div style="color:var(--text-muted);">REQ: <span id="reqCounter" style="color:var(--text-main); font-weight:700;">0</span></div>
+        <div style="color:var(--text-muted);">TOTAL REQ: <span id="reqCounter" style="color:var(--text-main); font-weight:700;">0</span></div>
       </div>
     </div>
   </header>
+
+  <div id="alertBanner" class="alert-banner">
+    <div class="alert-box">
+      <span style="font-size: 1.5rem;">🚨</span>
+      <div>
+        <strong style="color:#ef4444;">CRITICAL SERVICE DEGRADATION (ACTIVE DoS SURGE):</strong> 
+        Volumetric traffic overload detected! High response latency & transaction timeouts active until Chakravyuh AI micro-isolates the threat source.
+      </div>
+    </div>
+  </div>
 
   <section class="hero">
     <h1>Autonomous <span>Cyber Resilience</span> Benchmark</h1>
@@ -426,13 +515,16 @@ function getStorefrontHtml() {
       <div class="info">
         <div style="font-size: 1.5rem;">⚡</div>
         <div>
-          <h3 style="font-size: 0.85rem; font-weight: 800; color: #f8fafc;">Chakravyuh AI Real-Time Protection Status</h3>
+          <h3 style="font-size: 0.85rem; font-weight: 800; color: #f8fafc;">Live Defense Benchmark Controls</h3>
           <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
             Target Endpoint: <code style="color:#38bdf8;">http://localhost:5000</code> | SOC Command Dashboard: <code style="color:#38bdf8;">http://localhost:3000</code>
           </p>
         </div>
       </div>
-      <button class="btn" onclick="testCheckout(this)">⚡ Place Test Order</button>
+      <div style="display:flex; gap:0.6rem;">
+        <button class="btn" onclick="testCheckout(this)">⚡ Place Test Order</button>
+        <button class="btn btn-danger" onclick="triggerBrowserAttackBurst(this)">💥 Test Attack Burst</button>
+      </div>
     </div>
   </section>
 
@@ -459,7 +551,7 @@ function getStorefrontHtml() {
             <div class="price">\${p.price}</div>
             <small style="color:var(--text-muted); font-size:0.65rem;">\${p.stock}</small>
           </div>
-          <button class="btn" onclick="orderProduct('\${p.name}')">Buy Now</button>
+          <button class="btn" onclick="orderProduct('\${p.name}', this)">Buy Now</button>
         </div>
       \`;
       grid.appendChild(card);
@@ -469,43 +561,83 @@ function getStorefrontHtml() {
       const t = document.getElementById('toast');
       t.innerText = msg;
       t.style.borderColor = isError ? '#ef4444' : '#38bdf8';
+      t.style.background = isError ? '#450a0a' : '#0f172a';
+      t.style.color = isError ? '#fca5a5' : '#f8fafc';
       t.style.display = 'block';
-      setTimeout(() => { t.style.display = 'none'; }, 3000);
+      setTimeout(() => { t.style.display = 'none'; }, 4500);
     }
 
-    async function orderProduct(name) {
+    async function orderProduct(name, btn) {
+      const originalText = btn.innerText;
+      btn.innerText = "Processing...";
+      btn.disabled = true;
       const start = Date.now();
       try {
         const res = await fetch('/api/checkout', { method: 'POST' });
-        const data = await res.json();
         const latency = Date.now() - start;
-        showToast(\`✓ Order Placed for \${name}! (\${latency}ms response)\`);
+        if (!res.ok) {
+          showToast(\`⚠️ Error \${res.status}: Transaction Failed! Server congested under DoS load.\`, true);
+        } else {
+          const data = await res.json();
+          showToast(\`✓ Order Placed for \${name}! (\${latency}ms response)\`);
+        }
       } catch (err) {
-        showToast(\`⚠️ Order Failed! Site under heavy load.\`, true);
+        showToast(\`⚠️ Order Failed! Connection timed out during DoS surge.\`, true);
+      } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
       }
     }
 
     async function testCheckout(btn) {
-      btn.innerText = "Processing...";
+      const originalText = btn.innerText;
+      btn.innerText = "Processing Transaction...";
+      btn.disabled = true;
       const start = Date.now();
       try {
         const res = await fetch('/api/checkout');
-        const data = await res.json();
         const latency = Date.now() - start;
-        btn.innerText = "⚡ Place Test Order";
-        showToast(\`✓ Checkout processed in \${latency}ms (Order: \${data.orderId})\`);
+        if (!res.ok) {
+          showToast(\`⚠️ Error \${res.status}: Checkout Timed Out (\${latency}ms) under DoS load.\`, true);
+        } else {
+          const data = await res.json();
+          showToast(\`✓ Checkout processed in \${latency}ms (Order: \${data.orderId})\`);
+        }
       } catch (e) {
-        btn.innerText = "⚡ Place Test Order";
-        showToast(\`⚠️ Checkout timed out! Server is experiencing DoS.\`, true);
+        showToast(\`⚠️ Checkout timed out! Server is experiencing severe DoS load.\`, true);
+      } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
       }
     }
 
-    // Live Heartbeat & Latency Monitor
+    // In-browser rapid attack burst simulator (sends 400 requests in 3 seconds)
+    function triggerBrowserAttackBurst(btn) {
+      btn.innerText = "Attacking...";
+      btn.disabled = true;
+      showToast("💥 Launching simulated volumetric traffic burst (400 requests)...", true);
+      
+      let count = 0;
+      const burstInterval = setInterval(() => {
+        for (let i = 0; i < 20; i++) {
+          fetch('/api/checkout').catch(() => {});
+          count++;
+        }
+        if (count >= 400) {
+          clearInterval(burstInterval);
+          btn.innerText = "💥 Test Attack Burst";
+          btn.disabled = false;
+        }
+      }, 100);
+    }
+
+    // Live Heartbeat & Latency Monitor (Runs every 1000ms)
     setInterval(async () => {
       const start = Date.now();
       const gauge = document.getElementById('latencyGauge');
       const text = document.getElementById('latencyText');
       const reqCount = document.getElementById('reqCounter');
+      const banner = document.getElementById('alertBanner');
 
       try {
         const res = await fetch('/api/health');
@@ -513,17 +645,21 @@ function getStorefrontHtml() {
         const latency = Date.now() - start;
         
         reqCount.innerText = data.totalRequests || 0;
+        const rps = data.currentRps || 0;
 
-        if (latency > 300) {
+        if (data.isUnderAttack || latency > 200 || !res.ok) {
           gauge.className = 'latency-pill degraded';
-          text.innerText = \`LATENCY: \${latency}ms · SEVERE DOS LOAD\`;
+          text.innerText = \`LATENCY: \${latency}ms · SEVERE DOS ATTACK (\${rps} req/s)\`;
+          banner.style.display = 'block';
         } else {
           gauge.className = 'latency-pill';
-          text.innerText = \`PING: \${latency}ms · NOMINAL HEALTH\`;
+          text.innerText = \`PING: \${latency}ms · NOMINAL HEALTH (\${rps} req/s)\`;
+          banner.style.display = 'none';
         }
       } catch (err) {
         gauge.className = 'latency-pill degraded';
-        text.innerText = 'PING: TIMEOUT · SERVER UNRESPONSIVE';
+        text.innerText = 'PING: TIMEOUT (5000ms+) · SERVER UNRESPONSIVE';
+        banner.style.display = 'block';
       }
     }, 1000);
   </script>
