@@ -465,16 +465,21 @@ def decode_raw_frame(data, pkt_time):
 
         dst_port = None
         flags = 0
+        payload_data = b""
         if proto == 6:  # TCP
             tcp_offset = offset + ihl
             if len(data) >= tcp_offset + 14:
                 tcp_hdr = data[tcp_offset:tcp_offset+14]
                 dst_port = struct.unpack('!H', tcp_hdr[2:4])[0]
+                data_offset = ((tcp_hdr[12] >> 4) & 0x0F) * 4
                 flags = tcp_hdr[13]
+                if len(data) > tcp_offset + data_offset:
+                    payload_data = data[tcp_offset + data_offset:tcp_offset + data_offset + 256]
         elif proto == 17:  # UDP
             udp_offset = offset + ihl
-            if len(data) >= udp_offset + 4:
+            if len(data) >= udp_offset + 8:
                 dst_port = struct.unpack('!H', data[udp_offset+2:udp_offset+4])[0]
+                payload_data = data[udp_offset + 8:udp_offset + 8 + 256]
 
         return {
             'time': pkt_time,
@@ -482,7 +487,8 @@ def decode_raw_frame(data, pkt_time):
             'dst': str(dst_ip),
             'length': int(total_len) if total_len > 0 else len(data),
             'dst_port': dst_port,
-            'flags': flags
+            'flags': flags,
+            'payload': payload_data
         }
     except Exception:
         return None
@@ -740,53 +746,87 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         except Exception:
                             pass
 
-                    # 2. Precise Adversarial Attack Verification
-                    # - DoS / Flood: High packet velocity or SYN flood surge
-                    is_dos_attack = (pkt_velocity >= 120.0) or (syn_rate >= 30.0 and pkt_count >= 50) or (syn_ratio >= 0.70 and pkt_count >= 60)
-                    
-                    # - SYN Recon Port Scan: Sweeping 10+ distinct ports
-                    is_recon_port_scan = (len(meaningful_ports) >= 10 and pkt_count >= 20)
-                    
-                    # - Credential Brute-Force: High-frequency authentication probing
-                    is_brute_force_attack = (syn_rate >= 15.0 and pkt_count >= 40) or (syn_ratio >= 0.60 and pkt_count >= 50 and non_app_rate >= 10.0)
-                    
-                    # - Infiltration: Exploit delivery targeting vulnerable endpoints
-                    is_infiltration_attack = (not is_protected and pkt_count >= 30 and non_app_rate >= 10.0 and nn_risk >= 0.85 and (ml_label == "Infiltration" or len(meaningful_ports) >= 3))
-                    
-                    # - Botnet C2 & Lateral Spread: Internal spread across multiple unique hosts
-                    is_bot_lateral_attack = (not is_protected and dst_ip_count >= 4 and len(non_app_packets) >= 25 and (ml_label == "Bot/LateralMovement" or syn_rate >= 10.0))
+                    # 2. Precise Adversarial Attack Vector Fingerprinting
+                    all_payload = b"".join(p.get('payload', b"") for p in target_packets)
 
-                    if is_protected and not (src_ip.startswith("127.") and is_dos_attack):
-                        # Defender Machine Own Outbound Traffic is Always Benign Baseline
+                    # - Infiltration & Exploit Droppers (RCE payloads, shell probes, exploit signatures)
+                    is_infiltration_attack = (
+                        b"/api/exec" in all_payload or
+                        b"/upload" in all_payload or
+                        b"whoami" in all_payload or
+                        b"cat /etc" in all_payload or
+                        b"ExploitEngine" in all_payload or
+                        b"ChakravyuhExploit" in all_payload or
+                        b"mode=escalate" in all_payload or
+                        b"ELF_SIMULATED" in all_payload or
+                        (ml_label == "Infiltration" and pkt_count >= 20)
+                    )
+
+                    # - Botnet C2 Beaconing & Lateral Spread (C2 check-in headers, lateral node probes)
+                    is_bot_lateral_attack = (
+                        b"/c2/heartbeat" in all_payload or
+                        b"X-Bot-ID" in all_payload or
+                        b"X-C2-Stage" in all_payload or
+                        b"BotnetAgent" in all_payload or
+                        b"/probe?node=" in all_payload or
+                        dst_ip_count >= 3 or
+                        (ml_label == "Bot/LateralMovement" and pkt_count >= 20)
+                    )
+
+                    # - Credential Stuffing & Auth Brute-Force
+                    is_brute_force_attack = (
+                        b"/api/login" in all_payload or
+                        b"/auth/ssh" in all_payload or
+                        b"mode=bruteforce" in all_payload or
+                        b"pass=" in all_payload or
+                        b"user=admin" in all_payload or
+                        (ml_label == "Recon/BruteForce" and syn_rate >= 8.0)
+                    )
+
+                    # - SYN Recon Port Scan: Sweeping multiple ports
+                    is_recon_port_scan = (len(meaningful_ports) >= 6)
+
+                    # - High-Density DoS / Traffic Flood
+                    is_dos_attack = (
+                        pkt_velocity >= 120.0 or
+                        (syn_rate >= 25.0 and pkt_count >= 40) or
+                        (syn_ratio >= 0.70 and pkt_count >= 50) or
+                        b"X-Attack-Vector: DoS" in all_payload
+                    )
+
+                    is_local_self = (src_ip in SELF_IPS and not src_ip.startswith("127."))
+
+                    if is_local_self:
+                        # Defender machine's own outbound traffic is always Benign
                         label_name = "Benign"
                         pred_proba = 0.98
                         future_threat_score = 0.05
                         rollout_list = [0.02, 0.03, 0.04, 0.05]
-                    elif is_dos_attack:
-                        label_name = "DoS/Flood"
+                    elif is_infiltration_attack:
+                        label_name = "Infiltration"
                         pred_proba = max(pred_proba, 0.98)
-                        future_threat_score = 0.96
-                        rollout_list = [0.15, 0.40, 0.75, 0.96]
-                    elif is_recon_port_scan:
-                        label_name = "Recon/PortScan"
+                        future_threat_score = 0.98
+                        rollout_list = [0.20, 0.50, 0.82, 0.98]
+                    elif is_bot_lateral_attack:
+                        label_name = "Bot/LateralMovement"
                         pred_proba = max(pred_proba, 0.96)
-                        future_threat_score = 0.92
-                        rollout_list = [0.12, 0.35, 0.68, 0.92]
+                        future_threat_score = 0.94
+                        rollout_list = [0.14, 0.38, 0.72, 0.94]
                     elif is_brute_force_attack:
                         label_name = "Recon/BruteForce"
                         pred_proba = max(pred_proba, 0.96)
                         future_threat_score = 0.94
                         rollout_list = [0.14, 0.38, 0.70, 0.94]
-                    elif is_infiltration_attack:
-                        label_name = "Infiltration"
+                    elif is_recon_port_scan:
+                        label_name = "Recon/PortScan"
                         pred_proba = max(pred_proba, 0.97)
-                        future_threat_score = 0.98
-                        rollout_list = [0.20, 0.50, 0.82, 0.98]
-                    elif is_bot_lateral_attack:
-                        label_name = "Bot/LateralMovement"
-                        pred_proba = max(pred_proba, 0.95)
-                        future_threat_score = 0.93
-                        rollout_list = [0.14, 0.38, 0.72, 0.93]
+                        future_threat_score = 0.92
+                        rollout_list = [0.12, 0.35, 0.68, 0.92]
+                    elif is_dos_attack:
+                        label_name = "DoS/Flood"
+                        pred_proba = max(pred_proba, 0.98)
+                        future_threat_score = 0.96
+                        rollout_list = [0.15, 0.40, 0.75, 0.96]
                     else:
                         # Nominal Safe Baseline (Browsing, Next.js, FastAPI, ordinary LAN traffic)
                         label_name = "Benign"
@@ -794,7 +834,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         future_threat_score = 0.05
                         rollout_list = [0.02, 0.03, 0.04, 0.05]
 
-                    is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_protected)
+                    is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_local_self)
                     
                     # Save state atomically on every cycle
                     save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
@@ -803,7 +843,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
                     is_threat = (label_name != "Benign")
                     if is_threat or (now - last_log_time >= 3.0) or (label_name != last_threat_state):
                         if is_threat:
-                            write_log(f"[SNIFFER ALERT] High packet rate detected from {src_ip} | Threat: {label_name} | RSSM Risk: {future_threat_score*100:.1f}% | Packet Velocity: {pkt_velocity:.1f} pkts/s")
+                            write_log(f"[SNIFFER ALERT] Attack detected from {src_ip} | Threat: {label_name} | RSSM Risk: {future_threat_score*100:.1f}% | Packet Velocity: {pkt_velocity:.1f} pkts/s")
                         write_log(f"State: {label_name} | ML Conf: {pred_proba*100:.1f}% | RSSM K-Horizon Risk: {future_threat_score*100:.1f}% | Source IP: {src_ip}")
                         last_log_time = now
                         last_threat_state = label_name

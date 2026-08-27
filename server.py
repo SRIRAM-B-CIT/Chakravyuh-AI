@@ -215,6 +215,38 @@ class LaunchAttackRequest(BaseModel):
     target_port: Optional[int] = 8000
     duration: Optional[int] = 10
 
+# ==========================================
+# HONEYPOT & ATTACK RECEPTOR ENDPOINTS
+# (Intercepts simulation traffic cleanly without 404s)
+# ==========================================
+
+@app.post("/c2/heartbeat")
+@app.post("/c2/register")
+def c2_heartbeat_honeypot(req: Request):
+    """Honeypot trap for Botnet C2 beaconing."""
+    write_audit_log("TRAP: Botnet C2 beacon check-in intercepted by honeypot sensor.")
+    return {"status": "trapped", "service": "c2_honeypot", "action": "telemetry_recorded"}
+
+@app.get("/probe")
+def probe_honeypot(node: Optional[str] = None, port: Optional[int] = None):
+    """Honeypot trap for lateral movement port probes."""
+    return {"status": "probed", "target": node, "port": port, "banner": "Chakravyuh-Trap-Service 1.0"}
+
+@app.post("/api/login")
+@app.post("/auth/ssh")
+@app.post("/login")
+def auth_honeypot(req: Request):
+    """Honeypot trap for brute-force credential stuffing."""
+    return JSONResponse(status_code=401, content={"status": "auth_failed", "error": "Invalid credentials", "delay_applied": True})
+
+@app.post("/api/exec")
+@app.post("/api/execute")
+@app.post("/upload")
+def execute_honeypot(req: Request):
+    """Honeypot trap for RCE and payload dropper delivery."""
+    write_audit_log("TRAP: Infiltration / RCE payload intercepted and safely sandboxed.")
+    return {"status": "sandboxed", "result": "Execution halted by Chakravyuh SOAR security policy"}
+
 @app.get("/api/soar/playbooks")
 def get_soar_playbooks():
     """Returns the catalog of active automated SOAR self-healing playbooks."""
