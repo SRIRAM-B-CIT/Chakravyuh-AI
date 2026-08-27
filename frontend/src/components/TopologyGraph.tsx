@@ -11,9 +11,9 @@ const ForceTopology2D = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-[360px] bg-[#040812] border border-slate-800 rounded-xl flex items-center justify-center font-mono text-xs text-cyan-400">
+      <div className="w-full h-[360px] bg-[var(--card-surface)] border border-[var(--border-muted)] rounded-xl flex items-center justify-center font-mono text-xs text-blue-500 dark:text-cyan-400">
         <Zap className="h-4 w-4 animate-spin mr-2" />
-        INITIALIZING SPATIAL GRAPH ENGINE (REACT-FORCE-GRAPH-2D)...
+        INITIALIZING SPATIAL GRAPH ENGINE...
       </div>
     ),
   }
@@ -26,8 +26,17 @@ interface TopologyGraphProps {
 
 export function TopologyGraph({ topology, state }: TopologyGraphProps) {
   const [selectedNode, setSelectedNode] = useState<TopologyNode | null>(null);
+  const [isDark, setIsDark] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 620, height: 350 });
+
+  useEffect(() => {
+    const detect = () => setIsDark(document.documentElement.classList.contains("dark"));
+    detect();
+    const observer = new MutationObserver(detect);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const updateSize = () => {
@@ -92,11 +101,12 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
           selectedNodeId={selectedNode?.id || null}
           width={dimensions.width}
           height={dimensions.height}
+          isDark={isDark}
         />
 
         {/* Interactive Inspection Tooltip Overlay */}
-        <div className="absolute bottom-2.5 left-2.5 pointer-events-none flex items-center gap-1.5 rounded border border-slate-800 bg-[#060D1A]/90 px-2 py-1 font-mono text-[9px] text-slate-400 shadow-sm backdrop-blur">
-          <Crosshair className="h-3 w-3 text-cyan-400" />
+        <div className="absolute bottom-2.5 left-2.5 pointer-events-none flex items-center gap-1.5 rounded border border-[var(--border-muted)] bg-[var(--elevated-card)]/90 px-2 py-1 font-mono text-[9px] text-[var(--muted-text)] shadow-sm backdrop-blur">
+          <Crosshair className="h-3 w-3 text-blue-500 dark:text-cyan-400" />
           <span>CLICK / DRAG NODES TO INSPECT & INTERACT</span>
         </div>
 
