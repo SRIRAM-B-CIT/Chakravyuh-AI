@@ -4727,3 +4727,31 @@
 [23:39:18] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.193
 [23:39:21] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 1.254.128.0
 [23:39:24] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.246
+[11:03:02] ACTION: 1-Click Rollback Restored. netsh advfirewall firewall delete rule name="Chakravyuh-Block-192.168.29.193"
+[11:03:03] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[11:03:03] ACTION: Network telemetry reset to nominal baseline state.
+[11:06:01] ALERT: Intercepting threat from 192.168.29.124! Triggering host micro-isolation...
+[11:06:01] ACTION: netsh advfirewall firewall add rule name="Chakravyuh-Block-192.168.29.124" dir=in action=block remoteip=192.168.29.124
+[11:06:05] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[11:06:05] ALERT: Intercepting threat vector 'DoS/Flood' from 192.168.29.124! Triggering host micro-isolation...
+[11:06:05] ACTION: netsh advfirewall firewall add rule name="Chakravyuh-Block-192.168.29.124" dir=in action=block remoteip=192.168.29.124
+[11:17:09] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 192.168.29.124
+[11:17:09] ALERT: Intercepting threat vector 'DoS/Flood' from 192.168.29.124! Triggering host micro-isolation...
+[11:17:09] ACTION: netsh advfirewall firewall add rule name="Chakravyuh-Block-192.168.29.124" dir=in action=block remoteip=192.168.29.124
+[11:17:22] SOAR TRIGGER: Initiating automated self-healing remediation for DoS/Flood from 192.168.29.124...
+[11:17:25] SOAR ACTION: Netfilter drop rule applied for 192.168.29.124
+[11:17:25] SOAR ACTION: Active connection tracking entries purged for 192.168.29.124
+[11:17:25] SOAR ACTION: Ingress traffic rate-limiting policy activated on defense interface
+[11:17:25] SOAR STATUS: Remediation playbook 'DoS/Flood Mitigation & Self-Healing' successfully executed.
+[11:17:29] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[11:17:29] ACTION: Network telemetry reset to nominal baseline state.
+[11:17:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[11:17:31] ACTION: Network telemetry reset to nominal baseline state.
+[11:17:32] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[11:17:32] ACTION: Network telemetry reset to nominal baseline state.
+[11:17:34] SOAR TRIGGER: Initiating automated self-healing remediation for DoS/Flood from 192.168.29.124...
+[11:17:36] SOAR ACTION: Netfilter drop rule applied for 192.168.29.124
+[11:17:36] SOAR ACTION: Active connection tracking entries purged for 192.168.29.124
+[11:17:36] SOAR ACTION: Ingress traffic rate-limiting policy activated on defense interface
+[11:17:36] SOAR STATUS: Remediation playbook 'DoS/Flood Mitigation & Self-Healing' successfully executed.
+[11:17:40] ACTION: 1-Click Rollback Restored. netsh advfirewall firewall delete rule name="Chakravyuh-Block-192.168.29.124"
