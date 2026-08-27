@@ -2,37 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
-  --background: #090d16;
-  --foreground: #f1f5f9;
+  --background: #F4F7FB;
+  --foreground: #0F2747;
+  --card-surface: #FFFFFF;
+  --border-muted: #D9E3EF;
+  --secondary-bg: #EEF3F8;
+  --elevated-card: #F8FAFC;
+  --primary-text: #0F2747;
+  --secondary-text: #52677F;
+  --muted-text: #7A8CA0;
+  --cyber-blue: #2563EB;
+}
+
+.dark {
+  --background: #070B14;
+  --foreground: #F1F5F9;
+  --card-surface: #0E1626;
+  --border-muted: #1E293B;
+  --secondary-bg: #131E33;
+  --elevated-card: #0A101D;
+  --primary-text: #F8FAFC;
+  --secondary-text: #94A3B8;
+  --muted-text: #64748B;
+  --cyber-blue: #38BDF8;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(30, 44, 71, 0.4) 0%, transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+    radial-gradient(circle at 10% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 90% 100%, rgba(14, 165, 233, 0.03) 0%, transparent 50%),
+    linear-gradient(to right, rgba(100, 116, 139, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 116, 139, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
 }
 
-/* Custom Tactical Glass Panel */
+/* Custom Tactical Panels - Production Radix SOC Aesthetic */
 .tactical-card {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 44, 71, 0.85);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-  transition: all 0.2s ease-in-out;
+  background: var(--card-surface);
+  border: 1px solid var(--border-muted);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease;
 }
 
 .tactical-card:hover {
-  border-color: rgba(60, 90, 140, 0.7);
+  border-color: var(--cyber-blue);
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+}
+
+.panel {
+  background: var(--elevated-card);
+  border: 1px solid var(--border-muted);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--border-muted);
+  background: var(--card-surface);
+  color: var(--secondary-text);
+  padding: 0.45rem 0.8rem;
+  font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  transition: all 0.15s ease-in-out;
+}
+
+.action-button:hover {
+  background: var(--secondary-bg);
+  border-color: var(--cyber-blue);
+  color: var(--cyber-blue);
+}
+
+.action-button:active {
+  transform: scale(0.98);
+}
+
+.action-button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid;
+  padding: 0.2rem 0.55rem;
+  font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  border-radius: 4px;
+}
+
+.status-safe {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.status-critical {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.status-warning {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
 }
 
 /* Clean cyber scrollbar */
@@ -42,16 +137,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e2c47;
+  background: var(--border-muted);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334a75;
+  background: var(--cyber-blue);
 }
 
 /* React Flow custom styling overrides */
@@ -62,8 +157,8 @@ body {
 .react-flow__handle {
   width: 8px !important;
   height: 8px !important;
-  background: #06b6d4 !important;
-  border: 2px solid #090d16 !important;
+  background: var(--cyber-blue) !important;
+  border: 2px solid var(--card-surface) !important;
 }
 
 /* Threat Flow Animation */
@@ -81,4 +176,16 @@ body {
 .safe-edge-animated {
   stroke-dasharray: 4, 4;
   animation: dashPulse 2s linear infinite;
+}
+
+/* Scanline visual overlay */
+.scanline-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 0, 0, 0.05) 50%,
+    rgba(0, 0, 0, 0.05)
+  );
+  background-size: 100% 4px;
 }

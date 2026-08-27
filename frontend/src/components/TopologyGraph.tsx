@@ -1,368 +1,296 @@
 "use client";
 
-import React, { useState } from "react";
-import { Globe } from "lucide-react";
-import { TopologyData } from "@/lib/types";
+import { useMemo, useState } from "react";
+import { Crosshair, Globe, X, ShieldAlert, Cpu } from "lucide-react";
+import { SystemState, TopologyNode } from "@/lib/types";
 
 interface TopologyGraphProps {
-  topology: TopologyData;
-  state?: any;
+  topology: SystemState["topology"];
+  state?: SystemState;
 }
 
-export const TopologyGraph: React.FC<TopologyGraphProps> = ({ topology, state }) => {
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+const coordinates = [
+  { x: 12, y: 42 },
+  { x: 38, y: 20 },
+  { x: 44, y: 64 },
+  { x: 86, y: 42 },
+];
 
-  const rawNodes = topology?.nodes || [];
-  
-  const gatewayNode = rawNodes.find((n) => n.role === "Gateway" || n.ip.endsWith(".1")) || {
-    id: "192.168.29.1",
-    ip: "192.168.29.1",
-    label: "Gateway",
-    role: "Gateway Router",
-    risk_score: 0.02,
-    status: "SAFE" as const,
-  };
+const fallbackEdges = [
+  { id: "fallback-gateway-defense", sourceIndex: 0, targetIndex: 1, threat: false },
+  { id: "fallback-gateway-server", sourceIndex: 0, targetIndex: 2, threat: false },
+  { id: "fallback-defense-server", sourceIndex: 1, targetIndex: 2, threat: false },
+  { id: "fallback-defense-threat", sourceIndex: 1, targetIndex: 3, threat: true },
+  { id: "fallback-server-threat", sourceIndex: 2, targetIndex: 3, threat: true },
+];
 
-  const defenseNode = rawNodes.find((n) => n.is_defense || n.ip.endsWith(".104")) || {
-    id: "192.168.29.104",
-    ip: "192.168.29.104",
-    label: "Defense",
-    role: "Defense Controller",
-    risk_score: 0.05,
-    status: "SAFE" as const,
-  };
+function nodeColor(node: TopologyNode) {
+  if (node.is_defense || node.label.toLowerCase() === "defense")
+    return { stroke: "#38BDF8", fill: "#38BDF8" };
+  if (node.label.toLowerCase() === "gateway")
+    return { stroke: "#10B981", fill: "#10B981" };
+  if (node.label.toLowerCase() === "attacker")
+    return { stroke: "#EF4444", fill: "#EF4444" };
+  if (node.label.toLowerCase() === "server")
+    return { stroke: "#10B981", fill: "#10B981" };
+  return { stroke: "#94A3B8", fill: "#64748B" };
+}
 
-  const serverNode = rawNodes.find((n) => n.role.includes("Core") || n.role.includes("Server") || n.ip.endsWith(".42")) || {
-    id: "192.168.29.42",
-    ip: "192.168.29.42",
-    label: "Server",
-    role: "Internal Core Server",
-    risk_score: 0.12,
-    status: "SAFE" as const,
-  };
-
-  const currentRisk = state?.risk_score ?? 0.05;
-  const isStateAttack = currentRisk >= 0.40 || (state?.label && state.label !== "Benign");
-
-  const attackerNode = rawNodes.find((n) => n.status === "ATTACKER" || n.status === "ISOLATED" || n.risk_score > 0.4 || n.ip.endsWith(".124")) || {
-    id: "192.168.29.124",
-    ip: state?.src_ip || "192.168.29.124",
-    label: "Attacker",
-    role: "Threat Host",
-    risk_score: isStateAttack ? currentRisk : 0.05,
-    status: isStateAttack ? "ATTACKER" : "SAFE",
-  };
-
-  const isAttacking = isStateAttack || attackerNode.risk_score >= 0.40 || attackerNode.status === "ATTACKER";
-  const isIsolated = state?.isolated || attackerNode.status === "ISOLATED";
-
-  const dynamicThreatScore = isAttacking ? Math.max(currentRisk, attackerNode.risk_score) : 0.05;
-
-  // Coordinates in a viewBox 0 0 800 320
-  const nodePositions = {
-    gateway: { x: 120, y: 160 },
-    defense: { x: 300, y: 100 },
-    server: { x: 360, y: 240 },
-    attacker: { x: 640, y: 160 },
-  };
+export function TopologyGraph({ topology, state }: TopologyGraphProps) {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const nodes = topology?.nodes || [];
+  const positions = useMemo(
+    () =>
+      nodes.map((node, index) => ({
+        node,
+        ...(coordinates[index] || { x: 20 + (index % 4) * 20, y: 50 }),
+      })),
+    [nodes]
+  );
+  const selected = nodes.find((node) => node.id === selectedId);
+  const graphEdges = topology?.edges?.length
+    ? topology.edges
+    : fallbackEdges.map((edge) => ({
+        id: edge.id,
+        source: nodes[edge.sourceIndex]?.id || "",
+        target: nodes[edge.targetIndex]?.id || "",
+        threat: edge.threat,
+      }));
+  const threatEdges = graphEdges.filter((edge) => edge.threat);
+  const positionFor = (id: string) =>
+    positions.find(({ node }) => node.id === id);
 
   return (
-    <div className="tactical-card p-3.5 flex flex-col relative overflow-hidden bg-[#0c121e]/95 border border-slate-800">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-2">
+    <div className="tactical-card relative flex flex-col overflow-hidden p-4 rounded-xl shadow-sm h-full">
+      {/* Topology Header */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-muted)] pb-3">
         <div className="flex items-center gap-2">
-          <Globe className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <h2 className="text-xs font-bold text-white tracking-wide uppercase font-mono">
-            ST-GNN Dynamic Network Topology
-          </h2>
+          <Globe className="h-4 w-4 text-blue-500" />
+          <div>
+            <h2 className="font-mono text-xs font-bold tracking-wider text-[var(--foreground)] uppercase">
+              ST-GNN SPATIAL GRAPH TOPOLOGY
+            </h2>
+            <p className="text-[10px] text-[var(--muted-text)] font-mono">
+              Live Graph · {nodes.length} Nodes · {topology?.stats?.active_flows || 0} Active Flows
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-3 text-[10px] font-mono">
-          <span className="flex items-center gap-1 text-emerald-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" /> Safe Route
+
+        <div className="flex items-center gap-1.5 font-mono text-[9px] font-bold">
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+            ● SAFE
           </span>
-          <span className="flex items-center gap-1 text-rose-400">
-            <span className="w-2 h-2 rounded-full bg-rose-500 inline-block animate-pulse" /> Threat Flow
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-500">
+            ● DEFENSE
+          </span>
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/30 text-red-500">
+            ● THREAT
           </span>
         </div>
       </div>
 
-      {/* SVG Canvas Container with Guaranteed Explicit Pixel Height */}
-      <div 
-        className="w-full rounded-lg overflow-hidden border border-slate-800/80 bg-[#060a12] relative flex items-center justify-center"
-        style={{ minHeight: "280px", height: "280px" }}
+      {/* SVG Canvas Container */}
+      <div
+        className="relative min-h-[340px] flex-1 overflow-hidden rounded-xl border border-[var(--border-muted)] bg-[var(--secondary-bg)] shadow-inner flex flex-col"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(56, 189, 248, 0.12) 1px, transparent 1px)",
+          backgroundSize: "16px 16px",
+        }}
       >
-        {/* Subtle grid background */}
-        <div 
-          className="absolute inset-0 opacity-25 pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(#1e2c47 1px, transparent 1px)",
-            backgroundSize: "20px 20px"
-          }}
-        />
-
         <svg
-          width="100%"
-          height="280"
-          viewBox="0 0 800 320"
-          style={{ width: "100%", height: "280px", display: "block" }}
-          className="select-none"
+          viewBox="0 0 100 80"
+          className="absolute inset-0 h-full w-full"
           preserveAspectRatio="xMidYMid meet"
+          aria-label="Interactive network topology graph"
         >
           <defs>
-            {/* Glow Filters */}
-            <filter id="greenGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-
-            <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-
-            <filter id="redGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-
-            {/* Gradient for Curved Threat Path */}
-            <linearGradient id="threatPathGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
-              <stop offset="60%" stopColor="#f43f5e" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#ef4444" stopOpacity="1" />
-            </linearGradient>
-
-            {/* Marker for Threat Arrow */}
             <marker
               id="threatArrow"
-              viewBox="0 0 10 10"
-              refX="6"
-              refY="5"
-              markerWidth="6"
-              markerHeight="6"
-              orient="auto-start-reverse"
+              markerWidth="3.5"
+              markerHeight="3.5"
+              refX="3.5"
+              refY="1.75"
+              orient="auto"
             >
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444" />
+              <path d="M0,0 L3.5,1.75 L0,3.5" fill="none" stroke="#EF4444" strokeWidth="0.8" />
             </marker>
           </defs>
 
-          {/* Normal Safe Topology Network Edges */}
-          {/* Edge: Gateway -> Defense */}
-          <line
-            x1={nodePositions.gateway.x}
-            y1={nodePositions.gateway.y}
-            x2={nodePositions.defense.x}
-            y2={nodePositions.defense.y}
-            stroke="#22d3ee"
-            strokeWidth="2"
-            strokeOpacity="0.6"
-          />
+          {/* Graph Edges */}
+          {graphEdges.map((edge) => {
+            const source = positionFor(edge.source);
+            const target = positionFor(edge.target);
+            if (!source || !target) return null;
+            const threat = Boolean(
+              edge.threat || (edge.weight && edge.weight > 50)
+            );
+            const controlY = source.y < target.y ? Math.min(source.y, target.y) - 18 : Math.max(source.y, target.y) + 18;
+            return threat ? (
+              <path
+                key={edge.id}
+                d={`M ${source.x} ${source.y} Q ${(source.x + target.x) / 2} ${controlY} ${target.x} ${target.y}`}
+                fill="none"
+                stroke="#EF4444"
+                strokeWidth="0.75"
+                strokeDasharray="2 1"
+                className="threat-edge-animated"
+                markerEnd="url(#threatArrow)"
+              />
+            ) : (
+              <line
+                key={edge.id}
+                x1={source.x}
+                y1={source.y}
+                x2={target.x}
+                y2={target.y}
+                stroke="#10B981"
+                strokeWidth="0.5"
+                strokeOpacity="0.85"
+              />
+            );
+          })}
 
-          {/* Edge: Gateway -> Server */}
-          <line
-            x1={nodePositions.gateway.x}
-            y1={nodePositions.gateway.y}
-            x2={nodePositions.server.x}
-            y2={nodePositions.server.y}
-            stroke="#10b981"
-            strokeWidth="2"
-            strokeOpacity="0.5"
-          />
+          {/* Graph Nodes */}
+          {positions.map(({ node, x, y }) => {
+            const colors = nodeColor(node);
+            const active = selectedId === node.id;
+            const isThreatNode =
+              node.status === "ATTACKER" ||
+              node.status === "ISOLATED" ||
+              node.risk_score >= 0.7 ||
+              node.label.toLowerCase() === "attacker";
 
-          {/* Edge: Defense -> Server */}
-          <line
-            x1={nodePositions.defense.x}
-            y1={nodePositions.defense.y}
-            x2={nodePositions.server.x}
-            y2={nodePositions.server.y}
-            stroke="#38bdf8"
-            strokeWidth="2"
-            strokeOpacity="0.6"
-          />
-
-          {/* Curved Lower Connection: Server -> Attacker */}
-          <path
-            d={`M ${nodePositions.server.x} ${nodePositions.server.y} Q 480 240 ${nodePositions.attacker.x} ${nodePositions.attacker.y}`}
-            fill="none"
-            stroke={isAttacking ? "#ef4444" : "#1e2c47"}
-            strokeWidth={isAttacking ? "2" : "1.5"}
-            strokeOpacity={isAttacking ? "0.6" : "0.3"}
-            strokeDasharray={isAttacking ? "4,4" : "none"}
-            className={isAttacking ? "threat-edge-animated" : ""}
-          />
-
-          {/* Curved Upper Infiltration Arc: Defense -> Attacker */}
-          <path
-            id="threatFlowArc"
-            d={`M ${nodePositions.defense.x} ${nodePositions.defense.y} Q 460 60 ${nodePositions.attacker.x} ${nodePositions.attacker.y}`}
-            fill="none"
-            stroke={isAttacking ? "url(#threatPathGrad)" : "#1e2c47"}
-            strokeWidth={isAttacking ? "2.5" : "1.5"}
-            strokeDasharray={isAttacking ? "6,4" : "none"}
-            className={isAttacking ? "threat-edge-animated" : ""}
-            markerEnd={isAttacking ? "url(#threatArrow)" : ""}
-          />
-
-          {/* Flow Particles along Curved Threat Arc */}
-          {isAttacking && (
-            <>
-              <circle r="3" fill="#fca5a5" filter="url(#redGlow)">
-                <animateMotion
-                  path={`M ${nodePositions.defense.x} ${nodePositions.defense.y} Q 460 60 ${nodePositions.attacker.x} ${nodePositions.attacker.y}`}
-                  dur="1.6s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-              <circle r="2.5" fill="#ef4444">
-                <animateMotion
-                  path={`M ${nodePositions.defense.x} ${nodePositions.defense.y} Q 460 60 ${nodePositions.attacker.x} ${nodePositions.attacker.y}`}
-                  dur="1.6s"
-                  begin="0.8s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            </>
-          )}
-
-          {/* Threat Flow Text Callout */}
-          {isAttacking && (
-            <g transform="translate(440, 85)">
-              <text
-                x="0"
-                y="0"
-                fill="#f87171"
-                fontSize="11"
-                fontFamily="monospace"
-                fontWeight="bold"
-                textAnchor="middle"
+            return (
+              <g
+                key={node.id}
+                transform={`translate(${x} ${y})`}
+                onClick={() => setSelectedId(node.id)}
+                onMouseEnter={() => setSelectedId(node.id)}
+                className="cursor-pointer outline-none transition-transform"
+                tabIndex={0}
+                role="button"
+                aria-label={`Inspect ${node.label} ${node.ip}`}
               >
-                Threat Flow (148 pkts/s)
-              </text>
-              <line x1="0" y1="4" x2="0" y2="16" stroke="#ef4444" strokeWidth="1" strokeDasharray="2,2" strokeOpacity="0.7" />
-            </g>
-          )}
-
-          {/* ======================= NODE 1: GATEWAY ======================= */}
-          <g
-            transform={`translate(${nodePositions.gateway.x}, ${nodePositions.gateway.y})`}
-            className="cursor-pointer"
-            onMouseEnter={() => setHoveredNode("gateway")}
-            onMouseLeave={() => setHoveredNode(null)}
-          >
-            <circle r="22" fill="#10b981" fillOpacity="0.15" />
-            <circle r="15" fill="none" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.8" />
-            <circle r="8" fill="#10b981" filter="url(#greenGlow)" />
-            <circle r="4" fill="#a7f3d0" />
-
-            <text y="36" textAnchor="middle" fill="#f1f5f9" fontSize="11" fontWeight="bold" fontFamily="monospace">
-              Gateway
-            </text>
-            <text y="50" textAnchor="middle" fill="#94a3b8" fontSize="9" fontFamily="monospace">
-              {gatewayNode.ip}
-            </text>
-            <text y="62" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold" fontFamily="monospace">
-              Risk: {Math.round(gatewayNode.risk_score * 100)}%
-            </text>
-          </g>
-
-          {/* ======================= NODE 2: DEFENSE ======================= */}
-          <g
-            transform={`translate(${nodePositions.defense.x}, ${nodePositions.defense.y})`}
-            className="cursor-pointer"
-            onMouseEnter={() => setHoveredNode("defense")}
-            onMouseLeave={() => setHoveredNode(null)}
-          >
-            <circle r="28" fill="#00f0ff" fillOpacity="0.12" />
-            <circle r="19" fill="none" stroke="#00f0ff" strokeWidth="1.5" strokeOpacity="0.8">
-              <animate attributeName="r" values="18;23;18" dur="3s" repeatCount="indefinite" />
-              <animate attributeName="stroke-opacity" values="0.8;0.3;0.8" dur="3s" repeatCount="indefinite" />
-            </circle>
-            <circle r="10" fill="#00f0ff" filter="url(#cyanGlow)" />
-            <circle r="5" fill="#e0f2fe" />
-
-            <text y="40" textAnchor="middle" fill="#f1f5f9" fontSize="11" fontWeight="bold" fontFamily="monospace">
-              Defense
-            </text>
-            <text y="54" textAnchor="middle" fill="#94a3b8" fontSize="9" fontFamily="monospace">
-              {defenseNode.ip}
-            </text>
-            <text y="66" textAnchor="middle" fill="#00f0ff" fontSize="9" fontWeight="bold" fontFamily="monospace">
-              Risk: {Math.round(defenseNode.risk_score * 100)}%
-            </text>
-          </g>
-
-          {/* ======================= NODE 3: SERVER ======================= */}
-          <g
-            transform={`translate(${nodePositions.server.x}, ${nodePositions.server.y})`}
-            className="cursor-pointer"
-            onMouseEnter={() => setHoveredNode("server")}
-            onMouseLeave={() => setHoveredNode(null)}
-          >
-            <circle r="22" fill="#10b981" fillOpacity="0.15" />
-            <circle r="15" fill="none" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.8" />
-            <circle r="8" fill="#10b981" filter="url(#greenGlow)" />
-            <circle r="4" fill="#a7f3d0" />
-
-            <text y="36" textAnchor="middle" fill="#f1f5f9" fontSize="11" fontWeight="bold" fontFamily="monospace">
-              Server
-            </text>
-            <text y="50" textAnchor="middle" fill="#94a3b8" fontSize="9" fontFamily="monospace">
-              {serverNode.ip}
-            </text>
-            <text y="62" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold" fontFamily="monospace">
-              Risk: {Math.round(serverNode.risk_score * 100)}%
-            </text>
-          </g>
-
-          {/* ======================= NODE 4: ATTACKER ======================= */}
-          <g
-            transform={`translate(${nodePositions.attacker.x}, ${nodePositions.attacker.y})`}
-            className="cursor-pointer"
-            onMouseEnter={() => setHoveredNode("attacker")}
-            onMouseLeave={() => setHoveredNode(null)}
-          >
-            <circle r="36" fill="#ef4444" fillOpacity={isAttacking ? "0.10" : "0.03"}>
-              {isAttacking && (
-                <animate attributeName="r" values="28;42;28" dur="2s" repeatCount="indefinite" />
-              )}
-            </circle>
-            <circle r="26" fill="none" stroke="#ef4444" strokeWidth="1.5" strokeOpacity="0.6">
-              {isAttacking && (
-                <animate attributeName="r" values="22;32;22" dur="2s" repeatCount="indefinite" />
-              )}
-            </circle>
-            <circle r="18" fill="none" stroke="#ef4444" strokeWidth="2" strokeOpacity="0.9">
-              {isAttacking && (
-                <animate attributeName="stroke-opacity" values="0.9;0.4;0.9" dur="1.2s" repeatCount="indefinite" />
-              )}
-            </circle>
-
-            <circle r="11" fill={isAttacking ? "#ef4444" : "#64748b"} filter={isAttacking ? "url(#redGlow)" : ""} />
-            <circle r="5" fill={isAttacking ? "#ffe4e6" : "#cbd5e1"} />
-
-            <text y="42" textAnchor="middle" fill="#f1f5f9" fontSize="11" fontWeight="bold" fontFamily="monospace">
-              {isIsolated ? "Isolated Host" : isAttacking ? "Attacker" : "External Host"}
-            </text>
-            <text y="56" textAnchor="middle" fill="#94a3b8" fontSize="9" fontFamily="monospace">
-              {attackerNode.ip}
-            </text>
-            <text y="68" textAnchor="middle" fill={isAttacking ? "#ef4444" : "#10b981"} fontSize="9" fontWeight="bold" fontFamily="monospace">
-              Risk: {Math.round(dynamicThreatScore * 100)}%
-            </text>
-          </g>
+                <circle r={active ? 3.8 : 2.6} fill={colors.fill} opacity="0.15" />
+                <circle
+                  r={active ? 2.2 : 1.5}
+                  fill={colors.fill}
+                  stroke={colors.stroke}
+                  strokeWidth="0.8"
+                />
+                {isThreatNode && (
+                  <circle
+                    r="3.0"
+                    fill="none"
+                    stroke={colors.stroke}
+                    strokeWidth="0.6"
+                    className="animate-ping"
+                  />
+                )}
+                <text
+                  y="5.5"
+                  textAnchor="middle"
+                  fill="currentColor"
+                  className="text-[var(--foreground)]"
+                  fontSize="1.9"
+                  fontFamily="sans-serif"
+                  fontWeight="bold"
+                >
+                  {node.label.toUpperCase()}
+                </text>
+                <text
+                  y="8"
+                  textAnchor="middle"
+                  fill="currentColor"
+                  className="text-[var(--secondary-text)]"
+                  fontSize="1.3"
+                  fontFamily="sans-serif"
+                >
+                  {node.ip}
+                </text>
+                <text
+                  y="10.5"
+                  textAnchor="middle"
+                  fill={colors.stroke}
+                  fontSize="1.4"
+                  fontFamily="sans-serif"
+                  fontWeight="bold"
+                >
+                  RISK {Math.round(node.risk_score * 100)}%
+                </text>
+              </g>
+            );
+          })}
         </svg>
+
+        {/* Bottom Legend and Status */}
+        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded border border-[var(--border-muted)] bg-[var(--card-surface)]/95 px-2 py-1 font-mono text-[9px] text-[var(--secondary-text)] shadow-sm">
+          <Crosshair className="h-3 w-3 text-blue-500" />
+          <span>INSPECT NODE</span>
+        </div>
+
+        {threatEdges.length > 0 && (
+          <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 font-mono text-[10px] font-bold text-red-500 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded">
+            Threat Flow ({topology?.stats?.active_flows || 0} pkts/s)
+          </div>
+        )}
+        <div className="absolute bottom-3 right-3 flex items-center gap-1 font-mono text-[9px] text-[var(--muted-text)]">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Live
+        </div>
       </div>
+
+      {/* Selected Node Details Drawer */}
+      {selected && (
+        <aside
+          className="absolute right-4 top-14 z-20 w-60 rounded-xl border border-[var(--border-muted)] bg-[var(--card-surface)] p-3.5 shadow-xl animate-in fade-in slide-in-from-right-4 duration-200"
+          onMouseLeave={() => setSelectedId(null)}
+        >
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-2">
+              <Cpu className="h-4 w-4 text-blue-500" />
+              <div>
+                <p className="font-mono text-[8px] font-bold tracking-widest text-[var(--muted-text)] uppercase">
+                  NODE TELEMETRY
+                </p>
+                <h3 className="text-xs font-bold text-[var(--foreground)] font-mono">
+                  {selected.label}
+                </h3>
+              </div>
+            </div>
+            <button
+              onClick={() => setSelectedId(null)}
+              aria-label="Close node details"
+              className="text-[var(--muted-text)] hover:text-[var(--foreground)]"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <dl className="mt-3 space-y-2 font-mono text-[10px]">
+            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
+              <dt className="text-[var(--muted-text)]">IP ADDRESS</dt>
+              <dd className="text-[var(--foreground)] font-bold">{selected.ip}</dd>
+            </div>
+            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
+              <dt className="text-[var(--muted-text)]">ROLE</dt>
+              <dd className="text-[var(--secondary-text)]">{selected.role}</dd>
+            </div>
+            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
+              <dt className="text-[var(--muted-text)]">STATUS</dt>
+              <dd style={{ color: nodeColor(selected).stroke }} className="font-bold">
+                {selected.status}
+              </dd>
+            </div>
+            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
+              <dt className="text-[var(--muted-text)]">RISK SCORE</dt>
+              <dd className="text-xs text-[var(--foreground)] font-bold">
+                {Math.round(selected.risk_score * 100)}%
+              </dd>
+            </div>
+          </dl>
+        </aside>
+      )}
     </div>
   );
-};
-
-
+}
