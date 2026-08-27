@@ -60,4 +60,3 @@ yarn-error.log*
 # Dynamic temporary logs (Keep initial events.log & state.json template if desired or ignore temporary runtime dumps)
 *.tmp
 events.log
-state.json
