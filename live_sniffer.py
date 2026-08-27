@@ -763,9 +763,13 @@ def start_live_defense(interface=None, window_seconds=1.5):
 
                     # Write logs on threat change or periodic interval (every 3.0s)
                     is_threat = (label_name != "Benign")
+                    threat_key = (src_ip, label_name)
+                    is_already_mitigated = (src_ip in ACTIVE_ISOLATIONS or threat_key in remediated_threats)
+
                     if is_threat or (now - last_log_time >= 3.0) or (label_name != last_threat_state):
                         if is_threat:
-                            write_log(f"[SNIFFER ALERT] High packet rate detected from {src_ip} | Threat: {label_name} | RSSM Risk: {future_threat_score*100:.1f}% | Packet Velocity: {pkt_velocity:.1f} pkts/s")
+                            defense_tag = " [DROPPED BY NETFILTER FIREWALL]" if is_already_mitigated else ""
+                            write_log(f"[SNIFFER ALERT] Wire traffic surge from {src_ip} | Threat: {label_name}{defense_tag} | RSSM Risk: {future_threat_score*100:.1f}% | Ingress Rate: {pkt_velocity:.1f} pkts/s")
                         write_log(f"State: {label_name} | ML Conf: {pred_proba*100:.1f}% | RSSM K-Horizon Risk: {future_threat_score*100:.1f}% | Source IP: {src_ip}")
                         last_log_time = now
                         last_threat_state = label_name
