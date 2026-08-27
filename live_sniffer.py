@@ -568,19 +568,33 @@ def pyshark_capture_thread(iface):
         write_log(f"WARN: PyShark capture thread [{iface}] error: {e}")
 
 
+def get_all_host_ips() -> set:
+    """Dynamically gathers all IP addresses assigned to this local defender machine."""
+    ips = {"127.0.0.1", "::1", "localhost", "0.0.0.0"}
+    try:
+        out = subprocess.check_output(["ip", "-4", "addr", "show"], text=True)
+        for line in out.splitlines():
+            line = line.strip()
+            if line.startswith("inet "):
+                ip_part = line.split()[1].split("/")[0]
+                ips.add(ip_part)
+    except Exception:
+        pass
+    return ips
+
+SELF_IPS = get_all_host_ips()
+
+
 def is_internal_or_loopback(ip: str) -> bool:
-    """Checks if an IP is local loopback, infrastructure, or background system resolver."""
+    """Checks if an IP is local loopback, infrastructure, self, or background system resolver."""
     if not ip:
         return True
     ip = str(ip).strip().lower()
     if ip.startswith("127.") or ip in ("::1", "localhost", "0.0.0.0", "fe80::", "::"):
         return True
-    if ip.startswith(("224.0.0.", "239.255.", "ff02::", "fe80:")):
+    if ip.startswith(("224.0.0.", "239.255.", "ff02::", "fe80:", "255.255.")):
         return True
-    defense_ip = os.getenv("DEFENSE_IP", "192.168.29.104")
-    gateway_ip = os.getenv("GATEWAY_IP", "192.168.29.1")
-    internal_srv = os.getenv("INTERNAL_SERVER_IP", "192.168.29.42")
-    if ip in (defense_ip, gateway_ip, internal_srv):
+    if ip in SELF_IPS or ip == DEFENSE_IP or ip == GATEWAY_IP or ip == INTERNAL_SERVER_IP:
         return True
     return False
 
@@ -742,7 +756,13 @@ def start_live_defense(interface=None, window_seconds=1.5):
                     # - Botnet C2 & Lateral Spread: Internal spread across multiple unique hosts
                     is_bot_lateral_attack = (not is_protected and dst_ip_count >= 4 and len(non_app_packets) >= 25 and (ml_label == "Bot/LateralMovement" or syn_rate >= 10.0))
 
-                    if is_dos_attack:
+                    if is_protected and not (src_ip.startswith("127.") and is_dos_attack):
+                        # Defender Machine Own Outbound Traffic is Always Benign Baseline
+                        label_name = "Benign"
+                        pred_proba = 0.98
+                        future_threat_score = 0.05
+                        rollout_list = [0.02, 0.03, 0.04, 0.05]
+                    elif is_dos_attack:
                         label_name = "DoS/Flood"
                         pred_proba = max(pred_proba, 0.98)
                         future_threat_score = 0.96
