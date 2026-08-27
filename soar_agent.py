@@ -41,29 +41,31 @@ def get_firewall_action_string(attacker_ip: str, action: str = "block") -> str:
         else:
             return f"iptables -D INPUT -s {attacker_ip} -j DROP"
 
-def kill_active_connections(attacker_ip: str) -> bool:
+def kill_active_connections(attacker_ip: str, target_port: int = 5000) -> bool:
     """
     Active socket severing: Drops all established TCP/UDP connections from the attacking IP.
     Ensures that active data exfiltration or flood streams are terminated immediately.
     """
-    if is_protected_ip(attacker_ip):
-        logging.info(f"[SAFEGUARD] Protected/Loopback socket termination skipped for {attacker_ip}.")
-        return True
-
     logging.info(f"[SOAR] Terminating active TCP/UDP socket sessions for {attacker_ip}...")
     try:
         if IS_LINUX:
-            # Linux: Use ss to kill matching sockets or conntrack to flush entries
-            subprocess.run(f"sudo -n ss -K dst {attacker_ip}".split(), capture_output=True, timeout=1.5)
-            subprocess.run(f"sudo -n ss -K src {attacker_ip}".split(), capture_output=True, timeout=1.5)
-            # Try conntrack if available
-            subprocess.run(f"sudo -n conntrack -D -s {attacker_ip}".split(), capture_output=True, timeout=1.0)
-            logging.info(f"[SUCCESS] Active connection sessions dropped for {attacker_ip} via ss/conntrack.")
+            if is_protected_ip(attacker_ip):
+                # For local loopback test attacks (e.g. traffic_flood against port 5000 or 8000),
+                # drop the attacking socket streams connected to target port without breaking browser UI on port 3000
+                subprocess.run(f"sudo -n ss -K dport = {target_port}".split(), capture_output=True, timeout=1.5)
+                subprocess.run(f"sudo -n ss -K sport = {target_port}".split(), capture_output=True, timeout=1.5)
+                logging.info(f"[SUCCESS] Target port {target_port} attack sessions dropped via ss.")
+            else:
+                # Full remote host socket teardown
+                subprocess.run(f"sudo -n ss -K dst {attacker_ip}".split(), capture_output=True, timeout=1.5)
+                subprocess.run(f"sudo -n ss -K src {attacker_ip}".split(), capture_output=True, timeout=1.5)
+                subprocess.run(f"sudo -n conntrack -D -s {attacker_ip}".split(), capture_output=True, timeout=1.0)
+                logging.info(f"[SUCCESS] Active connection sessions dropped for {attacker_ip} via ss/conntrack.")
         elif IS_WINDOWS:
-            # Windows: PowerShell socket teardown
-            ps_cmd = f'Get-NetTCPConnection -RemoteAddress {attacker_ip} -ErrorAction SilentlyContinue | ForEach-Object {{ Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }}'
-            subprocess.run(["powershell", "-Command", ps_cmd], capture_output=True, timeout=2.0)
-            logging.info(f"[SUCCESS] Active connection sessions dropped for {attacker_ip} on Windows.")
+            if not is_protected_ip(attacker_ip):
+                ps_cmd = f'Get-NetTCPConnection -RemoteAddress {attacker_ip} -ErrorAction SilentlyContinue | ForEach-Object {{ Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }}'
+                subprocess.run(["powershell", "-Command", ps_cmd], capture_output=True, timeout=2.0)
+                logging.info(f"[SUCCESS] Active connection sessions dropped for {attacker_ip} on Windows.")
         return True
     except Exception as e:
         logging.warning(f"[INFO] Socket teardown staged for {attacker_ip} ({e})")
@@ -72,7 +74,8 @@ def kill_active_connections(attacker_ip: str) -> bool:
 def isolate_host(attacker_ip: str) -> bool:
     """Executes targeted micro-isolation on a single attacker IP across Windows and Linux."""
     if is_protected_ip(attacker_ip):
-        logging.info(f"[SAFEGUARD] Host {attacker_ip} is protected/loopback; skipping system firewall isolation rule.")
+        logging.info(f"[SAFEGUARD] Local simulation mode active for {attacker_ip}: dynamic host micro-isolation state engaged.")
+        ACTIVE_ISOLATIONS.add(attacker_ip)
         return True
 
     logging.warning(f"[CHAKRAVYUH AI] Isolating malicious host: {attacker_ip} on {platform.system()}")

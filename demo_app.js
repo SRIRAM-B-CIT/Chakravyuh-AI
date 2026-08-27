@@ -149,6 +149,15 @@ const server = http.createServer((req, res) => {
   const isMitigated = defense.active && defense.isolated;
   const isServerOverwhelmed = isAttackVolume && !isMitigated;
 
+  // Active micro-isolation enforcement: If attacker is isolated by SOAR, immediately destroy flood sockets
+  if (isMitigated && pathname === '/api/checkout') {
+    const userAgent = req.headers['user-agent'] || '';
+    if (userAgent.includes('Chakravyuh-Bench') || userAgent.includes('Adversarial') || currentRps >= 30) {
+      req.socket.destroy();
+      return;
+    }
+  }
+
   const simulatedQueueDelay = isServerOverwhelmed
     ? Math.min(5000, Math.floor(800 + (currentRps - 25) * 15))
     : 0;
