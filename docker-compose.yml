@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  # =========================================================================
+  # 1. Chakravyuh AI - FastAPI Backend & WebSocket Streamer Core
+  # =========================================================================
+  backend:
+    container_name: chakravyuh-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "server.py"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEFENSE_IP=${DEFENSE_IP:-192.168.29.104}
+      - GATEWAY_IP=${GATEWAY_IP:-192.168.29.1}
+      - INTERNAL_SERVER_IP=${INTERNAL_SERVER_IP:-192.168.29.42}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - chakravyuh-net
+
+  # =========================================================================
+  # 2. Chakravyuh AI - Live AI Packet Sniffer, ST-GNN & SOAR Engine
+  # =========================================================================
+  sniffer:
+    container_name: chakravyuh-sniffer
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "live_sniffer.py"]
+    volumes:
+      - ./:/app
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEFENSE_IP=${DEFENSE_IP:-192.168.29.104}
+      - GATEWAY_IP=${GATEWAY_IP:-192.168.29.1}
+      - INTERNAL_SERVER_IP=${INTERNAL_SERVER_IP:-192.168.29.42}
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chakravyuh-net
+
+  # =========================================================================
+  # 3. Chakravyuh AI - Next.js Cyber Command Dashboard
+  # =========================================================================
+  frontend:
+    container_name: chakravyuh-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws/stream
+      - BACKEND_INTERNAL_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - chakravyuh-net
+
+  # =========================================================================
+  # 4. Optional Attack Simulation Console (Run on demand via: docker compose run attack-suite)
+  # =========================================================================
+  attack-suite:
+    container_name: chakravyuh-attack-suite
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "attack_suite.py"]
+    volumes:
+      - ./:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - tools
+      - attack
+    networks:
+      - chakravyuh-net
+
+networks:
+  chakravyuh-net:
+    driver: bridge

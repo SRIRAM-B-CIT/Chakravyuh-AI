@@ -7212,3 +7212,93 @@
 [11:19:35] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.42.237
 [11:19:38] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.143
 [11:19:41] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.69
+[11:34:31] ==================================================
+[11:34:31] INFO: Live NetDreamer RSSM Defense Active on lo, enp0s31f6, wlp3s0
+[11:34:31] ==================================================
+[11:34:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124
+[11:34:31] INFO: Telemetry initialized to NOMINAL SAFE baseline.
+[11:34:31] INFO: Native Linux AF_PACKET raw socket engine active (0-latency capture).
+[11:34:31] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 168.65.244.21
+[11:34:34] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:34:37] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:34:40] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 13.224.245.42
+[11:34:43] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:34:46] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:34:49] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:34:52] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:34:56] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:34:59] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:02] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:05] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.42.88
+[11:35:08] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 0.1.92.53
+[11:35:17] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.38.191
+[11:35:20] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:23] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:26] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.37.54
+[11:35:30] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.37.54
+[11:35:33] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:36] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.30
+[11:35:39] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:42] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:45] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:48] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:35:50] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 34.5 pkts/s
+[11:35:50] State: Recon/BruteForce | ML Conf: 100.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 10.10.39.2
+[11:35:50] ALERT: Intercepting threat from 10.10.39.2! Triggering host micro-isolation & active neutralization...
+[11:35:50] ACTION: iptables -A INPUT -s 10.10.39.2 -j DROP
+[11:35:51] SOAR REMEDIATION: Authentication endpoint firewall quarantine applied to 10.10.39.2
+[11:35:51] SOAR REMEDIATION: Active unauthorized authentication handshakes severed
+[11:35:51] SOAR REMEDIATION: Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: 10.10.39.2]
+[11:35:51] SOAR REMEDIATION: Adaptive authentication rate-limiting enabled (5 attempts / 10 min window)
+[11:35:51] SOAR REMEDIATION: Credential audit security event dispatched to SOC SIEM
+[11:35:51] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 85.0 pkts/s
+[11:35:51] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:51] ALERT: Intercepting threat from 10.10.39.2! Triggering host micro-isolation & active neutralization...
+[11:35:51] ACTION: iptables -A INPUT -s 10.10.39.2 -j DROP
+[11:35:51] SOAR REMEDIATION: Netfilter drop rule applied for 10.10.39.2
+[11:35:51] SOAR REMEDIATION: Active connection tracking entries purged for 10.10.39.2
+[11:35:51] SOAR REMEDIATION: Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)
+[11:35:51] SOAR REMEDIATION: Ingress traffic rate-limiting policy activated on defense interface
+[11:35:52] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 108.0 pkts/s
+[11:35:52] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:52] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 107.0 pkts/s
+[11:35:52] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:53] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 78.5 pkts/s
+[11:35:53] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:53] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.5 pkts/s
+[11:35:53] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:54] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.5 pkts/s
+[11:35:54] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:54] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.5 pkts/s
+[11:35:54] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:55] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.5 pkts/s
+[11:35:55] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:56] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.5 pkts/s
+[11:35:56] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:56] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.0 pkts/s
+[11:35:56] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:57] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.0 pkts/s
+[11:35:57] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:57] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 54.0 pkts/s
+[11:35:57] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:58] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 51.0 pkts/s
+[11:35:58] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:58] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 51.5 pkts/s
+[11:35:58] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:59] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 51.5 pkts/s
+[11:35:59] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:35:59] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 51.5 pkts/s
+[11:35:59] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:36:00] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 51.0 pkts/s
+[11:36:00] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:36:00] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: DoS/Flood | RSSM Risk: 96.0% | Packet Velocity: 43.5 pkts/s
+[11:36:00] State: DoS/Flood | ML Conf: 98.0% | RSSM K-Horizon Risk: 96.0% | Source IP: 10.10.39.2
+[11:36:01] [SNIFFER ALERT] High packet rate detected from 10.10.39.2 | Threat: Recon/BruteForce | RSSM Risk: 94.0% | Packet Velocity: 35.0 pkts/s
+[11:36:01] State: Recon/BruteForce | ML Conf: 98.0% | RSSM K-Horizon Risk: 94.0% | Source IP: 10.10.39.2
+[11:36:01] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:36:04] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.39.2
+[11:36:07] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.33.149
+[11:36:11] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 208.101.120.167
+[11:36:14] State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 10.10.44.112
