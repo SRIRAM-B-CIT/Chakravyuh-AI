@@ -2,33 +2,45 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { Globe, X, ShieldAlert, Cpu, Crosshair, ShieldCheck, Zap } from "lucide-react";
+import {
+  Globe,
+  Maximize2,
+  Minimize2,
+  RotateCcw,
+  Crosshair,
+  Zap,
+  Activity,
+  Radio,
+  Layers,
+  Box,
+} from "lucide-react";
 import { SystemState, TopologyNode } from "@/lib/types";
 
-// Dynamic import for react-force-graph-2d (disabling SSR for HTML5 Canvas)
+// Dynamic import for react-force-graph-2d
 const ForceTopology2D = dynamic(
   () => import("./ForceTopology2D").then((mod) => mod.ForceTopology2D),
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-[360px] bg-[var(--card-surface)] border border-[var(--border-muted)] rounded-xl flex items-center justify-center font-mono text-xs text-blue-500 dark:text-cyan-400">
+      <div className="w-full h-[400px] bg-[var(--surface)] border border-[var(--border)] rounded-xl flex items-center justify-center font-mono text-xs text-[var(--violet)]">
         <Zap className="h-4 w-4 animate-spin mr-2" />
-        INITIALIZING SPATIAL GRAPH ENGINE...
+        INITIALIZING SPATIAL TOPOLOGY ENGINE...
       </div>
     ),
   }
 );
 
 interface TopologyGraphProps {
-  topology: SystemState["topology"];
+  topology?: SystemState["topology"];
   state?: SystemState;
 }
 
-export function TopologyGraph({ topology, state }: TopologyGraphProps) {
+export function TopologyGraph({ state }: TopologyGraphProps) {
   const [selectedNode, setSelectedNode] = useState<TopologyNode | null>(null);
+  const [activeTab, setActiveTab] = useState<"Graph" | "Heatmap" | "3D View">("Graph");
   const [isDark, setIsDark] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 620, height: 350 });
+  const [dimensions, setDimensions] = useState({ width: 700, height: 420 });
 
   useEffect(() => {
     const detect = () => setIsDark(document.documentElement.classList.contains("dark"));
@@ -41,10 +53,9 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
   useEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
-        const { clientWidth } = containerRef.current;
         setDimensions({
-          width: clientWidth || 620,
-          height: 350,
+          width: containerRef.current.clientWidth || 700,
+          height: 420,
         });
       }
     };
@@ -53,48 +64,79 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
-  const nodes = topology?.nodes || [];
-  const isThreatActive = state?.label !== "Benign" || (state?.risk_score || 0) >= 0.5;
+  const isThreatActive =
+    (state?.label && state.label !== "Benign") || (state?.risk_score || 0) >= 0.5;
   const isIsolated = Boolean(state?.isolated);
 
   return (
-    <div className="tactical-card relative flex flex-col overflow-hidden p-3.5 rounded-xl shadow-sm h-full">
-      {/* Topology Header */}
-      <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-muted)] pb-2.5">
-        <div className="flex items-center gap-2">
-          <Globe className="h-4 w-4 text-blue-500" />
-          <div>
-            <h2 className="font-mono text-xs font-bold tracking-wider text-[var(--foreground)] uppercase">
-              ST-GNN Dynamic Spatial Topology
+    <div className="card relative flex flex-col overflow-hidden p-4 h-full">
+      {/* Header Strip */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <Globe className="h-4 w-4 text-[var(--violet)]" />
+            <h2 className="font-head text-[13px] font-extrabold tracking-wider text-[var(--text-primary)] uppercase">
+              DYNAMIC SPATIAL TOPOLOGY
             </h2>
-            <p className="text-[10px] text-[var(--muted-text)] font-mono">
-              react-force-graph-2d · {nodes.length || 4} Nodes · {topology?.stats?.active_flows || 148} Active Flows
-            </p>
           </div>
+          <p className="text-[11px] text-[var(--text-muted)] font-mono mt-0.5">
+            Real-time Attack Graph · 4 Nodes · 131 Active Flows
+          </p>
         </div>
 
-        {/* Tactical Legend Strip */}
-        <div className="flex items-center gap-1.5 font-mono text-[9px] font-bold">
-          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
-            ● SAFE
-          </span>
-          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-500">
-            ● DEFENSE
-          </span>
-          <span className={`flex items-center gap-1 px-2 py-0.5 rounded border transition ${
-            isIsolated
-              ? "bg-red-950/80 border-red-500 text-red-300"
-              : isThreatActive
-              ? "bg-red-500/20 border-red-500/60 text-red-400 animate-pulse"
-              : "bg-slate-800 border-slate-700 text-slate-400"
-          }`}>
-            {isIsolated ? "🛑 QUARANTINED" : isThreatActive ? "⚡ ACTIVE THREAT" : "● EXTERNAL"}
-          </span>
+        {/* Graph / Heatmap / 3D View Switcher */}
+        <div className="flex items-center gap-1 rounded-lg bg-[var(--surface-2)] p-1 border border-[var(--border)]">
+          {(["Graph", "Heatmap", "3D View"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-3 py-1 rounded-md text-[11px] font-mono font-bold transition ${
+                activeTab === tab
+                  ? "bg-[var(--surface)] text-[var(--text-primary)] shadow-sm border border-[var(--border)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Force Graph Canvas Container */}
-      <div ref={containerRef} className="relative flex-1 w-full min-h-[350px]">
+      {/* Legend Ribbon */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-3 font-mono text-[10px] text-[var(--text-secondary)]">
+          <span className="flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full bg-[#6D28D9]" />
+            Safe (violet)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full bg-[#D97706]" />
+            Suspicious (amber)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full bg-[#F43F5E]" />
+            Compromised (coral)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full bg-[var(--text-muted)]" />
+            External
+          </span>
+        </div>
+
+        {isIsolated ? (
+          <span className="badge badge-coral">🛑 SOAR CONTAINMENT ACTIVE</span>
+        ) : isThreatActive ? (
+          <span className="badge badge-coral animate-pulse">⚡ THREAT ESCALATION DETECTED</span>
+        ) : (
+          <span className="badge badge-mint">🟢 TELEMETRY NOMINAL</span>
+        )}
+      </div>
+
+      {/* Main Force Graph Canvas Container */}
+      <div
+        ref={containerRef}
+        className="relative flex-1 w-full min-h-[400px] rounded-xl overflow-hidden border border-[var(--border)]"
+      >
         <ForceTopology2D
           state={state}
           onSelectNode={(node) => setSelectedNode(node)}
@@ -104,82 +146,67 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
           isDark={isDark}
         />
 
-        {/* Interactive Inspection Tooltip Overlay */}
-        <div className="absolute bottom-2.5 left-2.5 pointer-events-none flex items-center gap-1.5 rounded border border-[var(--border-muted)] bg-[var(--elevated-card)]/90 px-2 py-1 font-mono text-[9px] text-[var(--muted-text)] shadow-sm backdrop-blur">
-          <Crosshair className="h-3 w-3 text-blue-500 dark:text-cyan-400" />
-          <span>CLICK / DRAG NODES TO INSPECT & INTERACT</span>
+        {/* Bottom Interactive Toolbar */}
+        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 p-1 rounded-lg bg-[var(--surface)]/90 border border-[var(--border)] shadow-sm backdrop-blur">
+          <button
+            title="Inspect"
+            className="p-1.5 rounded hover:bg-[var(--surface-2)] text-[var(--text-secondary)] transition"
+          >
+            <Crosshair className="h-3.5 w-3.5" />
+          </button>
+          <button
+            title="Fit to screen"
+            className="p-1.5 rounded hover:bg-[var(--surface-2)] text-[var(--text-secondary)] transition"
+          >
+            <Maximize2 className="h-3.5 w-3.5" />
+          </button>
+          <button
+            title="Center Graph"
+            className="p-1.5 rounded hover:bg-[var(--surface-2)] text-[var(--text-secondary)] transition"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </button>
         </div>
 
-        {isIsolated && (
-          <div className="absolute bottom-2.5 right-2.5 pointer-events-none flex items-center gap-1.5 rounded border border-red-500/60 bg-red-950/90 px-2.5 py-1 font-mono text-[9px] font-bold text-red-300 shadow-md">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-            <span>SOAR QUARANTINE ACTIVE · NETFILTER DROP</span>
-          </div>
-        )}
+        {/* Live Feed Indicator */}
+        <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--surface)]/95 border border-[var(--border)] shadow-sm backdrop-blur font-mono text-[10px] font-bold text-[var(--text-primary)]">
+          <span className="h-2 w-2 rounded-full bg-[var(--coral)] animate-ping" />
+          <span>● LIVE FEED</span>
+        </div>
       </div>
 
-      {/* Selected Node Details Drawer */}
+      {/* Selected Node Details Modal/Drawer */}
       {selectedNode && (
-        <aside
-          className="absolute right-4 top-14 z-20 w-64 rounded-xl border border-[var(--border-muted)] bg-[var(--card-surface)] p-3.5 shadow-2xl animate-in fade-in slide-in-from-right-4 duration-200"
+        <div
+          className="absolute right-6 top-20 z-20 w-64 card p-3.5 shadow-2xl animate-slide-up"
           onMouseLeave={() => setSelectedNode(null)}
         >
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
-              <Cpu className="h-4 w-4 text-blue-500" />
-              <div>
-                <p className="font-mono text-[8px] font-bold tracking-widest text-[var(--muted-text)] uppercase">
-                  NODE TELEMETRY
-                </p>
-                <h3 className="text-xs font-bold text-[var(--foreground)] font-mono">
-                  {selectedNode.label}
-                </h3>
-              </div>
-            </div>
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+            <span className="font-head text-xs font-bold text-[var(--text-primary)]">
+              {selectedNode.label}
+            </span>
             <button
               onClick={() => setSelectedNode(null)}
-              aria-label="Close node details"
-              className="text-[var(--muted-text)] hover:text-[var(--foreground)]"
+              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] font-mono"
             >
-              <X className="h-3.5 w-3.5" />
+              ✕
             </button>
           </div>
-
-          <dl className="mt-3 space-y-2 font-mono text-[10px]">
-            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
-              <dt className="text-[var(--muted-text)]">IP ADDRESS</dt>
-              <dd className="text-[var(--foreground)] font-bold">{selectedNode.ip}</dd>
+          <div className="space-y-1.5 mt-2 font-mono text-[11px]">
+            <div className="flex justify-between text-[var(--text-secondary)]">
+              <span>IP Address:</span>
+              <span className="font-bold text-[var(--text-primary)]">{selectedNode.ip}</span>
             </div>
-            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
-              <dt className="text-[var(--muted-text)]">ROLE</dt>
-              <dd className="text-[var(--secondary-text)]">{selectedNode.role}</dd>
+            <div className="flex justify-between text-[var(--text-secondary)]">
+              <span>Status:</span>
+              <span className="font-bold text-[var(--violet)]">{selectedNode.status}</span>
             </div>
-            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
-              <dt className="text-[var(--muted-text)]">STATUS</dt>
-              <dd className={`font-bold ${
-                selectedNode.status === "ISOLATED" || isIsolated
-                  ? "text-red-400"
-                  : selectedNode.status === "ATTACKER"
-                  ? "text-amber-400"
-                  : "text-emerald-400"
-              }`}>
-                {selectedNode.status || (isIsolated ? "ISOLATED" : "SAFE")}
-              </dd>
+            <div className="flex justify-between text-[var(--text-secondary)]">
+              <span>Risk Score:</span>
+              <span className="font-bold text-[var(--coral)]">{selectedNode.risk_score}</span>
             </div>
-            <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
-              <dt className="text-[var(--muted-text)]">RISK SCORE</dt>
-              <dd className="text-xs text-[var(--foreground)] font-bold">
-                {Math.round((selectedNode.risk_score || (isThreatActive ? 0.96 : 0.05)) * 100)}%
-              </dd>
-            </div>
-            <div className="flex justify-between">
-              <dt className="text-[var(--muted-text)]">CONTAINMENT</dt>
-              <dd className="text-xs font-bold text-cyan-400">
-                {isIsolated ? "QUARANTINED" : "STANDBY"}
-              </dd>
-            </div>
-          </dl>
-        </aside>
+          </div>
+        </div>
       )}
     </div>
   );

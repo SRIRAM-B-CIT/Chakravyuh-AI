@@ -5,16 +5,12 @@ import { motion } from "framer-motion";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { MetricGrid } from "@/components/dashboard/MetricGrid";
-import { IncidentSummary } from "@/components/dashboard/IncidentSummary";
-import { ModelHealth } from "@/components/dashboard/ModelHealth";
-import { StatusStrip } from "@/components/StatusStrip";
+import { ThreatOverview } from "@/components/dashboard/ThreatOverview";
+import { PredictionConfidence } from "@/components/dashboard/PredictionConfidence";
 import { TopologyGraph } from "@/components/TopologyGraph";
-import { HorizonChart } from "@/components/HorizonChart";
 import { LiveLogs } from "@/components/LiveLogs";
 import { CompactSoarBar } from "@/components/CompactSoarBar";
 import { CommandMenu } from "@/components/ui/CommandMenu";
-import { CinematicLanding } from "@/components/landing/CinematicLanding";
-import { BlockchainTransition } from "@/components/landing/BlockchainTransition";
 
 import { useSoarActions } from "@/hooks/useSoarActions";
 import { useTelemetryStream } from "@/hooks/useTelemetryStream";
@@ -25,26 +21,26 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
+      staggerChildren: 0.06,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
       type: "spring",
-      stiffness: 100,
-      damping: 15,
+      stiffness: 120,
+      damping: 18,
     },
   },
 };
 
 const initialState: SystemState = {
-  src_ip: "192.168.29.124",
+  src_ip: "172.16.0.3",
   label: "Benign",
   ml_conf: 0.98,
   risk_score: 0.05,
@@ -59,23 +55,35 @@ const initialState: SystemState = {
   topology: {
     nodes: [
       {
-        id: "192.168.29.1",
-        ip: "192.168.29.1",
-        label: "Gateway",
-        role: "Gateway Router",
-        risk_score: 0.02,
+        id: "192.168.1.10",
+        ip: "192.168.1.10",
+        label: "Critical Asset",
+        role: "Core Financial Database & Vault",
+        risk_score: 0.18,
         status: "SAFE",
-        packet_count: 24,
-        byte_rate: "1.2 MB/s",
+        packet_count: 54,
+        byte_rate: "4.2 MB/s",
         is_defense: false,
         is_isolated: false,
       },
       {
-        id: "192.168.29.104",
-        ip: "192.168.29.104",
-        label: "Defense",
-        role: "Defense Controller",
+        id: "127.0.0.1",
+        ip: "127.0.0.1",
+        label: "Server",
+        role: "Internal Enterprise Server",
         risk_score: 0.05,
+        status: "SAFE",
+        packet_count: 88,
+        byte_rate: "2.1 MB/s",
+        is_defense: false,
+        is_isolated: false,
+      },
+      {
+        id: "10.0.0.5",
+        ip: "10.0.0.5",
+        label: "Defense",
+        role: "Autonomous SOAR Controller",
+        risk_score: 0.02,
         status: "SAFE",
         packet_count: 148,
         byte_rate: "3.8 MB/s",
@@ -83,26 +91,26 @@ const initialState: SystemState = {
         is_isolated: false,
       },
       {
-        id: "192.168.29.42",
-        ip: "192.168.29.42",
-        label: "Server",
-        role: "Internal Core Server",
-        risk_score: 0.12,
+        id: "10.0.0.8",
+        ip: "10.0.0.8",
+        label: "Gateway",
+        role: "Perimeter Router & Firewall",
+        risk_score: 0.02,
         status: "SAFE",
-        packet_count: 18,
-        byte_rate: "850 KB/s",
+        packet_count: 32,
+        byte_rate: "1.6 MB/s",
         is_defense: false,
         is_isolated: false,
       },
       {
-        id: "192.168.29.124",
-        ip: "192.168.29.124",
+        id: "172.16.0.3",
+        ip: "172.16.0.3",
         label: "Attacker",
-        role: "External Node",
-        risk_score: 0.05,
+        role: "External Adversary Stream",
+        risk_score: 0.95,
         status: "SAFE",
-        packet_count: 28,
-        byte_rate: "210 KB/s",
+        packet_count: 148,
+        byte_rate: "18.4 MB/s",
         is_defense: false,
         is_isolated: false,
       },
@@ -110,26 +118,25 @@ const initialState: SystemState = {
     edges: [],
     stats: {
       total_nodes: 4,
-      total_edges: 0,
+      total_edges: 5,
       threat_level: "NORMAL",
-      active_flows: 148,
+      active_flows: 131,
     },
   },
 };
 
 const initialLogs = [
-  "[21:35:01] INFO: Connecting State / ST-GNN spatial graph topology online.",
-  "[21:35:03] State: Benign | Source IP: 192.168.29.124",
-  "[21:35:05] ACTION: Network connectivity nominal.",
+  "10:42:14 · CRITICAL · State: Benign · ML Conf: 99.6% · RSSM K-Horizon Risk: 3.8% · Source IP: 127.0.0.1",
+  "10:42:17 · DETECTED · State: Benign · ML Conf: 99.0% · RSSM K-Horizon Risk: 3.8%",
+  "10:42:20 · SCAN · Port Scan Detected · 12 Ports · Severity: Low · Source IP: 10.0.0.5",
+  "10:42:24 · DETECTED · State: Benign · ML Conf: 98.6% · RSSM K-Horizon Risk: 5.8%",
+  "10:42:28 · INFO · Baseline Updated Successfully · Auto-Remediate Engine",
 ];
 
 export default function DashboardPage() {
   const telemetry = useTelemetryStream(initialState, initialLogs);
   const actions = useSoarActions(telemetry.refresh);
-  const [uptimeSeconds, setUptimeSeconds] = useState(1540);
-
-  // Directly starts on dashboard (no puzzle loader)
-  const [viewState, setViewState] = useState<"landing" | "transitioning" | "dashboard">("dashboard");
+  const [uptimeSeconds, setUptimeSeconds] = useState(1700);
   const [isCommandMenuOpen, setIsCommandMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -158,131 +165,89 @@ export default function DashboardPage() {
       void actions.run("simulate", telemetry.state.src_ip);
     } else if (actionId === "reset") {
       void actions.run("reset", telemetry.state.src_ip);
-    } else if (actionId === "nav-topology") {
-      document.getElementById("topology")?.scrollIntoView({ behavior: "smooth" });
-    } else if (actionId === "nav-horizon") {
-      document.getElementById("horizon")?.scrollIntoView({ behavior: "smooth" });
-    } else if (actionId === "nav-logs") {
-      document.getElementById("logs")?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <>
-      {/* 1. Blockchain Consensus Sequence Overlay */}
-      {viewState === "transitioning" && (
-        <BlockchainTransition onComplete={() => setViewState("dashboard")} />
-      )}
+    <DashboardShell state={telemetry.state}>
+      {/* Top Header Navigation */}
+      <TopHeader
+        status={telemetry.status}
+        uptime={uptime}
+        loading={actions.loading}
+        currentView="dashboard"
+        onSwitchView={() => {}}
+        onOpenCommandMenu={() => setIsCommandMenuOpen(true)}
+        onAction={runHeaderAction}
+        onRefresh={telemetry.refresh}
+      />
 
-      {/* 2. Platform Overview / Landing View Overlay */}
-      {viewState === "landing" && (
-        <DashboardShell state={telemetry.state}>
-          <CinematicLanding
-            onEnterDashboard={() => setViewState("dashboard")}
-            onStartBlockchainSequence={() => setViewState("transitioning")}
-          />
-        </DashboardShell>
-      )}
-
-      {/* 3. SOC Command Center Dashboard */}
-      <div
-        className={
-          viewState === "dashboard"
-            ? "block opacity-100 transition-opacity duration-300"
-            : "hidden opacity-0"
-        }
+      {/* Main Command Center Canvas */}
+      <motion.main
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="w-full space-y-4 p-4 md:p-6"
       >
-        <DashboardShell state={telemetry.state}>
-          <TopHeader
-            status={telemetry.status}
-            uptime={uptime}
-            loading={actions.loading}
-            currentView="dashboard"
-            onSwitchView={(v) => setViewState(v)}
-            onOpenCommandMenu={() => setIsCommandMenuOpen(true)}
-            onAction={runHeaderAction}
-            onRefresh={telemetry.refresh}
-          />
-
-          <motion.main
-            id="dashboard"
-            variants={containerVariants}
-            initial="hidden"
-            animate={viewState === "dashboard" ? "show" : "hidden"}
-            className="mx-auto w-full max-w-[1800px] space-y-4 p-3 md:p-5 flex-1"
+        {actions.error && (
+          <motion.div
+            variants={itemVariants}
+            role="alert"
+            className="rounded-xl border border-[var(--coral)]/40 bg-[var(--coral-light)] p-3 font-mono text-xs text-[var(--coral)] shadow-sm"
           >
-            {actions.error && (
-              <motion.div
-                variants={itemVariants}
-                role="alert"
-                className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 font-mono text-xs text-red-400 shadow-sm"
-              >
-                SOAR ACTION FAILED: {actions.error}
-              </motion.div>
-            )}
+            SOAR ACTION FAILED: {actions.error}
+          </motion.div>
+        )}
 
-            {/* Row 1: Enterprise KPI Grid */}
-            <motion.div variants={itemVariants}>
-              <MetricGrid state={telemetry.state} uptime={uptime} />
-            </motion.div>
+        {/* Row 1: Six Top KPI Cards */}
+        <motion.div variants={itemVariants}>
+          <MetricGrid state={telemetry.state} uptime={uptime} />
+        </motion.div>
 
-            {/* Row 2: Side-by-Side Graphical Node Part (Left) + Terminal & Controls (Right) */}
-            <motion.div
-              variants={itemVariants}
-              className="grid w-full grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] items-stretch"
-            >
-              {/* Left Column: ST-GNN Spatial Graph Topology */}
-              <section id="topology" className="min-w-0 flex flex-col">
-                <TopologyGraph
-                  topology={telemetry.state.topology}
-                  state={telemetry.state}
-                />
-              </section>
+        {/* Row 2: Dynamic Spatial Topology (60%) + SOAR & Audit Trail (40%) */}
+        <motion.div
+          variants={itemVariants}
+          className="grid w-full grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] items-stretch"
+        >
+          {/* Main Network Centerpiece */}
+          <section id="topology" className="min-w-0 flex flex-col">
+            <TopologyGraph
+              topology={telemetry.state.topology}
+              state={telemetry.state}
+            />
+          </section>
 
-              {/* Right Column: Compact SOAR Controls (Top) + Live Event Terminal Logs (Bottom) */}
-              <section id="terminal-soar" className="min-w-0 flex flex-col gap-3">
-                {/* Attack type, Rollback, Reset Baseline & SOAR actions bar */}
-                <CompactSoarBar
-                  state={telemetry.state}
-                  onRefresh={telemetry.refresh}
-                  onAction={runHeaderAction}
-                />
+          {/* Right Column: SOAR Controls (Top) + Audit Trail (Bottom) */}
+          <section id="soar-terminal" className="min-w-0 flex flex-col gap-4">
+            <CompactSoarBar
+              state={telemetry.state}
+              onRefresh={telemetry.refresh}
+              onAction={runHeaderAction}
+            />
 
-                {/* Live Event Terminal Logs */}
-                <div id="logs" className="flex-1 min-h-[220px]">
-                  <LiveLogs logs={telemetry.logs} />
-                </div>
-              </section>
-            </motion.div>
+            <div id="logs" className="flex-1 min-h-[260px]">
+              <LiveLogs logs={telemetry.logs} />
+            </div>
+          </section>
+        </motion.div>
 
-            {/* Row 3: Horizon Chart Full Width */}
-            <motion.div variants={itemVariants} className="w-full">
-              <section id="horizon">
-                <HorizonChart state={telemetry.state} />
-              </section>
-            </motion.div>
+        {/* Row 3: Threat Overview (50%) + Prediction Confidence (50%) */}
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-1 gap-4 lg:grid-cols-2"
+        >
+          <ThreatOverview state={telemetry.state} />
+          <PredictionConfidence state={telemetry.state} />
+        </motion.div>
+      </motion.main>
 
-            {/* Row 4: Incident Summary & World Model Health */}
-            <motion.div
-              variants={itemVariants}
-              className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-            >
-              <IncidentSummary state={telemetry.state} />
-              <ModelHealth state={telemetry.state} />
-            </motion.div>
-          </motion.main>
-
-          <StatusStrip connected={telemetry.status !== "disconnected"} />
-
-          {/* Quick Command Palette Dialog */}
-          <CommandMenu
-            isOpen={isCommandMenuOpen}
-            onClose={() => setIsCommandMenuOpen(false)}
-            onSelectAction={handleCommandAction}
-            srcIp={telemetry.state.src_ip}
-          />
-        </DashboardShell>
-      </div>
-    </>
+      {/* Command Palette */}
+      <CommandMenu
+        isOpen={isCommandMenuOpen}
+        onClose={() => setIsCommandMenuOpen(false)}
+        onSelectAction={handleCommandAction}
+        srcIp={telemetry.state.src_ip}
+      />
+    </DashboardShell>
   );
 }

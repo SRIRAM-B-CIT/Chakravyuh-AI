@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Grid2X2, Globe, Moon, RotateCcw, Shield, ShieldCheck, Sun, Flame } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { ConnectionStatus } from "@/hooks/useTelemetryStream";
 
 interface TopHeaderProps {
@@ -15,128 +15,111 @@ interface TopHeaderProps {
   onRefresh: () => void;
 }
 
-export function TopHeader({ currentView, uptime, loading, onSwitchView, onAction }: TopHeaderProps) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+const NAV_LINKS = ["Overview", "Threat Monitor", "Predictions", "Attack Graph", "Logs", "Settings"];
+
+export function TopHeader({ uptime, onAction }: TopHeaderProps) {
+  const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [activeNav, setActiveNav] = useState("Overview");
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") as "dark" | "light" | null;
-    const initial = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "dark");
+    const initial = saved || "light";
     setTheme(initial);
-    if (initial === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.toggle("dark", initial === "dark");
   }, []);
 
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     localStorage.setItem("theme", next);
-    if (next === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.toggle("dark", next === "dark");
   };
 
   return (
-    <header className="sticky top-0 z-30 h-[62px] border-b border-[var(--border-muted)] bg-[var(--card-surface)]/95 px-4 shadow-sm backdrop-blur md:px-7 transition-colors duration-200">
-      <div className="mx-auto flex h-full max-w-[1800px] items-center justify-between gap-3">
-        {/* Left Logo and View Switcher */}
-        <div className="flex min-w-0 items-center gap-5">
-          <div className="flex shrink-0 items-center gap-2.5">
-            <Shield className="h-5 w-5 text-blue-500" strokeWidth={2} />
-            <div>
-              <div className="font-sans text-[12px] font-black tracking-[.08em] text-[var(--foreground)]">
-                CHAKRAVYUH <span className="text-blue-500">AI</span>
-              </div>
-              <div className="font-sans text-[7px] font-bold tracking-[.08em] text-[var(--muted-text)]">
-                AUTONOMOUS SOC COMMAND
-              </div>
-            </div>
+    <header className="topbar sticky top-0 z-40 h-[58px] px-5 flex items-center justify-between gap-4">
+      {/* Logo */}
+      <div className="flex items-center gap-3 shrink-0">
+        {/* Hex logo mark */}
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+          <path
+            d="M17 2L30.5 9.5V24.5L17 32L3.5 24.5V9.5L17 2Z"
+            fill="none"
+            stroke="url(#hg)"
+            strokeWidth="1.8"
+          />
+          <path d="M17 8L25 12.5V21.5L17 26L9 21.5V12.5L17 8Z" fill="url(#hg2)" opacity="0.9" />
+          <defs>
+            <linearGradient id="hg" x1="3" y1="2" x2="31" y2="32" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#6D28D9" /><stop offset="1" stopColor="#C026D3" />
+            </linearGradient>
+            <linearGradient id="hg2" x1="9" y1="8" x2="25" y2="26" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#7C3AED" /><stop offset="1" stopColor="#DB2777" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div>
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif" }} className="text-[15px] font-black tracking-tight text-[var(--text-primary)] leading-none">
+            CHAKRAVYUH <span style={{ color: "var(--violet)" }}>AI</span>
           </div>
-
-          <div className="hidden items-center gap-1 rounded-lg bg-[var(--secondary-bg)] p-1 sm:flex border border-[var(--border-muted)]">
-            <button
-              onClick={() => onSwitchView("dashboard")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-mono font-bold transition ${
-                currentView === "dashboard"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-[var(--secondary-text)] hover:text-[var(--foreground)]"
-              }`}
-            >
-              <Grid2X2 className="h-3.5 w-3.5" />
-              SOC Command
-            </button>
-            <button
-              onClick={() => onSwitchView("landing")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-mono font-bold transition ${
-                currentView === "landing"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-[var(--secondary-text)] hover:text-[var(--foreground)]"
-              }`}
-            >
-              <Globe className="h-3.5 w-3.5" />
-              Overview
-            </button>
+          <div className="text-[9px] font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase mt-0.5 font-mono">
+            AUTONOMOUS SOC COMMAND
           </div>
         </div>
+      </div>
 
-        {/* Center/Right Controls: Theme Toggle and Quick Action Bar */}
-        <div className="flex items-center gap-2">
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="flex items-center gap-1.5 rounded-lg border border-[var(--border-muted)] bg-[var(--secondary-bg)] px-2.5 py-1.5 text-[11px] font-mono font-bold text-[var(--secondary-text)] hover:text-[var(--foreground)] transition shadow-sm"
-            title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? (
-              <>
-                <Moon className="h-3.5 w-3.5 text-cyan-400" />
-                <span className="hidden sm:inline text-cyan-300">DARK</span>
-              </>
-            ) : (
-              <>
-                <Sun className="h-3.5 w-3.5 text-amber-500" />
-                <span className="hidden sm:inline text-amber-600">LIGHT</span>
-              </>
-            )}
-          </button>
+      {/* SOC Command dropdown */}
+      <div className="hidden md:flex items-center">
+        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border)] text-[12px] font-semibold text-[var(--text-secondary)] hover:bg-[var(--surface-2)] transition mr-3">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--mint)] animate-blink" />
+          SOC Command
+          <span className="text-[var(--text-muted)]">▾</span>
+        </button>
 
-          {/* Quick Header Buttons */}
-          <button
-            onClick={() => onAction("reset")}
-            disabled={loading !== null}
-            className="action-button text-[11px] font-mono whitespace-nowrap"
-          >
-            <RotateCcw className="h-3 w-3" />
-            <span className="hidden md:inline">Reset Baseline</span>
-          </button>
+        {/* Nav links */}
+        <nav className="flex items-center gap-1">
+          {NAV_LINKS.map((link) => (
+            <button
+              key={link}
+              onClick={() => setActiveNav(link)}
+              className={`px-3 py-1.5 text-[12px] font-medium rounded-md transition-all ${
+                activeNav === link
+                  ? "text-[var(--violet)] font-semibold"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              }`}
+              style={activeNav === link ? {
+                borderBottom: "2px solid var(--violet)",
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+              } : {}}
+            >
+              {link}
+            </button>
+          ))}
+        </nav>
+      </div>
 
-          <button
-            onClick={() => onAction("simulate")}
-            disabled={loading !== null}
-            className="action-button whitespace-nowrap text-[11px] font-mono text-amber-500 hover:text-amber-400 hover:border-amber-500"
-          >
-            <Flame className="h-3 w-3 text-amber-500" />
-            <span className="hidden md:inline">Simulate Attack</span>
-          </button>
+      {/* Right controls */}
+      <div className="flex items-center gap-2.5 shrink-0">
+        {/* Theme toggle */}
+        <button
+          onClick={toggleTheme}
+          className="h-8 w-8 flex items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
+          aria-label="Toggle theme"
+        >
+          {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+        </button>
 
-          <button
-            onClick={() => onAction("rollback")}
-            disabled={loading !== null}
-            className="action-button whitespace-nowrap text-[11px] font-mono text-cyan-500 hover:text-cyan-400 hover:border-cyan-500"
-          >
-            <ShieldCheck className="h-3 w-3 text-cyan-500" />
-            <span className="hidden md:inline">1-Click Rollback</span>
-          </button>
+        {/* Uptime */}
+        <div className="hidden xl:flex flex-col items-end">
+          <span className="text-[9px] font-semibold text-[var(--text-muted)] uppercase tracking-wider font-mono">UPTIME</span>
+          <span className="text-[13px] font-bold font-mono text-[var(--mint)]">{uptime}</span>
+        </div>
 
-          {/* Uptime Badge */}
-          <span className="ml-1 hidden rounded-lg bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1.5 font-mono text-[10px] font-bold text-emerald-500 xl:inline-flex">
-            ◷&nbsp;Uptime {uptime}
-          </span>
+        {/* Analyst avatar */}
+        <div className="relative h-8 w-8 rounded-full flex items-center justify-center text-white text-[11px] font-bold"
+          style={{ background: "linear-gradient(135deg, var(--violet), var(--magenta))" }}>
+          SA
+          <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-[var(--mint)] border-2 border-[var(--surface)]" />
         </div>
       </div>
     </header>

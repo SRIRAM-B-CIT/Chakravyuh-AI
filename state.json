@@ -1,5 +1,5 @@
 {
-  "src_ip": "192.168.29.193",
+  "src_ip": "127.0.0.1",
   "label": "Benign",
   "ml_conf": 0.98,
   "risk_score": 0.05,
@@ -40,8 +40,8 @@
   "topology": {
     "nodes": [
       {
-        "id": "192.168.29.1",
-        "ip": "192.168.29.1",
+        "id": "node-gateway",
+        "ip": "10.42.0.1",
         "label": "Gateway",
         "role": "Gateway Router",
         "risk_score": 0.02,
@@ -52,19 +52,19 @@
         "is_isolated": false
       },
       {
-        "id": "192.168.29.104",
-        "ip": "192.168.29.104",
+        "id": "node-defense",
+        "ip": "10.42.0.181",
         "label": "Defense",
         "role": "Defense Controller",
         "risk_score": 0.05,
         "status": "SAFE",
-        "packet_count": 148,
+        "packet_count": 8,
         "byte_rate": "3.8 MB/s",
         "is_defense": true,
         "is_isolated": false
       },
       {
-        "id": "192.168.29.42",
+        "id": "node-server",
         "ip": "192.168.29.42",
         "label": "Server",
         "role": "Internal Core Server",
@@ -76,13 +76,13 @@
         "is_isolated": false
       },
       {
-        "id": "192.168.29.193",
-        "ip": "192.168.29.193",
+        "id": "node-attacker",
+        "ip": "127.0.0.1",
         "label": "Attacker",
         "role": "External Node",
         "risk_score": 0.05,
         "status": "SAFE",
-        "packet_count": 2,
+        "packet_count": 120,
         "byte_rate": "340 KB/s",
         "is_defense": false,
         "is_isolated": false
@@ -91,8 +91,8 @@
     "edges": [
       {
         "id": "e-gw-def",
-        "source": "192.168.29.1",
-        "target": "192.168.29.104",
+        "source": "node-gateway",
+        "target": "node-defense",
         "weight": 14,
         "traffic": "Safe Path",
         "protocol": "TCP/HTTPS",
@@ -100,9 +100,9 @@
         "threat": false
       },
       {
-        "id": "e-def-internal",
-        "source": "192.168.29.104",
-        "target": "192.168.29.42",
+        "id": "e-def-server",
+        "source": "node-defense",
+        "target": "node-server",
         "weight": 8,
         "traffic": "Safe Path",
         "protocol": "gRPC/TLS",
@@ -110,9 +110,9 @@
         "threat": false
       },
       {
-        "id": "e-gw-internal",
-        "source": "192.168.29.1",
-        "target": "192.168.29.42",
+        "id": "e-gw-server",
+        "source": "node-gateway",
+        "target": "node-server",
         "weight": 6,
         "traffic": "Internal Route",
         "protocol": "TCP/TLS",
@@ -121,18 +121,18 @@
       },
       {
         "id": "e-att-def",
-        "source": "192.168.29.193",
-        "target": "192.168.29.104",
-        "weight": 2,
+        "source": "node-attacker",
+        "target": "node-defense",
+        "weight": 120,
         "traffic": "Safe Path",
         "protocol": "TCP/SYN",
         "animated": false,
         "threat": false
       },
       {
-        "id": "e-att-srv",
-        "source": "192.168.29.193",
-        "target": "192.168.29.42",
+        "id": "e-att-server",
+        "source": "node-attacker",
+        "target": "node-server",
         "weight": 34,
         "traffic": "Internal Route",
         "protocol": "TCP/SYN",
@@ -144,8 +144,8 @@
       "total_nodes": 4,
       "total_edges": 5,
       "threat_level": "NORMAL",
-      "active_flows": 130
+      "active_flows": 131
     }
   },
-  "last_updated": 1787767764.8140488
+  "last_updated": 1787807544.5297103
 }
