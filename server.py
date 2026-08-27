@@ -378,7 +378,8 @@ def simulate_attack_scenario(req: SimulationRequest):
         "label": attack,
         "ml_conf": 0.98,
         "risk_score": risk,
-        "isolated": False,
+        "isolated": True,
+        "sim_until": time.time() + 30.0,  # Hold simulation visible for 30 seconds
         "netfilter_drops": "41.3k Drops",
         "rollout": [rollout_step0, rollout_step1, rollout_step2, rollout_step3],
         "rollout_series": {

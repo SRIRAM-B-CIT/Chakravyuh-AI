@@ -25,42 +25,42 @@ ATTACK_VECTORS = {
         "category": "DoS/Flood (Class 4)",
         "script": "traffic_flood.py",
         "default_port": 8000,
-        "default_duration": 10
+        "default_duration": 30
     },
     "2": {
         "name": "SYN Reconnaissance Port Scan",
         "category": "Recon/PortScan (Class 1)",
         "script": "recon_scan.py",
         "default_port": 80,
-        "default_duration": 8
+        "default_duration": 30
     },
     "3": {
         "name": "SSH / FTP / Auth Credential Brute-Force",
         "category": "Recon/BruteForce (Class 1)",
         "script": "brute_force.py",
         "default_port": 8000,
-        "default_duration": 10
+        "default_duration": 30
     },
     "4": {
         "name": "Infiltration / RCE & Command Injection",
         "category": "Infiltration (Class 2)",
         "script": "infiltration_exploit.py",
         "default_port": 8000,
-        "default_duration": 10
+        "default_duration": 30
     },
     "5": {
         "name": "Botnet C2 Beaconing & Lateral Spread",
         "category": "Bot/LateralMovement (Class 3)",
         "script": "bot_lateral.py",
         "default_port": 8000,
-        "default_duration": 10
+        "default_duration": 30
     },
     "6": {
         "name": "Slowloris Low-and-Slow Socket Exhaustion",
         "category": "DoS/Flood (Slowloris Variant)",
         "script": "slowloris_dos.py",
         "default_port": 8000,
-        "default_duration": 10
+        "default_duration": 30
     }
 }
 
@@ -122,10 +122,6 @@ def interactive_menu():
     target_ip = input("\nEnter Target IP (default 127.0.0.1): ").strip() or "127.0.0.1"
     port_in = input(f"Enter Target Port (default {default_port}): ").strip()
     target_port = int(port_in) if port_in else default_port
-    dur_in = input(f"Enter Duration in seconds (default {default_dur}s): ").strip()
-    duration = int(dur_in) if dur_in else default_dur
-
-    run_attack(choice, target_ip, target_port, duration)
     dur_in = input(f"Enter Duration in seconds (default {default_dur}s): ").strip()
     duration = int(dur_in) if dur_in else default_dur
 

@@ -214,6 +214,18 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
 
 
 def save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, active_ip_counts=None, edge_traffic_map=None, rollout_values=None):
+    # Guard: If dashboard simulation is active (sim_until > now), don't overwrite with benign traffic
+    if label_name == "Benign" or not is_isolated:
+        try:
+            if os.path.exists(STATE_JSON):
+                with open(STATE_JSON, "r") as f:
+                    existing = json.load(f)
+                sim_until = existing.get("sim_until", 0)
+                if time.time() < sim_until:
+                    return  # Simulation still active — preserve dashboard state
+        except Exception:
+            pass
+
     if active_ip_counts is None:
         active_ip_counts = {src_ip: 148, DEFENSE_IP: 148, GATEWAY_IP: 24, INTERNAL_SERVER_IP: 18}
     if edge_traffic_map is None:
@@ -662,14 +674,24 @@ def start_live_defense(interface=None, window_seconds=1.5):
                 ip_counts = Counter()
                 for p in window_packets:
                     src = p.get('src')
+                    if src:
+                        ip_counts[src] += 1
+
                 # Filter out multicast/broadcast/system resolver noise
+                NOISE_PREFIXES = ("224.", "239.", "255.", "ff02::", "fe80:", "127.0.0.5")
                 valid_candidates = {
                     ip: count for ip, count in ip_counts.items()
-                    if not ip.startswith(("224.", "239.", "255.", "ff02::", "fe80:", "127.0.0.5"))
+                    if not ip.startswith(NOISE_PREFIXES)
                 }
 
-                if valid_candidates:
-                    # Pick the most active traffic source in the current window
+                # Priority 1: Loopback 127.0.0.1 burst — local attack simulation
+                lo_count = ip_counts.get("127.0.0.1", 0)
+                lo_velocity = lo_count / rolling_window
+                if lo_velocity >= 15.0:
+                    # Loopback is flooding — treat it as primary threat source
+                    src_ip = "127.0.0.1"
+                elif valid_candidates:
+                    # Priority 2: Most active source in window
                     src_ip = Counter(valid_candidates).most_common(1)[0][0]
                 else:
                     src_ip = None
