@@ -28,25 +28,19 @@ def flood_worker(target_ip: str, target_port: int, worker_id: int):
     while not stop_event.is_set():
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(0.4)
+            s.settimeout(0.3)
             s.connect((target_ip, target_port))
             s.sendall(payload)
+            s.close()
             with counter_lock:
                 sent_count += 1
-            # If server or SOAR severs connection
-            resp = s.recv(64)
-            if not resp:
-                with counter_lock:
-                    dropped_count += 1
-            s.close()
         except (ConnectionResetError, ConnectionRefusedError, BrokenPipeError, socket.timeout):
             with counter_lock:
                 dropped_count += 1
-            time.sleep(0.01)
         except Exception:
             with counter_lock:
                 dropped_count += 1
-        time.sleep(0.001)
+        time.sleep(0.0005)
 
 def start_traffic_flood(target_ip: str = "127.0.0.1", target_port: int = 5000, threads: int = 24, duration: int = 10):
     global sent_count, dropped_count

@@ -710,7 +710,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
 
                     # 2. Precise Adversarial Attack Verification
                     # - DoS / Flood: High packet velocity or SYN flood surge
-                    is_dos_attack = (pkt_velocity >= 120.0) or (syn_rate >= 30.0 and pkt_count >= 50) or (syn_ratio >= 0.70 and pkt_count >= 60)
+                    is_dos_attack = (pkt_velocity >= 75.0) or (syn_rate >= 20.0 and pkt_count >= 30) or (syn_ratio >= 0.50 and pkt_count >= 40)
                     
                     # - SYN Recon Port Scan: Sweeping 10+ distinct ports
                     is_recon_port_scan = (len(meaningful_ports) >= 10 and pkt_count >= 20)
