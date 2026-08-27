@@ -29,8 +29,30 @@ weights_path = os.path.join(MODELS_DIR, "netdreamer_weights.pth")
 world_model = NetworkWorldModel.load_pretrained(weights_path)
 world_model.eval()
 
-DEFENSE_IP = os.getenv("DEFENSE_IP", "192.168.29.104")
-GATEWAY_IP = os.getenv("GATEWAY_IP", "192.168.29.1")
+def get_local_machine_ip() -> str:
+    env_ip = os.getenv("DEFENSE_IP")
+    if env_ip:
+        return env_ip
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "192.168.29.104"
+
+def get_gateway_ip(defense_ip: str) -> str:
+    env_gw = os.getenv("GATEWAY_IP")
+    if env_gw:
+        return env_gw
+    parts = defense_ip.split(".")
+    if len(parts) == 4:
+        return f"{parts[0]}.{parts[1]}.{parts[2]}.1"
+    return "192.168.29.1"
+
+DEFENSE_IP = get_local_machine_ip()
+GATEWAY_IP = get_gateway_ip(DEFENSE_IP)
 INTERNAL_SERVER_IP = os.getenv("INTERNAL_SERVER_IP", "192.168.29.42")
 
 # Interfaces to capture on: loopback (lo) catches 127.0.0.1 attacks; any catches Wi-Fi attacks

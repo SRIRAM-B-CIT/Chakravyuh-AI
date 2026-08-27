@@ -13,6 +13,7 @@ Provides an interactive menu and CLI launcher for all trained MITRE attack categ
 import os
 import sys
 import time
+import socket
 import subprocess
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -94,6 +95,24 @@ def run_attack(choice: str, target_ip: str, target_port: int, duration: int = 10
     except KeyboardInterrupt:
         print("\n[!] Attack interrupted by operator.")
 
+def get_default_target_ip() -> str:
+    """Auto-detects default target IP: Hotspot host (10.42.0.1) if on hotspot client, or 127.0.0.1."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+        # If on hotspot subnet (e.g. 10.42.0.X), default target host is 10.42.0.1
+        if local_ip.startswith("10.42.0.") and local_ip != "10.42.0.1":
+            return "10.42.0.1"
+        # If on local subnet (e.g. 192.168.X.Y), guess gateway
+        parts = local_ip.split(".")
+        if len(parts) == 4 and parts[0] == "192":
+            return f"{parts[0]}.{parts[1]}.{parts[2]}.1"
+        return "127.0.0.1"
+    except Exception:
+        return "127.0.0.1"
+
 def interactive_menu():
     print_banner()
     print("Available Adversarial Vectors:")
@@ -112,11 +131,11 @@ def interactive_menu():
         return
 
     vec = ATTACK_VECTORS[choice]
-    default_ip = "127.0.0.1"
+    suggested_ip = get_default_target_ip()
     default_port = vec["default_port"]
     default_dur = vec["default_duration"]
 
-    target_ip = input(f"Enter Target IP (default {default_ip}): ").strip() or default_ip
+    target_ip = input(f"Enter Target IP (default {suggested_ip}): ").strip() or suggested_ip
     port_in = input(f"Enter Target Port (default {default_port}): ").strip()
     target_port = int(port_in) if port_in else default_port
     dur_in = input(f"Enter Duration in seconds (default {default_dur}s): ").strip()
@@ -128,7 +147,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         # CLI direct mode: attack_suite.py <vector_num> [target_ip] [target_port] [duration]
         vector = sys.argv[1]
-        t_ip = sys.argv[2] if len(sys.argv) > 2 else "127.0.0.1"
+        t_ip = sys.argv[2] if len(sys.argv) > 2 else get_default_target_ip()
         t_port = int(sys.argv[3]) if len(sys.argv) > 3 else ATTACK_VECTORS.get(vector, {}).get("default_port", 8000)
         t_dur = int(sys.argv[4]) if len(sys.argv) > 4 else 10
         run_attack(vector, t_ip, t_port, t_dur)
