@@ -26,12 +26,6 @@ Supports both **Linux (Ubuntu/Debian/Zorin/RHEL)** and **Windows (10/11)**.
 
 ```text
 Chakravyuh-AI/
-├── docker-compose.yml         # Multi-container Docker orchestration (Backend, Sniffer, Frontend)
-├── Dockerfile                 # Unified Python 3.11 Backend, AI Sniffer & SOAR Container
-├── docker-start.sh            # 1-Click Docker launcher for Linux / macOS / WSL
-├── docker-start.bat           # 1-Click Docker launcher for Windows (CMD)
-├── docker-start.ps1           # 1-Click Docker launcher for Windows (PowerShell)
-├── DOCKER.md                  # Comprehensive Docker containerization documentation
 ├── pyproject.toml             # Modern uv / PEP 621 package specification
 ├── requirements.txt           # Pinned dependency manifest for uv/pip
 ├── server.py                  # FastAPI Backend & WebSocket Streamer (/ws/stream)
@@ -49,7 +43,6 @@ Chakravyuh-AI/
 │   ├── label_encoder.pkl      # 5 MITRE multi-stage classes
 │   └── metrics/               # Official ROC/PR curves, confusion matrix & t-SNE evaluation plots
 └── frontend/                  # Next.js 14+ Cyber Command Center Dashboard
-    ├── Dockerfile             # Multi-stage production container for Next.js 14
     ├── src/app/page.tsx       # Main dashboard layout & real-time WS manager
     ├── src/components/        # TopologyGraph, HorizonChart, MetricCards, SoarControl, LiveLogs
     └── package.json
@@ -57,30 +50,7 @@ Chakravyuh-AI/
 
 ---
 
-## 🐳 1-Click Docker Quickstart (Recommended for Linux & Windows)
-
-Running with Docker ensures consistent environments across **Linux** and **Windows (Docker Desktop / WSL2)** without manual package or dependency management.
-
-### 🐧 On Linux / macOS / WSL:
-```bash
-./docker-start.sh
-```
-*(Or manually: `docker compose up --build -d backend sniffer frontend`)*
-
-### 🪟 On Windows (Windows 10 / 11):
-Double-click **`docker-start.bat`** (or run `.\docker-start.ps1` in PowerShell).
-*(Or manually: `docker compose up --build -d backend sniffer frontend`)*
-
-### 🌐 Accessing Services:
-* **Cyber Command Center Dashboard**: [http://localhost:3000](http://localhost:3000)
-* **FastAPI Backend & API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
-* **WebSocket Stream**: `ws://localhost:8000/ws/stream`
-
-> 📖 **See [DOCKER.md](file:///home/sriram/Desktop/SIH%202026/Chakravyuh-AI/DOCKER.md) for full container management and testing details.**
-
----
-
-## ⚡ Native Installation (Alternative via `uv`)
+## ⚡ Fast Installation with `uv`
 
 [`uv`](https://github.com/astral-sh/uv) is an extremely fast Python package and environment manager.
 
