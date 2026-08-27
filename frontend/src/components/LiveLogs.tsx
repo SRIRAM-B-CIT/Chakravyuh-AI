@@ -1,27 +1,19 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import {
-  ScrollText,
-  Search,
-  Copy,
-  Check,
-  Pause,
-  Play,
-  Download,
-  Filter,
-} from "lucide-react";
+import { ScrollText, Search, Copy, Check, Pause, Play, Download } from "lucide-react";
+import { Badge } from "@/components/ui/Badge";
 
 interface LiveLogsProps {
   logs: string[];
 }
 
 const fallbackDefaultLogs = [
-  "10:42:14 · CRITICAL · State: Benign · ML Conf: 99.6% · RSSM K-Horizon Risk: 3.8% · Source IP: 127.0.0.1",
-  "10:42:17 · DETECTED · State: Benign · ML Conf: 99.0% · RSSM K-Horizon Risk: 3.8%",
-  "10:42:20 · SCAN · Port Scan Detected · 12 Ports · Severity: Low · Source IP: 10.0.0.5",
-  "10:42:24 · DETECTED · State: Benign · ML Conf: 98.6% · RSSM K-Horizon Risk: 5.8%",
-  "10:42:28 · INFO · Baseline Updated Successfully · Auto-Remediate Engine",
+  "[21:35:01] INFO: Connecting State / ST-GNN spatial graph topology online.",
+  "[21:35:03] State: Benign | Source IP: 192.168.29.124",
+  "[21:35:05] State: Benign | Source IP: 192.168.29.104",
+  "[21:35:08] ACTION: 1-Click Rollback Restored. Network connectivity nominal.",
+  "[21:35:10] State: Benign | Source IP: 192.168.29.124",
 ];
 
 export const LiveLogs: React.FC<LiveLogsProps> = ({ logs }) => {
@@ -39,33 +31,20 @@ export const LiveLogs: React.FC<LiveLogsProps> = ({ logs }) => {
     }
   }, [displayLogs, autoScroll]);
 
-  const parseLogLine = (line: string) => {
-    let type = "INFO";
-    let badgeClass = "badge-gray";
+  const getSeverity = (line: string) =>
+    line.includes("ALERT") || line.includes("CRITICAL") || line.includes("DoS")
+      ? "CRITICAL"
+      : line.includes("ACTION")
+      ? "SOAR"
+      : line.includes("State: Benign")
+      ? "BENIGN"
+      : "INFO";
 
-    if (line.includes("CRITICAL") || line.includes("ALERT") || line.includes("DoS")) {
-      type = "CRITICAL";
-      badgeClass = "badge-coral";
-    } else if (line.includes("DETECTED") || line.includes("SCAN") || line.includes("Port Scan")) {
-      type = "DETECTED";
-      badgeClass = "badge-violet";
-    } else if (line.includes("ACTION") || line.includes("SOAR") || line.includes("Remediate") || line.includes("Rollback")) {
-      type = "SOAR";
-      badgeClass = "badge-mint";
-    } else if (line.includes("Benign")) {
-      type = "BENIGN";
-      badgeClass = "badge-violet";
-    }
-
-    return { type, badgeClass };
-  };
-
-  const filteredLogs = displayLogs.filter((line) => {
-    const matchesText = line.toLowerCase().includes(filter.toLowerCase());
-    if (severity === "ALL") return matchesText;
-    const { type } = parseLogLine(line);
-    return matchesText && (type === severity || (severity === "CRITICAL" && type === "DETECTED"));
-  });
+  const filteredLogs = displayLogs.filter(
+    (line) =>
+      line.toLowerCase().includes(filter.toLowerCase()) &&
+      (severity === "ALL" || getSeverity(line) === severity)
+  );
 
   const handleCopy = () => {
     navigator.clipboard.writeText(displayLogs.join("\n"));
@@ -78,31 +57,60 @@ export const LiveLogs: React.FC<LiveLogsProps> = ({ logs }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `chakravyuh_audit_trail_${Date.now()}.log`;
+    a.download = `chakravyuh_soc_audit_${Date.now()}.log`;
     a.click();
   };
 
+  const renderLogLine = (line: string, index: number) => {
+    const currentSeverity = getSeverity(line);
+    const badgeVariant =
+      currentSeverity === "CRITICAL"
+        ? "critical"
+        : currentSeverity === "SOAR"
+        ? "safe"
+        : currentSeverity === "BENIGN"
+        ? "info"
+        : "neutral";
+
+    return (
+      <div
+        key={`${line}-${index}`}
+        className="flex items-start gap-2.5 py-1 font-mono text-[11px] leading-relaxed hover:bg-slate-900/40 px-1 rounded transition"
+      >
+        <Badge variant={badgeVariant} dot={false} className="shrink-0 text-[9px]">
+          {currentSeverity}
+        </Badge>
+        <span className="text-slate-300 break-all">{line}</span>
+      </div>
+    );
+  };
+
   return (
-    <div className="card p-4 flex flex-col h-full relative overflow-hidden">
-      {/* Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-[var(--border)] pb-3 mb-2.5">
+    <div className="tactical-card p-4 flex flex-col h-full relative overflow-hidden">
+      {/* Terminal Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-3 mb-3">
         <div className="flex items-center gap-2">
-          <ScrollText className="w-4 h-4 text-[var(--violet)]" />
-          <h2 className="font-head text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
-            REAL-TIME SECURITY AUDIT TRAIL
-          </h2>
+          <ScrollText className="w-4 h-4 text-cyan-400" />
+          <div>
+            <h2 className="text-xs font-bold text-white tracking-wide uppercase font-mono">
+              Live Event Terminal Logs
+            </h2>
+            <p className="text-[10px] text-slate-400 font-mono">
+              REAL-TIME SECURITY AUDIT TRAIL
+            </p>
+          </div>
         </div>
 
-        {/* Filter Pills */}
+        {/* Severity Filter Buttons */}
         <div className="flex flex-wrap items-center gap-1">
           {["ALL", "CRITICAL", "SOAR", "BENIGN", "INFO"].map((item) => (
             <button
               key={item}
               onClick={() => setSeverity(item)}
-              className={`rounded-full px-2.5 py-0.5 font-mono text-[10px] font-bold border transition ${
+              className={`rounded px-2 py-0.5 font-mono text-[9px] font-bold border transition ${
                 severity === item
-                  ? "bg-[var(--text-primary)] text-[var(--surface)] border-[var(--text-primary)]"
-                  : "bg-[var(--surface-2)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text-primary)]"
+                  ? "border-cyan-400/60 bg-cyan-950/40 text-cyan-300"
+                  : "border-slate-800 text-slate-500 hover:text-slate-300"
               }`}
             >
               {item}
@@ -110,23 +118,27 @@ export const LiveLogs: React.FC<LiveLogsProps> = ({ logs }) => {
           ))}
         </div>
 
-        {/* Search Field & Tools */}
-        <div className="flex items-center gap-1.5">
+        {/* Search & Utility Tools */}
+        <div className="flex items-center gap-2">
           <div className="relative">
-            <Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+            <Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              placeholder="Search logs..."
-              className="pl-7 pr-2 py-1 bg-[var(--surface-2)] border border-[var(--border)] focus:border-[var(--violet)] rounded-md text-[11px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none w-28 sm:w-36 font-mono"
+              placeholder="Filter logs..."
+              className="pl-7 pr-2 py-1 bg-[#040810] border border-slate-800 focus:border-cyan-400 rounded text-[11px] text-white placeholder-slate-500 outline-none w-28 sm:w-36 font-mono"
             />
           </div>
 
           <button
             onClick={() => setAutoScroll(!autoScroll)}
-            title={autoScroll ? "Pause stream" : "Resume stream"}
-            className="p-1 rounded-md border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
+            title={autoScroll ? "Pause auto-scroll" : "Resume auto-scroll"}
+            className={`p-1.5 rounded border transition ${
+              autoScroll
+                ? "bg-cyan-950/40 text-cyan-400 border-cyan-800/60"
+                : "bg-slate-900 text-slate-400 border-slate-800"
+            }`}
           >
             {autoScroll ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
           </button>
@@ -134,48 +146,31 @@ export const LiveLogs: React.FC<LiveLogsProps> = ({ logs }) => {
           <button
             onClick={handleCopy}
             title="Copy audit log"
-            className="p-1 rounded-md border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
+            className="p-1.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-[var(--mint)]" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-cyan-400" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
 
           <button
             onClick={handleDownload}
             title="Export audit trail"
-            className="p-1 rounded-md border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
+            className="p-1.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition"
           >
             <Download className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Log Feed Viewport */}
+      {/* Terminal Viewport */}
       <div
         ref={terminalRef}
-        className="flex-1 w-full overflow-y-auto space-y-1 pr-1 font-mono text-[11px] leading-relaxed select-text"
-        style={{ minHeight: "220px", maxHeight: "260px" }}
+        className="w-full bg-[#030610] border border-slate-800/90 rounded-xl p-3 overflow-y-auto font-mono text-[11px] leading-relaxed shadow-inner"
+        style={{ minHeight: "190px", height: "190px" }}
       >
         {filteredLogs.length === 0 ? (
-          <div className="text-[var(--text-muted)] italic p-3 text-center">
-            No matching event audit logs found.
-          </div>
+          <div className="text-slate-500 italic p-2">No matching event logs found.</div>
         ) : (
-          filteredLogs.map((line, idx) => {
-            const { type, badgeClass } = parseLogLine(line);
-            return (
-              <div
-                key={`${line}-${idx}`}
-                className="log-row flex items-start gap-2.5 py-1.5 px-2 rounded hover:bg-[var(--surface-2)] transition"
-              >
-                <span className={`badge ${badgeClass} text-[9px] shrink-0`}>
-                  {type}
-                </span>
-                <span className="text-[var(--text-primary)] break-all font-mono">
-                  {line}
-                </span>
-              </div>
-            );
-          })
+          filteredLogs.map((line, idx) => renderLogLine(line, idx))
         )}
       </div>
     </div>

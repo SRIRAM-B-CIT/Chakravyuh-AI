@@ -1,82 +1,96 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  LayoutDashboard, Activity, Network, Cpu, Bell, ScrollText,
-  Globe, BarChart3, FileText, Settings, BrainCircuit,
-} from "lucide-react";
+import { Activity, BrainCircuit, ChevronLeft, ChevronRight, Gauge, LayoutDashboard, Network, Settings, Shield, Terminal } from "lucide-react";
+import { Tooltip } from "@/components/ui/Tooltip";
 
-const ITEMS = [
-  { icon: LayoutDashboard, label: "Overview",       active: true },
-  { icon: Activity,        label: "Threat Monitor", active: false },
-  { icon: Network,         label: "Attack Graph",   active: false },
-  { icon: Cpu,             label: "Predictions",    active: false },
-  { icon: Bell,            label: "Alerts",         active: false },
-  { icon: ScrollText,      label: "Logs",           active: false },
-  { icon: Globe,           label: "World Model",    active: false },
-  { icon: BarChart3,       label: "Analytics",      active: false },
-  { icon: FileText,        label: "Reports",        active: false },
-  { icon: Settings,        label: "Settings",       active: false },
+interface SidebarProps {
+  collapsed: boolean;
+  onToggle: () => void;
+}
+
+const items = [
+  ["Command Center", LayoutDashboard, "#dashboard"],
+  ["Network Topology", Network, "#topology"],
+  ["Threat Intelligence", Activity, "#incident"],
+  ["Predictive Horizon", Gauge, "#horizon"],
+  ["SOAR Operations", Shield, "#soar"],
+  ["Event Audit", Terminal, "#logs"],
+  ["Model Health", BrainCircuit, "#model"],
 ] as const;
 
-export function Sidebar() {
-  const [active, setActive] = useState("Overview");
-
+export function Sidebar({ collapsed }: SidebarProps) {
   return (
     <aside
-      className="hidden md:flex flex-col shrink-0 w-[196px] border-r border-[var(--border)] bg-[var(--surface)]"
-      style={{ minHeight: "calc(100vh - 58px)" }}
+      className="hidden md:flex flex-col shrink-0 border-r border-slate-800 bg-[#090D16] transition-all duration-300 w-64"
     >
-      {/* Nav */}
-      <nav className="flex-1 p-3 space-y-0.5 pt-4">
-        <p className="px-3 pb-2 text-[9px] font-bold tracking-[0.18em] text-[var(--text-muted)] uppercase font-mono">
+      {/* Brand Header */}
+      <div className="flex flex-col justify-center border-b border-slate-800 px-5 py-4 h-20">
+        <div className="flex items-center gap-2">
+          <Shield className="h-5 w-5 text-[#2563EB]" />
+          <span className="font-sans text-sm font-extrabold tracking-wider text-white">
+            CHAKRAVYUH AI
+          </span>
+        </div>
+        <span className="text-[8px] font-bold tracking-[0.2em] text-slate-400 uppercase mt-1">
+          AUTONOMOUS SOC COMMAND
+        </span>
+      </div>
+
+      <nav className="flex-1 space-y-1 p-4" aria-label="Command center sections">
+        <div className="px-3 pb-2 font-sans text-[10px] font-bold tracking-[0.15em] text-slate-500 uppercase">
           NAVIGATION
-        </p>
-        {ITEMS.map(({ icon: Icon, label }) => {
-          const isActive = active === label;
+        </div>
+        {items.map(([label, Icon, href], index) => {
+          const isActive = index === 0;
           return (
-            <button
+            <a
               key={label}
-              onClick={() => setActive(label)}
-              className={`sidebar-item w-full text-left ${isActive ? "active" : ""}`}
+              href={href}
+              className={`flex items-center gap-3 rounded-lg border px-3 py-2 font-sans text-xs font-semibold transition-all ${
+                isActive
+                  ? "border-[#2563EB] bg-[#2563EB] text-white shadow-sm"
+                  : "border-transparent text-slate-400 hover:bg-slate-800/40 hover:text-white"
+              }`}
             >
-              <Icon className="h-4 w-4 shrink-0" />
+              <Icon className={`h-4 w-4 shrink-0 ${isActive ? "text-white" : "text-slate-500"}`} />
               <span>{label}</span>
-            </button>
+            </a>
           );
         })}
+
+        <div className="mt-6 border-t border-slate-800 pt-4">
+          <div className="px-3 pb-2 font-sans text-[10px] font-bold tracking-[0.15em] text-slate-500 uppercase">
+            SUBSYSTEM MONITOR
+          </div>
+          {[
+            ["Backend API", true],
+            ["WebSocket Stream", true],
+            ["Live Sniffer", true],
+            ["ST-GNN Engine", true],
+          ].map(([item, ok]) => (
+            <div
+              key={item as string}
+              className="flex items-center justify-between px-3 py-1.5 font-sans text-[11px] text-slate-400"
+            >
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+                <span>{item as string}</span>
+              </div>
+              <span className="text-[9px] font-extrabold text-[#10B981]">ONLINE</span>
+            </div>
+          ))}
+        </div>
       </nav>
 
-      {/* AI Analyst mini */}
-      <div className="p-3 border-t border-[var(--border)]">
-        <p className="px-1 pb-1.5 text-[9px] font-bold tracking-[0.18em] text-[var(--text-muted)] uppercase font-mono">
-          AI ANALYST
-        </p>
-
-        {/* Mini network viz */}
-        <div className="rounded-lg overflow-hidden bg-[var(--surface-2)] border border-[var(--border)] p-2 mb-2">
-          <svg width="100%" height="60" viewBox="0 0 168 60">
-            {/* Connections */}
-            <line x1="84" y1="30" x2="30"  y2="12" stroke="#F43F5E" strokeWidth="1" opacity="0.5" />
-            <line x1="84" y1="30" x2="140" y2="15" stroke="#F43F5E" strokeWidth="1" opacity="0.5" />
-            <line x1="84" y1="30" x2="50"  y2="50" stroke="#6D28D9" strokeWidth="1" opacity="0.5" />
-            <line x1="84" y1="30" x2="130" y2="48" stroke="#6D28D9" strokeWidth="1" opacity="0.5" />
-            <line x1="30" y1="12" x2="140" y2="15" stroke="#D97706" strokeWidth="0.8" opacity="0.35" />
-            {/* Nodes */}
-            <circle cx="84"  cy="30" r="6"   fill="#F43F5E" opacity="0.9" />
-            <circle cx="84"  cy="30" r="11"  fill="none" stroke="#F43F5E" strokeWidth="1" opacity="0.3" />
-            <circle cx="30"  cy="12" r="4"   fill="#6D28D9" opacity="0.8" />
-            <circle cx="140" cy="15" r="4"   fill="#D97706" opacity="0.8" />
-            <circle cx="50"  cy="50" r="3.5" fill="#059669" opacity="0.8" />
-            <circle cx="130" cy="48" r="3.5" fill="#C026D3" opacity="0.8" />
-          </svg>
+      {/* Analyst Profile */}
+      <div className="border-t border-slate-800 p-4 flex items-center gap-3">
+        <div className="h-9 w-9 rounded-full bg-[#2563EB] text-white flex items-center justify-center font-bold text-sm">
+          AN
         </div>
-
-        <div className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--mint)] animate-blink" />
-          <span className="text-[10px] font-medium text-[var(--text-secondary)]">Chakra AI Online</span>
+        <div className="font-sans text-left">
+          <div className="text-xs font-bold text-white">Analyst Active</div>
+          <div className="text-[10px] text-slate-400">Clearance Level 5</div>
         </div>
-        <p className="text-[9px] text-[var(--text-muted)] mt-0.5 pl-3.5">Monitoring 24/7</p>
       </div>
     </aside>
   );

@@ -13,7 +13,6 @@ Provides an interactive menu and CLI launcher for all trained MITRE attack categ
 import os
 import sys
 import time
-import socket
 import subprocess
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -25,42 +24,42 @@ ATTACK_VECTORS = {
         "category": "DoS/Flood (Class 4)",
         "script": "traffic_flood.py",
         "default_port": 8000,
-        "default_duration": 30
+        "default_duration": 10
     },
     "2": {
         "name": "SYN Reconnaissance Port Scan",
         "category": "Recon/PortScan (Class 1)",
         "script": "recon_scan.py",
         "default_port": 80,
-        "default_duration": 30
+        "default_duration": 8
     },
     "3": {
         "name": "SSH / FTP / Auth Credential Brute-Force",
         "category": "Recon/BruteForce (Class 1)",
         "script": "brute_force.py",
         "default_port": 8000,
-        "default_duration": 30
+        "default_duration": 10
     },
     "4": {
         "name": "Infiltration / RCE & Command Injection",
         "category": "Infiltration (Class 2)",
         "script": "infiltration_exploit.py",
         "default_port": 8000,
-        "default_duration": 30
+        "default_duration": 10
     },
     "5": {
         "name": "Botnet C2 Beaconing & Lateral Spread",
         "category": "Bot/LateralMovement (Class 3)",
         "script": "bot_lateral.py",
         "default_port": 8000,
-        "default_duration": 30
+        "default_duration": 10
     },
     "6": {
         "name": "Slowloris Low-and-Slow Socket Exhaustion",
         "category": "DoS/Flood (Slowloris Variant)",
         "script": "slowloris_dos.py",
         "default_port": 8000,
-        "default_duration": 30
+        "default_duration": 10
     }
 }
 
@@ -95,9 +94,6 @@ def run_attack(choice: str, target_ip: str, target_port: int, duration: int = 10
     except KeyboardInterrupt:
         print("\n[!] Attack interrupted by operator.")
 
-def get_default_target_ip() -> str:
-    return "127.0.0.1"
-
 def interactive_menu():
     print_banner()
     print("Available Adversarial Vectors:")
@@ -116,10 +112,11 @@ def interactive_menu():
         return
 
     vec = ATTACK_VECTORS[choice]
+    default_ip = "127.0.0.1"
     default_port = vec["default_port"]
     default_dur = vec["default_duration"]
 
-    target_ip = input("\nEnter Target IP (default 127.0.0.1): ").strip() or "127.0.0.1"
+    target_ip = input(f"Enter Target IP (default {default_ip}): ").strip() or default_ip
     port_in = input(f"Enter Target Port (default {default_port}): ").strip()
     target_port = int(port_in) if port_in else default_port
     dur_in = input(f"Enter Duration in seconds (default {default_dur}s): ").strip()
@@ -131,7 +128,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         # CLI direct mode: attack_suite.py <vector_num> [target_ip] [target_port] [duration]
         vector = sys.argv[1]
-        t_ip = sys.argv[2] if len(sys.argv) > 2 else get_default_target_ip()
+        t_ip = sys.argv[2] if len(sys.argv) > 2 else "127.0.0.1"
         t_port = int(sys.argv[3]) if len(sys.argv) > 3 else ATTACK_VECTORS.get(vector, {}).get("default_port", 8000)
         t_dur = int(sys.argv[4]) if len(sys.argv) > 4 else 10
         run_attack(vector, t_ip, t_port, t_dur)

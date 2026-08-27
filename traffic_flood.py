@@ -52,10 +52,10 @@ def start_traffic_flood(target_ip: str, target_port: int = 8000, threads: int = 
     print("\n[✓] Traffic flood simulation finished.")
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("target", nargs="?", default="127.0.0.1")
-    parser.add_argument("port", nargs="?", type=int, default=8000)
-    parser.add_argument("--duration", type=int, default=30)
-    args = parser.parse_args()
-    start_traffic_flood(args.target, args.port, duration=args.duration)
+    if len(sys.argv) > 1:
+        target = sys.argv[1]
+    else:
+        target = input("Enter Target Defense IP (e.g. 192.168.29.104): ").strip() or "192.168.29.104"
+    port_input = input("Enter Target Port (default 8000): ").strip()
+    port = int(port_input) if port_input else 8000
+    start_traffic_flood(target, port)

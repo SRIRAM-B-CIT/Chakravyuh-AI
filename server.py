@@ -3,8 +3,7 @@ import json
 import time
 import asyncio
 from typing import Optional, List
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -65,22 +64,22 @@ def load_current_state():
         },
         "topology": {
             "nodes": [
-                {"id": "node-gateway", "ip": "10.42.0.1", "label": "Gateway", "role": "Gateway Router", "risk_score": 0.02, "status": "SAFE", "packet_count": 24, "byte_rate": "1.2 MB/s", "is_defense": False, "is_isolated": False},
-                {"id": "node-defense", "ip": "10.42.0.1", "label": "Defense", "role": "Defense Controller", "risk_score": 0.05, "status": "SAFE", "packet_count": 148, "byte_rate": "3.8 MB/s", "is_defense": True, "is_isolated": False},
-                {"id": "node-server", "ip": "192.168.29.42", "label": "Server", "role": "Internal Core Server", "risk_score": 0.12, "status": "SAFE", "packet_count": 18, "byte_rate": "850 KB/s", "is_defense": False, "is_isolated": False},
-                {"id": "node-attacker", "ip": "10.42.0.181", "label": "Attacker", "role": "Threat Host", "risk_score": 0.05, "status": "SAFE", "packet_count": 88, "byte_rate": "340 KB/s", "is_defense": False, "is_isolated": False}
+                {"id": "192.168.29.1", "ip": "192.168.29.1", "label": "Gateway", "role": "Gateway Router", "risk_score": 0.02, "status": "SAFE", "packet_count": 24, "byte_rate": "1.2 MB/s", "is_defense": False, "is_isolated": False},
+                {"id": "192.168.29.104", "ip": "192.168.29.104", "label": "Defense", "role": "Defense Controller", "risk_score": 0.05, "status": "SAFE", "packet_count": 148, "byte_rate": "3.8 MB/s", "is_defense": True, "is_isolated": False},
+                {"id": "192.168.29.42", "ip": "192.168.29.42", "label": "Server", "role": "Internal Core Server", "risk_score": 0.12, "status": "SAFE", "packet_count": 18, "byte_rate": "850 KB/s", "is_defense": False, "is_isolated": False},
+                {"id": "192.168.29.124", "ip": "192.168.29.124", "label": "Attacker", "role": "Threat Host", "risk_score": 0.96, "status": "ATTACKER", "packet_count": 148, "byte_rate": "18.4 MB/s", "is_defense": False, "is_isolated": False}
             ],
             "edges": [
-                {"id": "e-gw-def", "source": "node-gateway", "target": "node-defense", "weight": 14, "traffic": "Safe Path", "protocol": "TCP/HTTPS", "animated": False, "threat": False},
-                {"id": "e-def-internal", "source": "node-defense", "target": "node-server", "weight": 8, "traffic": "Safe Path", "protocol": "gRPC/TLS", "animated": False, "threat": False},
-                {"id": "e-gw-internal", "source": "node-gateway", "target": "node-server", "weight": 6, "traffic": "Internal Route", "protocol": "TCP/TLS", "animated": False, "threat": False},
-                {"id": "e-att-def", "source": "node-attacker", "target": "node-defense", "weight": 86, "traffic": "Safe Path", "protocol": "TCP/SYN", "animated": False, "threat": False},
-                {"id": "e-att-srv", "source": "node-attacker", "target": "node-server", "weight": 34, "traffic": "Internal Route", "protocol": "TCP/SYN", "animated": False, "threat": False}
+                {"id": "e-gw-def", "source": "192.168.29.1", "target": "192.168.29.104", "weight": 14, "traffic": "Safe Path", "protocol": "TCP/HTTPS", "animated": False, "threat": False},
+                {"id": "e-def-internal", "source": "192.168.29.104", "target": "192.168.29.42", "weight": 8, "traffic": "Safe Path", "protocol": "gRPC/TLS", "animated": False, "threat": False},
+                {"id": "e-gw-internal", "source": "192.168.29.1", "target": "192.168.29.42", "weight": 6, "traffic": "Internal Route", "protocol": "TCP/TLS", "animated": False, "threat": False},
+                {"id": "e-att-def", "source": "192.168.29.124", "target": "192.168.29.104", "weight": 86, "traffic": "Threat Flow (148 pkts/s)", "protocol": "TCP/SYN", "animated": True, "threat": True},
+                {"id": "e-att-srv", "source": "192.168.29.124", "target": "192.168.29.42", "weight": 34, "traffic": "Lateral Probe", "protocol": "TCP/SYN", "animated": True, "threat": True}
             ],
             "stats": {
                 "total_nodes": 4,
                 "total_edges": 5,
-                "threat_level": "NOMINAL",
+                "threat_level": "ELEVATED",
                 "active_flows": 148
             }
         },
@@ -216,38 +215,6 @@ class LaunchAttackRequest(BaseModel):
     target_port: Optional[int] = 8000
     duration: Optional[int] = 10
 
-# ==========================================
-# HONEYPOT & ATTACK RECEPTOR ENDPOINTS
-# (Intercepts simulation traffic cleanly without 404s)
-# ==========================================
-
-@app.post("/c2/heartbeat")
-@app.post("/c2/register")
-def c2_heartbeat_honeypot(req: Request):
-    """Honeypot trap for Botnet C2 beaconing."""
-    write_audit_log("TRAP: Botnet C2 beacon check-in intercepted by honeypot sensor.")
-    return {"status": "trapped", "service": "c2_honeypot", "action": "telemetry_recorded"}
-
-@app.get("/probe")
-def probe_honeypot(node: Optional[str] = None, port: Optional[int] = None):
-    """Honeypot trap for lateral movement port probes."""
-    return {"status": "probed", "target": node, "port": port, "banner": "Chakravyuh-Trap-Service 1.0"}
-
-@app.post("/api/login")
-@app.post("/auth/ssh")
-@app.post("/login")
-def auth_honeypot(req: Request):
-    """Honeypot trap for brute-force credential stuffing."""
-    return JSONResponse(status_code=401, content={"status": "auth_failed", "error": "Invalid credentials", "delay_applied": True})
-
-@app.post("/api/exec")
-@app.post("/api/execute")
-@app.post("/upload")
-def execute_honeypot(req: Request):
-    """Honeypot trap for RCE and payload dropper delivery."""
-    write_audit_log("TRAP: Infiltration / RCE payload intercepted and safely sandboxed.")
-    return {"status": "sandboxed", "result": "Execution halted by Chakravyuh SOAR security policy"}
-
 @app.get("/api/soar/playbooks")
 def get_soar_playbooks():
     """Returns the catalog of active automated SOAR self-healing playbooks."""
@@ -378,8 +345,7 @@ def simulate_attack_scenario(req: SimulationRequest):
         "label": attack,
         "ml_conf": 0.98,
         "risk_score": risk,
-        "isolated": True,
-        "sim_until": time.time() + 30.0,  # Hold simulation visible for 30 seconds
+        "isolated": False,
         "netfilter_drops": "41.3k Drops",
         "rollout": [rollout_step0, rollout_step1, rollout_step2, rollout_step3],
         "rollout_series": {

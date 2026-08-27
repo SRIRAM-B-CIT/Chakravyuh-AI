@@ -29,30 +29,8 @@ weights_path = os.path.join(MODELS_DIR, "netdreamer_weights.pth")
 world_model = NetworkWorldModel.load_pretrained(weights_path)
 world_model.eval()
 
-def get_local_machine_ip() -> str:
-    env_ip = os.getenv("DEFENSE_IP")
-    if env_ip:
-        return env_ip
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
-        s.close()
-        return ip
-    except Exception:
-        return "192.168.29.104"
-
-def get_gateway_ip(defense_ip: str) -> str:
-    env_gw = os.getenv("GATEWAY_IP")
-    if env_gw:
-        return env_gw
-    parts = defense_ip.split(".")
-    if len(parts) == 4:
-        return f"{parts[0]}.{parts[1]}.{parts[2]}.1"
-    return "192.168.29.1"
-
-DEFENSE_IP = get_local_machine_ip()
-GATEWAY_IP = get_gateway_ip(DEFENSE_IP)
+DEFENSE_IP = os.getenv("DEFENSE_IP", "192.168.29.104")
+GATEWAY_IP = os.getenv("GATEWAY_IP", "192.168.29.1")
 INTERNAL_SERVER_IP = os.getenv("INTERNAL_SERVER_IP", "192.168.29.42")
 
 # Interfaces to capture on: loopback (lo) catches 127.0.0.1 attacks; any catches Wi-Fi attacks
@@ -96,10 +74,10 @@ def write_log(message):
 
 
 def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_counts, edge_traffic_map):
-    """Builds rich dynamic node and edge topology structure with stable canonical IDs."""
+    """Builds rich dynamic node and edge topology structure for real-time visualization."""
     nodes = [
         {
-            "id": "node-gateway",
+            "id": GATEWAY_IP,
             "ip": GATEWAY_IP,
             "label": "Gateway",
             "role": "Gateway Router",
@@ -111,7 +89,7 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "is_isolated": False
         },
         {
-            "id": "node-defense",
+            "id": DEFENSE_IP,
             "ip": DEFENSE_IP,
             "label": "Defense",
             "role": "Defense Controller",
@@ -123,7 +101,7 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "is_isolated": False
         },
         {
-            "id": "node-server",
+            "id": INTERNAL_SERVER_IP,
             "ip": INTERNAL_SERVER_IP,
             "label": "Server",
             "role": "Internal Core Server",
@@ -133,26 +111,29 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "byte_rate": "850 KB/s",
             "is_defense": False,
             "is_isolated": False
-        },
-        {
-            "id": "node-attacker",
-            "ip": attacker_ip,
-            "label": "Attacker",
-            "role": "Threat Host" if attacker_risk > 0.70 else "External Node",
-            "risk_score": round(float(attacker_risk), 2),
-            "status": "ISOLATED" if is_isolated else ("ATTACKER" if attacker_risk > 0.70 else "SAFE"),
-            "packet_count": active_ip_counts.get(attacker_ip, 88),
-            "byte_rate": "18.4 MB/s" if attacker_risk > 0.70 else "340 KB/s",
-            "is_defense": False,
-            "is_isolated": is_isolated
         }
     ]
+
+    # Add attacker / external node
+    attacker_status = "ISOLATED" if is_isolated else ("ATTACKER" if attacker_risk > 0.70 else "SAFE")
+    nodes.append({
+        "id": attacker_ip,
+        "ip": attacker_ip,
+        "label": "Attacker",
+        "role": "Threat Host" if attacker_risk > 0.70 else "External Node",
+        "risk_score": round(float(attacker_risk), 2),
+        "status": attacker_status,
+        "packet_count": active_ip_counts.get(attacker_ip, 148),
+        "byte_rate": "18.4 MB/s" if attacker_risk > 0.70 else "340 KB/s",
+        "is_defense": False,
+        "is_isolated": is_isolated
+    })
 
     edges = [
         {
             "id": "e-gw-def",
-            "source": "node-gateway",
-            "target": "node-defense",
+            "source": GATEWAY_IP,
+            "target": DEFENSE_IP,
             "weight": max(1, active_ip_counts.get(GATEWAY_IP, 14)),
             "traffic": "Safe Path",
             "protocol": "TCP/HTTPS",
@@ -160,9 +141,9 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "threat": False
         },
         {
-            "id": "e-def-server",
-            "source": "node-defense",
-            "target": "node-server",
+            "id": "e-def-internal",
+            "source": DEFENSE_IP,
+            "target": INTERNAL_SERVER_IP,
             "weight": max(1, active_ip_counts.get(INTERNAL_SERVER_IP, 8)),
             "traffic": "Safe Path",
             "protocol": "gRPC/TLS",
@@ -170,9 +151,9 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
             "threat": False
         },
         {
-            "id": "e-gw-server",
-            "source": "node-gateway",
-            "target": "node-server",
+            "id": "e-gw-internal",
+            "source": GATEWAY_IP,
+            "target": INTERNAL_SERVER_IP,
             "weight": 6,
             "traffic": "Internal Route",
             "protocol": "TCP/TLS",
@@ -181,18 +162,18 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
         },
         {
             "id": "e-att-def",
-            "source": "node-attacker",
-            "target": "node-defense",
+            "source": attacker_ip,
+            "target": DEFENSE_IP,
             "weight": max(1, active_ip_counts.get(attacker_ip, 86)),
-            "traffic": "Threat Flow" if attacker_risk > 0.60 else "Safe Path",
+            "traffic": "Threat Flow (148 pkts/s)" if attacker_risk > 0.60 else "Safe Path",
             "protocol": "TCP/SYN",
             "animated": attacker_risk > 0.60,
             "threat": attacker_risk > 0.60
         },
         {
-            "id": "e-att-server",
-            "source": "node-attacker",
-            "target": "node-server",
+            "id": "e-att-srv",
+            "source": attacker_ip,
+            "target": INTERNAL_SERVER_IP,
             "weight": 34,
             "traffic": "Lateral Probe" if attacker_risk > 0.60 else "Internal Route",
             "protocol": "TCP/SYN",
@@ -214,18 +195,6 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
 
 
 def save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, active_ip_counts=None, edge_traffic_map=None, rollout_values=None):
-    # Guard: If dashboard simulation is active (sim_until > now), don't overwrite with benign traffic
-    if label_name == "Benign" or not is_isolated:
-        try:
-            if os.path.exists(STATE_JSON):
-                with open(STATE_JSON, "r") as f:
-                    existing = json.load(f)
-                sim_until = existing.get("sim_until", 0)
-                if time.time() < sim_until:
-                    return  # Simulation still active — preserve dashboard state
-        except Exception:
-            pass
-
     if active_ip_counts is None:
         active_ip_counts = {src_ip: 148, DEFENSE_IP: 148, GATEWAY_IP: 24, INTERNAL_SERVER_IP: 18}
     if edge_traffic_map is None:
@@ -431,31 +400,36 @@ def extract_flow_features(packets):
     return feature_array, len(dst_ips), len(dst_ports)
 
 
+
 def decode_raw_frame(data, pkt_time):
-    """Robust zero-copy parser supporting Ethernet (14B), Linux Cooked SLL (16B on lo), and raw IPv4."""
-    if len(data) < 20:
+    """Fast pure-Python decoder for Ethernet II, Linux SLL, and Raw IPv4 frames."""
+    if len(data) < 14:
         return None
 
-    offset = None
-    # 1. Standard Ethernet frame (14 bytes) - check EtherType for IPv4 (0x0800)
-    if len(data) >= 34 and data[12:14] == b'\x08\x00':
-        offset = 14
-    # 2. Linux Cooked Capture / SLL frame on loopback 'lo' (16 bytes) - check protocol at 14:16
-    elif len(data) >= 36 and data[14:16] == b'\x08\x00':
-        offset = 16
-    # 3. Raw IPv4 packet starting at byte 0
-    elif (data[0] >> 4) == 4 and (data[0] & 0x0F) >= 5:
-        offset = 0
-    else:
-        # Fallback scan up to 32 bytes for IPv4 header signature (0x45)
-        for i in range(min(32, len(data) - 20)):
-            if (data[i] >> 4) == 4 and (data[i] & 0x0F) >= 5:
-                tlen = struct.unpack('!H', data[i+2:i+4])[0]
-                if tlen <= len(data) - i:
-                    offset = i
-                    break
+    offset = 0
+    if len(data) >= 14:
+        try:
+            eth_proto = struct.unpack('!H', data[12:14])[0]
+            if eth_proto == 0x0800:  # Ethernet IPv4
+                offset = 14
+            elif len(data) >= 16 and struct.unpack('!H', data[14:16])[0] == 0x0800:  # Linux SLL IPv4
+                offset = 16
+            elif (data[0] >> 4) == 4:  # Raw IPv4
+                offset = 0
+            else:
+                # Scan first 20 bytes for IPv4 header signature (0x45)
+                found = False
+                for i in range(min(16, len(data) - 20)):
+                    if (data[i] >> 4) == 4 and (data[i] & 0x0F) >= 5:
+                        offset = i
+                        found = True
+                        break
+                if not found:
+                    return None
+        except Exception:
+            return None
 
-    if offset is None or len(data) < offset + 20:
+    if len(data) < offset + 20:
         return None
 
     try:
@@ -472,21 +446,16 @@ def decode_raw_frame(data, pkt_time):
 
         dst_port = None
         flags = 0
-        payload_data = b""
         if proto == 6:  # TCP
             tcp_offset = offset + ihl
             if len(data) >= tcp_offset + 14:
                 tcp_hdr = data[tcp_offset:tcp_offset+14]
                 dst_port = struct.unpack('!H', tcp_hdr[2:4])[0]
-                data_offset = ((tcp_hdr[12] >> 4) & 0x0F) * 4
                 flags = tcp_hdr[13]
-                if len(data) > tcp_offset + data_offset:
-                    payload_data = data[tcp_offset + data_offset:tcp_offset + data_offset + 256]
         elif proto == 17:  # UDP
             udp_offset = offset + ihl
-            if len(data) >= udp_offset + 8:
+            if len(data) >= udp_offset + 4:
                 dst_port = struct.unpack('!H', data[udp_offset+2:udp_offset+4])[0]
-                payload_data = data[udp_offset + 8:udp_offset + 8 + 256]
 
         return {
             'time': pkt_time,
@@ -494,8 +463,7 @@ def decode_raw_frame(data, pkt_time):
             'dst': str(dst_ip),
             'length': int(total_len) if total_len > 0 else len(data),
             'dst_port': dst_port,
-            'flags': flags,
-            'payload': payload_data
+            'flags': flags
         }
     except Exception:
         return None
@@ -581,33 +549,19 @@ def pyshark_capture_thread(iface):
         write_log(f"WARN: PyShark capture thread [{iface}] error: {e}")
 
 
-def get_all_host_ips() -> set:
-    """Dynamically gathers all IP addresses assigned to this local defender machine."""
-    ips = {"127.0.0.1", "::1", "localhost", "0.0.0.0"}
-    try:
-        out = subprocess.check_output(["ip", "-4", "addr", "show"], text=True)
-        for line in out.splitlines():
-            line = line.strip()
-            if line.startswith("inet "):
-                ip_part = line.split()[1].split("/")[0]
-                ips.add(ip_part)
-    except Exception:
-        pass
-    return ips
-
-SELF_IPS = get_all_host_ips()
-
-
 def is_internal_or_loopback(ip: str) -> bool:
-    """Checks if an IP is local loopback, infrastructure, self, or background system resolver."""
+    """Checks if an IP is local loopback, infrastructure, or background system resolver."""
     if not ip:
         return True
     ip = str(ip).strip().lower()
     if ip.startswith("127.") or ip in ("::1", "localhost", "0.0.0.0", "fe80::", "::"):
         return True
-    if ip.startswith(("224.0.0.", "239.255.", "ff02::", "fe80:", "255.255.")):
+    if ip.startswith(("224.0.0.", "239.255.", "ff02::", "fe80:")):
         return True
-    if ip in SELF_IPS or ip == DEFENSE_IP or ip == GATEWAY_IP or ip == INTERNAL_SERVER_IP:
+    defense_ip = os.getenv("DEFENSE_IP", "192.168.29.104")
+    gateway_ip = os.getenv("GATEWAY_IP", "192.168.29.1")
+    internal_srv = os.getenv("INTERNAL_SERVER_IP", "192.168.29.42")
+    if ip in (defense_ip, gateway_ip, internal_srv):
         return True
     return False
 
@@ -674,25 +628,21 @@ def start_live_defense(interface=None, window_seconds=1.5):
                 ip_counts = Counter()
                 for p in window_packets:
                     src = p.get('src')
-                    if src:
+                    if src and src != GATEWAY_IP and not src.startswith("127.0.0.5"):  # Exclude systemd-resolved DNS resolver
                         ip_counts[src] += 1
 
-                # Filter out multicast/broadcast/system resolver noise
-                NOISE_PREFIXES = ("224.", "239.", "255.", "ff02::", "fe80:", "127.0.0.5")
-                valid_candidates = {
-                    ip: count for ip, count in ip_counts.items()
-                    if not ip.startswith(NOISE_PREFIXES)
-                }
+                # Prioritize active threat source IPs:
+                # 1. External threat IPs (not internal/loopback/defense)
+                external_candidates = [ip for ip in ip_counts if not is_internal_or_loopback(ip)]
+                # 2. Local test candidate (127.0.0.1 explicitly for localhost benchmark test scripts)
+                local_test_candidates = [ip for ip in ip_counts if ip in ("127.0.0.1", "::1", "localhost")]
 
-                # Priority 1: Loopback 127.0.0.1 burst — local attack simulation
-                lo_count = ip_counts.get("127.0.0.1", 0)
-                lo_velocity = lo_count / rolling_window
-                if lo_velocity >= 15.0:
-                    # Loopback is flooding — treat it as primary threat source
-                    src_ip = "127.0.0.1"
-                elif valid_candidates:
-                    # Priority 2: Most active source in window
-                    src_ip = Counter(valid_candidates).most_common(1)[0][0]
+                if external_candidates:
+                    src_ip = Counter({ip: ip_counts[ip] for ip in external_candidates}).most_common(1)[0][0]
+                elif local_test_candidates:
+                    src_ip = Counter({ip: ip_counts[ip] for ip in local_test_candidates}).most_common(1)[0][0]
+                elif ip_counts:
+                    src_ip = ip_counts.most_common(1)[0][0]
                 else:
                     src_ip = None
 
@@ -757,87 +707,47 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         except Exception:
                             pass
 
-                    # 2. Precise Adversarial Attack Vector Fingerprinting
-                    all_payload = b"".join(p.get('payload', b"") for p in target_packets)
+                    # 2. Precise Adversarial Attack Verification
+                    # - DoS / Flood: High packet velocity or SYN flood surge
+                    is_dos_attack = (pkt_velocity >= 120.0) or (syn_rate >= 30.0 and pkt_count >= 50) or (syn_ratio >= 0.70 and pkt_count >= 60)
+                    
+                    # - SYN Recon Port Scan: Sweeping 10+ distinct ports
+                    is_recon_port_scan = (len(meaningful_ports) >= 10 and pkt_count >= 20)
+                    
+                    # - Credential Brute-Force: High-frequency authentication probing
+                    is_brute_force_attack = (syn_rate >= 15.0 and pkt_count >= 40) or (syn_ratio >= 0.60 and pkt_count >= 50 and non_app_rate >= 10.0)
+                    
+                    # - Infiltration: Exploit delivery targeting vulnerable endpoints
+                    is_infiltration_attack = (not is_protected and pkt_count >= 30 and non_app_rate >= 10.0 and nn_risk >= 0.85 and (ml_label == "Infiltration" or len(meaningful_ports) >= 3))
+                    
+                    # - Botnet C2 & Lateral Spread: Internal spread across multiple unique hosts
+                    is_bot_lateral_attack = (not is_protected and dst_ip_count >= 4 and len(non_app_packets) >= 25 and (ml_label == "Bot/LateralMovement" or syn_rate >= 10.0))
 
-                    # - Infiltration & Exploit Droppers (RCE payloads, shell probes, exploit signatures)
-                    is_infiltration_attack = (
-                        b"/api/exec" in all_payload or
-                        b"/upload" in all_payload or
-                        b"whoami" in all_payload or
-                        b"cat /etc" in all_payload or
-                        b"ExploitEngine" in all_payload or
-                        b"ChakravyuhExploit" in all_payload or
-                        b"mode=escalate" in all_payload or
-                        b"ELF_SIMULATED" in all_payload or
-                        (ml_label == "Infiltration" and pkt_count >= 20)
-                    )
-
-                    # - Botnet C2 Beaconing & Lateral Spread (C2 check-in headers, lateral node probes)
-                    is_bot_lateral_attack = (
-                        b"/c2/heartbeat" in all_payload or
-                        b"X-Bot-ID" in all_payload or
-                        b"X-C2-Stage" in all_payload or
-                        b"BotnetAgent" in all_payload or
-                        b"/probe?node=" in all_payload or
-                        dst_ip_count >= 3 or
-                        (ml_label == "Bot/LateralMovement" and pkt_count >= 20)
-                    )
-
-                    # - Credential Stuffing & Auth Brute-Force
-                    is_brute_force_attack = (
-                        b"/api/login" in all_payload or
-                        b"/auth/ssh" in all_payload or
-                        b"mode=bruteforce" in all_payload or
-                        b"pass=" in all_payload or
-                        b"user=admin" in all_payload or
-                        (ml_label == "Recon/BruteForce" and syn_rate >= 8.0)
-                    )
-
-                    # - SYN Recon Port Scan: Sweeping multiple ports
-                    is_recon_port_scan = (len(meaningful_ports) >= 6)
-
-                    # - High-Density DoS / Traffic Flood
-                    is_dos_attack = (
-                        pkt_velocity >= 120.0 or
-                        (syn_rate >= 25.0 and pkt_count >= 40) or
-                        (syn_ratio >= 0.70 and pkt_count >= 50) or
-                        b"X-Attack-Vector: DoS" in all_payload
-                    )
-
-                    is_local_self = (src_ip in SELF_IPS and not src_ip.startswith("127."))
-
-                    if is_local_self:
-                        # Defender machine's own outbound traffic is always Benign
-                        label_name = "Benign"
-                        pred_proba = 0.98
-                        future_threat_score = 0.05
-                        rollout_list = [0.02, 0.03, 0.04, 0.05]
-                    elif is_infiltration_attack:
-                        label_name = "Infiltration"
+                    if is_dos_attack:
+                        label_name = "DoS/Flood"
                         pred_proba = max(pred_proba, 0.98)
-                        future_threat_score = 0.98
-                        rollout_list = [0.20, 0.50, 0.82, 0.98]
-                    elif is_bot_lateral_attack:
-                        label_name = "Bot/LateralMovement"
+                        future_threat_score = 0.96
+                        rollout_list = [0.15, 0.40, 0.75, 0.96]
+                    elif is_recon_port_scan:
+                        label_name = "Recon/PortScan"
                         pred_proba = max(pred_proba, 0.96)
-                        future_threat_score = 0.94
-                        rollout_list = [0.14, 0.38, 0.72, 0.94]
+                        future_threat_score = 0.92
+                        rollout_list = [0.12, 0.35, 0.68, 0.92]
                     elif is_brute_force_attack:
                         label_name = "Recon/BruteForce"
                         pred_proba = max(pred_proba, 0.96)
                         future_threat_score = 0.94
                         rollout_list = [0.14, 0.38, 0.70, 0.94]
-                    elif is_recon_port_scan:
-                        label_name = "Recon/PortScan"
+                    elif is_infiltration_attack:
+                        label_name = "Infiltration"
                         pred_proba = max(pred_proba, 0.97)
-                        future_threat_score = 0.92
-                        rollout_list = [0.12, 0.35, 0.68, 0.92]
-                    elif is_dos_attack:
-                        label_name = "DoS/Flood"
-                        pred_proba = max(pred_proba, 0.98)
-                        future_threat_score = 0.96
-                        rollout_list = [0.15, 0.40, 0.75, 0.96]
+                        future_threat_score = 0.98
+                        rollout_list = [0.20, 0.50, 0.82, 0.98]
+                    elif is_bot_lateral_attack:
+                        label_name = "Bot/LateralMovement"
+                        pred_proba = max(pred_proba, 0.95)
+                        future_threat_score = 0.93
+                        rollout_list = [0.14, 0.38, 0.72, 0.93]
                     else:
                         # Nominal Safe Baseline (Browsing, Next.js, FastAPI, ordinary LAN traffic)
                         label_name = "Benign"
@@ -845,7 +755,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         future_threat_score = 0.05
                         rollout_list = [0.02, 0.03, 0.04, 0.05]
 
-                    is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_local_self)
+                    is_isolated = (label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90 and not is_protected)
                     
                     # Save state atomically on every cycle
                     save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated, dict(ip_counts), rollout_values=rollout_list)
@@ -854,7 +764,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
                     is_threat = (label_name != "Benign")
                     if is_threat or (now - last_log_time >= 3.0) or (label_name != last_threat_state):
                         if is_threat:
-                            write_log(f"[SNIFFER ALERT] Attack detected from {src_ip} | Threat: {label_name} | RSSM Risk: {future_threat_score*100:.1f}% | Packet Velocity: {pkt_velocity:.1f} pkts/s")
+                            write_log(f"[SNIFFER ALERT] High packet rate detected from {src_ip} | Threat: {label_name} | RSSM Risk: {future_threat_score*100:.1f}% | Packet Velocity: {pkt_velocity:.1f} pkts/s")
                         write_log(f"State: {label_name} | ML Conf: {pred_proba*100:.1f}% | RSSM K-Horizon Risk: {future_threat_score*100:.1f}% | Source IP: {src_ip}")
                         last_log_time = now
                         last_threat_state = label_name

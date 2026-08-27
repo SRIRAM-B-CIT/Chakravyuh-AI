@@ -188,59 +188,20 @@ Launch the interactive terminal console to pick and execute any attack vector wi
 
 ---
 
----
+### 🛡️ Option 3: Automated SOAR Self-Healing Playbooks ("Fix the Issue")
 
-## 🌐 Two-Laptop Live Demonstration (Laptop 1: Defender vs. Laptop 2: Attacker)
-
-Chakravyuh AI is engineered for live multi-machine cyber warfare demonstrations. You can set up two laptops on the same Wi-Fi or Mobile Hotspot:
-
-### 🛡️ Setup on Laptop 1 (Defender / SOC Command Host)
-1. Turn on Wi-Fi or Mobile Hotspot (e.g., Laptop 1 becomes `10.42.0.1` or `192.168.x.x`).
-2. **Terminal 1 — Start FastAPI Defense Server**:
-   ```bash
-   cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
-   ../.venv/bin/python server.py
-   ```
-3. **Terminal 2 — Start Next.js Cyber Command Dashboard**:
-   ```bash
-   cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI/frontend"
-   npm run dev -- -H 0.0.0.0
-   ```
-   *(Open `http://localhost:3000` on Laptop 1, or open `http://<Laptop_1_IP>:3000` from any laptop on the network)*
-4. **Terminal 3 — Start Real-Time AI Sniffer & SOAR Defense**:
-   ```bash
-   cd "/home/sriram/Desktop/SIH 2026/Chakravyuh-AI"
-   sudo /home/sriram/Desktop/"SIH 2026"/.venv/bin/python live_sniffer.py
-   ```
+When an attack occurs, Chakravyuh AI executes an end-to-end automated containment and self-healing cycle:
+1. **Targeted Micro-Isolation**: Immediate OS-level firewall drop rule applied (`iptables -A INPUT -s <IP> -j DROP` on Linux, `netsh advfirewall` on Windows).
+2. **Active Socket Connection Teardown**: Immediately severs active malicious TCP sockets from the threat source using `ss -K dst <IP>` and purges connection tracking table entries.
+3. **Attack-Specific Remediation Playbooks**:
+   - **DoS / Flood Playbook**: Activates kernel TCP SYN Cookies (`net.ipv4.tcp_syncookies=1`), purges conntrack pools, and enforces ingress burst rate-limiting.
+   - **Brute-Force Playbook**: Quarantines auth endpoints, terminates rogue auth sessions, creates Fail2ban jail policies, and triggers credential security audits.
+   - **Infiltration Playbook**: Kills suspicious spawned child processes/reverse shells, audits filesystem binary hashes, and creates forensic telemetry snapshots.
+   - **Botnet / Lateral Playbook**: Quarantines internal spreading channels, blackholes outbound C2 command beacons, and updates ST-GNN neighbor routing tables.
+4. **1-Click Analyst Rollback & Self-Healing Baseline Reset**:
+   - Click **`[ 🛡 1-Click Rollback ]`** in the dashboard to restore traffic, or click **`[ 🔄 Auto-Remediate ]`** to re-run automated playbooks on demand.
 
 ---
-
-### ⚔️ Setup on Laptop 2 (Attacker Host)
-1. Connect Laptop 2 to Laptop 1's Hotspot or Wi-Fi network (Laptop 2 gets an IP like `10.42.0.181`).
-2. Open terminal on Laptop 2 and run the Attack Suite:
-   ```bash
-   cd Chakravyuh-AI
-   python attack_suite.py
-   ```
-3. Enter Target IP: `<Laptop_1_Defender_IP>` (e.g. `10.42.0.1`) and select any attack vector [1-6].
-
----
-
-### 🎬 What Happens During the Live Attack:
-1. **Instant Detection**: Laptop 1's `live_sniffer.py` captures Laptop 2's packet surge in zero latency, classifies the threat vector, and forecasts the RSSM risk curve.
-2. **Live Dynamic 2D Force Graph Animation (`react-force-graph-2d`)**:
-   * ⚡ **DoS / Flood**: Blazing crimson laser beam with hyper-speed plasma particle storm.
-   * 📡 **SYN Port Scan**: Pulsing amber radar sweep beams fanning out across multi-port endpoints.
-   * 🔑 **Credential Brute-Force**: Rapid orange auth probe sparks and sharp needle bursts.
-   * ☣️ **Infiltration / Exploit**: Toxic purple creeping worm payload droplets sliding into the internal server.
-   * 🕸️ **Botnet / Lateral Movement**: Branching radioactive green spiderweb tendrils spreading between hosts.
-3. **Targeted Micro-Isolation & Self-Healing**:
-   * Linux Netfilter drops Laptop 2's IP: `iptables -A INPUT -s 10.42.0.181 -j DROP`.
-   * Active TCP/UDP socket connections are severed via `ss -K dst 10.42.0.181`.
-   * The Attacker node `10.42.0.181` on the dashboard is enclosed in a **Glowing Hexagonal Cyber Quarantine Barrier (`🛑 MICRO-ISOLATED [DROP]`)** with severed links (`✕ SEVERED`).
-   * Laptop 2's terminal immediately sees all attack connections blocked!
-4. **1-Click Analyst Rollback**:
-   * Click **`[ 🛡️ 1-Click Rollback ]`** on the dashboard to unblock Laptop 2 and reset telemetry to nominal safe baseline!
 
 ## 📊 Expected SOC Dashboard Behavior
 
