@@ -8,6 +8,7 @@ import socket
 import sys
 import time
 import threading
+import argparse
 
 stop_event = threading.Event()
 
@@ -31,7 +32,7 @@ def flood_worker(target_ip: str, target_port: int, worker_id: int):
             pass
         time.sleep(0.001)
 
-def start_traffic_flood(target_ip: str = "127.0.0.1", target_port: int = 5000, threads: int = 24, duration: int = 12):
+def start_traffic_flood(target_ip: str = "127.0.0.1", target_port: int = 5000, threads: int = 24, duration: int = 10):
     print(f"==================================================")
     print(f"[ATTACK SIMULATION] Launching High-Density Traffic Surge on {target_ip}:{target_port}")
     print(f"Target: Port {target_port} (E-Commerce Demo Storefront / API)")
@@ -58,13 +59,11 @@ def start_traffic_flood(target_ip: str = "127.0.0.1", target_port: int = 5000, t
     print(f"\n[✓] Traffic flood simulation on {target_ip}:{target_port} finished.")
 
 if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else (input("Enter Target IP (default 127.0.0.1): ").strip() or "127.0.0.1")
-    port_arg = sys.argv[2] if len(sys.argv) > 2 else (input("Enter Target Port (default 5000 for E-Commerce / 8000 for API): ").strip() or "5000")
-    threads_arg = sys.argv[3] if len(sys.argv) > 3 else "24"
-    duration_arg = sys.argv[4] if len(sys.argv) > 4 else "12"
+    parser = argparse.ArgumentParser(description="Chakravyuh AI: High-Density Traffic / DoS Flood Simulator")
+    parser.add_argument("target", nargs="?", default="127.0.0.1", help="Target Defense IP (default: 127.0.0.1)")
+    parser.add_argument("port", nargs="?", type=int, default=5000, help="Target Port (default: 5000 for E-Commerce / 8000 for API)")
+    parser.add_argument("--workers", "--threads", "-w", "-t", type=int, default=24, help="Concurrent workers (default: 24)")
+    parser.add_argument("--duration", "-d", type=int, default=10, help="Duration in seconds (default: 10)")
 
-    port = int(port_arg)
-    threads = int(threads_arg)
-    duration = int(duration_arg)
-
-    start_traffic_flood(target, port, threads, duration)
+    args, unknown = parser.parse_known_args()
+    start_traffic_flood(args.target, args.port, args.workers, args.duration)
