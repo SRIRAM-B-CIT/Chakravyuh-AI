@@ -67,7 +67,7 @@ export const TopologyGraph: React.FC<TopologyGraphProps> = ({ topology, state })
   };
 
   return (
-    <div className="tactical-card p-3.5 flex flex-col h-full relative overflow-hidden bg-[#0c121e]/95 border border-slate-800">
+    <div className="tactical-card p-3.5 flex flex-col relative overflow-hidden bg-[#0c121e]/95 border border-slate-800">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">

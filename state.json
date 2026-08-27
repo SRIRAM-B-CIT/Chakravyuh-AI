@@ -1,15 +1,15 @@
 {
-  "src_ip": "192.168.29.124",
-  "label": "Benign",
+  "src_ip": "192.168.29.128",
+  "label": "DoS/Flood",
   "ml_conf": 0.98,
-  "risk_score": 0.05,
+  "risk_score": 0.96,
   "isolated": false,
-  "netfilter_drops": "0 Drops",
+  "netfilter_drops": "41.3k Drops",
   "rollout": [
-    0.01,
-    0.02,
-    0.04,
-    0.05
+    0.14,
+    0.38,
+    0.72,
+    0.96
   ],
   "rollout_series": {
     "Gateway": [
@@ -31,10 +31,10 @@
       0.12
     ],
     "Threat Node": [
-      0.01,
-      0.02,
-      0.04,
-      0.05
+      0.14,
+      0.38,
+      0.72,
+      0.96
     ]
   },
   "topology": {
@@ -76,14 +76,14 @@
         "is_isolated": false
       },
       {
-        "id": "192.168.29.124",
-        "ip": "192.168.29.124",
+        "id": "192.168.29.128",
+        "ip": "192.168.29.128",
         "label": "Attacker",
-        "role": "External Node",
-        "risk_score": 0.05,
-        "status": "SAFE",
+        "role": "Threat Host",
+        "risk_score": 0.96,
+        "status": "ATTACKER",
         "packet_count": 148,
-        "byte_rate": "340 KB/s",
+        "byte_rate": "18.4 MB/s",
         "is_defense": false,
         "is_isolated": false
       }
@@ -93,7 +93,7 @@
         "id": "e-gw-def",
         "source": "192.168.29.1",
         "target": "192.168.29.104",
-        "weight": 24,
+        "weight": 14,
         "traffic": "Safe Path",
         "protocol": "TCP/HTTPS",
         "animated": false,
@@ -103,7 +103,7 @@
         "id": "e-def-internal",
         "source": "192.168.29.104",
         "target": "192.168.29.42",
-        "weight": 18,
+        "weight": 8,
         "traffic": "Safe Path",
         "protocol": "gRPC/TLS",
         "animated": false,
@@ -121,31 +121,31 @@
       },
       {
         "id": "e-att-def",
-        "source": "192.168.29.124",
+        "source": "192.168.29.128",
         "target": "192.168.29.104",
-        "weight": 148,
-        "traffic": "Safe Path",
+        "weight": 86,
+        "traffic": "Threat Flow (148 pkts/s)",
         "protocol": "TCP/SYN",
-        "animated": false,
-        "threat": false
+        "animated": true,
+        "threat": true
       },
       {
         "id": "e-att-srv",
-        "source": "192.168.29.124",
+        "source": "192.168.29.128",
         "target": "192.168.29.42",
         "weight": 34,
-        "traffic": "Internal Route",
+        "traffic": "Lateral Probe",
         "protocol": "TCP/SYN",
-        "animated": false,
-        "threat": false
+        "animated": true,
+        "threat": true
       }
     ],
     "stats": {
       "total_nodes": 4,
       "total_edges": 5,
-      "threat_level": "NORMAL",
-      "active_flows": 338
+      "threat_level": "CRITICAL",
+      "active_flows": 148
     }
   },
-  "last_updated": 1787727833.4441047
+  "last_updated": 1787746593.306465
 }

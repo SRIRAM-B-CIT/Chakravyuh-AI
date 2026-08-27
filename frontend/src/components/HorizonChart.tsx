@@ -57,7 +57,7 @@ export const HorizonChart: React.FC<HorizonChartProps> = ({ state }) => {
   ];
 
   return (
-    <div className="tactical-card p-3.5 flex flex-col h-full relative overflow-hidden bg-[#0c121e]/95 border border-slate-800">
+    <div className="tactical-card p-3.5 flex flex-col relative overflow-hidden bg-[#0c121e]/95 border border-slate-800">
       {/* Header with Title and Custom Legends */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2 border-b border-slate-800/80 pb-2">
         <div className="flex items-center gap-2">
