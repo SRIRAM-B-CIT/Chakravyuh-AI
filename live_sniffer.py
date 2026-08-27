@@ -667,21 +667,15 @@ def start_live_defense(interface=None, window_seconds=1.5):
                 ip_counts = Counter()
                 for p in window_packets:
                     src = p.get('src')
-                    if src and src != GATEWAY_IP and not src.startswith("127.0.0.5"):  # Exclude systemd-resolved DNS resolver
-                        ip_counts[src] += 1
+                # Filter out multicast/broadcast/system resolver noise
+                valid_candidates = {
+                    ip: count for ip, count in ip_counts.items()
+                    if not ip.startswith(("224.", "239.", "255.", "ff02::", "fe80:", "127.0.0.5"))
+                }
 
-                # Prioritize active threat source IPs:
-                # 1. External threat IPs (not internal/loopback/defense)
-                external_candidates = [ip for ip in ip_counts if not is_internal_or_loopback(ip)]
-                # 2. Local test candidate (127.0.0.1 explicitly for localhost benchmark test scripts)
-                local_test_candidates = [ip for ip in ip_counts if ip in ("127.0.0.1", "::1", "localhost")]
-
-                if external_candidates:
-                    src_ip = Counter({ip: ip_counts[ip] for ip in external_candidates}).most_common(1)[0][0]
-                elif local_test_candidates:
-                    src_ip = Counter({ip: ip_counts[ip] for ip in local_test_candidates}).most_common(1)[0][0]
-                elif ip_counts:
-                    src_ip = ip_counts.most_common(1)[0][0]
+                if valid_candidates:
+                    # Pick the most active traffic source in the current window
+                    src_ip = Counter(valid_candidates).most_common(1)[0][0]
                 else:
                     src_ip = None
 

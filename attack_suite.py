@@ -96,22 +96,7 @@ def run_attack(choice: str, target_ip: str, target_port: int, duration: int = 10
         print("\n[!] Attack interrupted by operator.")
 
 def get_default_target_ip() -> str:
-    """Auto-detects default target IP: Hotspot host (10.42.0.1) if on hotspot client, or 127.0.0.1."""
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        local_ip = s.getsockname()[0]
-        s.close()
-        # If on hotspot subnet (e.g. 10.42.0.X), default target host is 10.42.0.1
-        if local_ip.startswith("10.42.0.") and local_ip != "10.42.0.1":
-            return "10.42.0.1"
-        # If on local subnet (e.g. 192.168.X.Y), guess gateway
-        parts = local_ip.split(".")
-        if len(parts) == 4 and parts[0] == "192":
-            return f"{parts[0]}.{parts[1]}.{parts[2]}.1"
-        return "127.0.0.1"
-    except Exception:
-        return "127.0.0.1"
+    return "127.0.0.1"
 
 def interactive_menu():
     print_banner()
@@ -131,13 +116,16 @@ def interactive_menu():
         return
 
     vec = ATTACK_VECTORS[choice]
-    suggested_ip = get_default_target_ip()
     default_port = vec["default_port"]
     default_dur = vec["default_duration"]
 
-    target_ip = input(f"Enter Target IP (default {suggested_ip}): ").strip() or suggested_ip
+    target_ip = input("\nEnter Target IP (default 127.0.0.1): ").strip() or "127.0.0.1"
     port_in = input(f"Enter Target Port (default {default_port}): ").strip()
     target_port = int(port_in) if port_in else default_port
+    dur_in = input(f"Enter Duration in seconds (default {default_dur}s): ").strip()
+    duration = int(dur_in) if dur_in else default_dur
+
+    run_attack(choice, target_ip, target_port, duration)
     dur_in = input(f"Enter Duration in seconds (default {default_dur}s): ").strip()
     duration = int(dur_in) if dur_in else default_dur
 
