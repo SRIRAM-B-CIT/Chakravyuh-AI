@@ -72,13 +72,21 @@ with right_col:
     col_btn1, col_btn2 = st.columns(2)
     with col_btn1:
         if st.button("🔴 Micro-Isolate Host"):
-            isolate_host(target_ip)
-            st.error(f"Host {target_ip} isolated via iptables.")
+            result = isolate_host(target_ip)
+            if result.get("verified"):
+                st.error(f"Host {result['ip']} isolation verified in the firewall.")
+            elif result.get("mode") == "simulation":
+                st.warning(f"Local source {result['ip']} identified; firewall isolation was not applied.")
+            else:
+                st.error(f"Isolation failed: {result.get('error', 'unknown error')}")
             
     with col_btn2:
         if st.button("🟢 Rollback Isolation"):
-            rollback_isolation(target_ip)
-            st.success(f"Host {target_ip} connectivity restored.")
+            result = rollback_isolation(target_ip)
+            if result.get("success") and result.get("verified"):
+                st.success(f"Host {result['ip']} connectivity restoration verified.")
+            else:
+                st.error(f"Rollback failed: {result.get('error', 'unknown error')}")
             
     st.markdown("---")
     st.subheader("📜 Live Event Logs")

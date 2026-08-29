@@ -1,21 +1,19 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Grid2X2, Globe, Moon, RotateCcw, Shield, ShieldCheck, Sun, Flame } from "lucide-react";
+import { Moon, RotateCcw, Shield, ShieldCheck, Sun, Flame } from "lucide-react";
 import { ConnectionStatus } from "@/hooks/useTelemetryStream";
 
 interface TopHeaderProps {
   status: ConnectionStatus;
   uptime: string;
   loading: string | null;
-  currentView: "landing" | "dashboard";
-  onSwitchView: (view: "landing" | "dashboard") => void;
   onOpenCommandMenu: () => void;
   onAction: (action: "reset" | "simulate" | "rollback") => void;
   onRefresh: () => void;
 }
 
-export function TopHeader({ currentView, uptime, loading, onSwitchView, onAction }: TopHeaderProps) {
+export function TopHeader({ uptime, loading, onAction }: TopHeaderProps) {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
@@ -43,7 +41,7 @@ export function TopHeader({ currentView, uptime, loading, onSwitchView, onAction
   return (
     <header className="sticky top-0 z-30 h-[62px] border-b border-[var(--border-muted)] bg-[var(--card-surface)]/95 px-4 shadow-sm backdrop-blur md:px-7 transition-colors duration-200">
       <div className="mx-auto flex h-full max-w-[1800px] items-center justify-between gap-3">
-        {/* Left Logo and View Switcher */}
+        {/* Product identity */}
         <div className="flex min-w-0 items-center gap-5">
           <div className="flex shrink-0 items-center gap-2.5">
             <Shield className="h-5 w-5 text-blue-500" strokeWidth={2} />
@@ -55,31 +53,6 @@ export function TopHeader({ currentView, uptime, loading, onSwitchView, onAction
                 AUTONOMOUS SOC COMMAND
               </div>
             </div>
-          </div>
-
-          <div className="hidden items-center gap-1 rounded-lg bg-[var(--secondary-bg)] p-1 sm:flex border border-[var(--border-muted)]">
-            <button
-              onClick={() => onSwitchView("dashboard")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-mono font-bold transition ${
-                currentView === "dashboard"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-[var(--secondary-text)] hover:text-[var(--foreground)]"
-              }`}
-            >
-              <Grid2X2 className="h-3.5 w-3.5" />
-              SOC Command
-            </button>
-            <button
-              onClick={() => onSwitchView("landing")}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-mono font-bold transition ${
-                currentView === "landing"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-[var(--secondary-text)] hover:text-[var(--foreground)]"
-              }`}
-            >
-              <Globe className="h-3.5 w-3.5" />
-              Overview
-            </button>
           </div>
         </div>
 

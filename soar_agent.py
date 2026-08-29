@@ -4,6 +4,7 @@ import platform
 import subprocess
 import logging
 import time
+import ipaddress
 from typing import Dict, Any, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -14,12 +15,26 @@ IS_LINUX = platform.system() == "Linux"
 # Active isolated host registry
 ACTIVE_ISOLATIONS = set()
 
+
+def validate_ip_address(ip: str) -> str:
+    """Validate and normalize an IPv4/IPv6 address before command construction."""
+    try:
+        address = ipaddress.ip_address(str(ip).strip())
+    except ValueError as exc:
+        raise ValueError(f"Invalid IP address: {ip!r}") from exc
+
+    if address.is_unspecified or address.is_multicast:
+        raise ValueError(f"Unsafe isolation target: {address}")
+    return str(address)
+
 def is_protected_ip(ip: str) -> bool:
     """Checks if an IP is local loopback, infrastructure, or system daemon."""
-    if not ip:
+    try:
+        ip = validate_ip_address(ip)
+    except ValueError:
         return True
-    ip = str(ip).strip().lower()
-    if ip.startswith("127.") or ip in ("::1", "localhost", "0.0.0.0", "fe80::", "::"):
+    address = ipaddress.ip_address(ip)
+    if address.is_loopback or address.is_link_local:
         return True
     defense_ip = os.getenv("DEFENSE_IP", "192.168.29.104")
     gateway_ip = os.getenv("GATEWAY_IP", "192.168.29.1")
@@ -30,6 +45,7 @@ def is_protected_ip(ip: str) -> bool:
 
 def get_firewall_action_string(attacker_ip: str, action: str = "block") -> str:
     """Returns human-readable OS-specific firewall action string."""
+    attacker_ip = validate_ip_address(attacker_ip)
     if IS_WINDOWS:
         if action == "block":
             return f'netsh advfirewall firewall add rule name="Chakravyuh-Block-{attacker_ip}" dir=in action=block remoteip={attacker_ip}'
@@ -71,82 +87,200 @@ def kill_active_connections(attacker_ip: str, target_port: int = 5000) -> bool:
         logging.warning(f"[INFO] Socket teardown staged for {attacker_ip} ({e})")
         return False
 
-def isolate_host(attacker_ip: str) -> bool:
-    """Executes targeted micro-isolation on a single attacker IP across Windows and Linux."""
+def _command_error(result: subprocess.CompletedProcess) -> str:
+    stderr = (result.stderr or b"")
+    stdout = (result.stdout or b"")
+    if isinstance(stderr, bytes):
+        stderr = stderr.decode(errors="replace")
+    if isinstance(stdout, bytes):
+        stdout = stdout.decode(errors="replace")
+    return str(stderr or stdout).strip()
+
+
+def _windows_rule_exists(attacker_ip: str) -> bool:
+    rule_name = f"Chakravyuh-Block-{attacker_ip}"
+    result = subprocess.run(
+        ["netsh", "advfirewall", "firewall", "show", "rule", f"name={rule_name}", "verbose"],
+        capture_output=True,
+        timeout=2.0,
+    )
+    stdout = result.stdout or b""
+    stderr = result.stderr or b""
+    if isinstance(stdout, bytes):
+        stdout = stdout.decode(errors="replace")
+    if isinstance(stderr, bytes):
+        stderr = stderr.decode(errors="replace")
+    output = f"{stdout} {stderr}"
+    return result.returncode == 0 and attacker_ip in output and "block" in output.lower()
+
+
+def _linux_rule_exists(attacker_ip: str) -> bool:
+    address = ipaddress.ip_address(attacker_ip)
+    firewall = "ip6tables" if address.version == 6 else "iptables"
+    result = subprocess.run(
+        ["sudo", "-n", firewall, "-C", "INPUT", "-s", attacker_ip, "-j", "DROP"],
+        capture_output=True,
+        timeout=1.5,
+    )
+    return result.returncode == 0
+
+
+def is_firewall_rule_active(attacker_ip: str) -> bool:
+    """Confirm that the exact host DROP rule exists in the OS firewall."""
+    attacker_ip = validate_ip_address(attacker_ip)
     if is_protected_ip(attacker_ip):
-        logging.info(f"[SAFEGUARD] Local simulation mode active for {attacker_ip}: dynamic host micro-isolation state engaged.")
-        ACTIVE_ISOLATIONS.add(attacker_ip)
-        return True
+        return False
+    if IS_WINDOWS:
+        return _windows_rule_exists(attacker_ip)
+    if IS_LINUX:
+        return _linux_rule_exists(attacker_ip)
+    return False
+
+
+def isolate_host(attacker_ip: str) -> Dict[str, Any]:
+    """Apply and verify a targeted firewall rule for one validated source IP."""
+    try:
+        attacker_ip = validate_ip_address(attacker_ip)
+    except ValueError as exc:
+        logging.error(f"[SOAR] Isolation rejected: {exc}")
+        return {"success": False, "verified": False, "mode": "rejected", "ip": str(attacker_ip), "error": str(exc)}
+
+    if is_protected_ip(attacker_ip):
+        logging.info(f"[SAFEGUARD] Local simulation source {attacker_ip} identified; firewall isolation intentionally not applied.")
+        return {
+            "success": True,
+            "verified": False,
+            "mode": "simulation",
+            "ip": attacker_ip,
+            "error": None,
+        }
 
     logging.warning(f"[CHAKRAVYUH AI] Isolating malicious host: {attacker_ip} on {platform.system()}")
-    ACTIVE_ISOLATIONS.add(attacker_ip)
     try:
         if IS_WINDOWS:
-            # Windows Defender Firewall via netsh
             rule_name = f"Chakravyuh-Block-{attacker_ip}"
-            check_cmd = f'netsh advfirewall firewall show rule name="{rule_name}"'
-            result = subprocess.run(check_cmd, shell=True, capture_output=True, timeout=1.5)
-            if result.returncode != 0:
-                add_cmd = f'netsh advfirewall firewall add rule name="{rule_name}" dir=in action=block remoteip={attacker_ip}'
-                subprocess.run(add_cmd, shell=True, capture_output=True, timeout=2.0)
-                logging.info(f"[SUCCESS] Host {attacker_ip} isolated successfully via Windows Firewall.")
-            else:
-                logging.info(f"[INFO] Host {attacker_ip} is already blocked in Windows Firewall.")
+            if not _windows_rule_exists(attacker_ip):
+                result = subprocess.run(
+                    ["netsh", "advfirewall", "firewall", "add", "rule", f"name={rule_name}",
+                     "dir=in", "action=block", f"remoteip={attacker_ip}"],
+                    capture_output=True,
+                    timeout=3.0,
+                )
+                if result.returncode != 0:
+                    error = _command_error(result) or f"netsh exited with {result.returncode}"
+                    logging.error(f"[FAILED] Windows Firewall rejected isolation for {attacker_ip}: {error}")
+                    return {"success": False, "verified": False, "mode": "firewall", "ip": attacker_ip, "error": error}
+        elif IS_LINUX:
+            address = ipaddress.ip_address(attacker_ip)
+            firewall = "ip6tables" if address.version == 6 else "iptables"
+            if not _linux_rule_exists(attacker_ip):
+                result = subprocess.run(
+                    ["sudo", "-n", firewall, "-A", "INPUT", "-s", attacker_ip, "-j", "DROP"],
+                    capture_output=True,
+                    timeout=2.0,
+                )
+                if result.returncode != 0:
+                    error = _command_error(result) or f"{firewall} exited with {result.returncode}"
+                    logging.error(f"[FAILED] {firewall} rejected isolation for {attacker_ip}: {error}")
+                    return {"success": False, "verified": False, "mode": "firewall", "ip": attacker_ip, "error": error}
         else:
-            # Linux Netfilter / iptables
-            check_cmd = f"sudo -n iptables -C INPUT -s {attacker_ip} -j DROP"
-            result = subprocess.run(check_cmd.split(), capture_output=True, timeout=1.0)
-            if result.returncode != 0:
-                rule_cmd = f"sudo -n iptables -A INPUT -s {attacker_ip} -j DROP"
-                subprocess.run(rule_cmd.split(), capture_output=True, timeout=1.5)
-                logging.info(f"[SUCCESS] Host {attacker_ip} isolated successfully via iptables.")
-            else:
-                logging.info(f"[INFO] Host {attacker_ip} is already isolated.")
-        return True
-    except Exception as e:
-        logging.warning(f"[INFO] Netfilter rule staged for {attacker_ip} ({e})")
-        return False
+            return {"success": False, "verified": False, "mode": "unsupported", "ip": attacker_ip, "error": f"Unsupported OS: {platform.system()}"}
 
-def rollback_isolation(attacker_ip: str) -> bool:
-    """1-Click analyst rollback to restore connectivity across Windows and Linux."""
+        verified = is_firewall_rule_active(attacker_ip)
+        if not verified:
+            error = "Firewall command completed but the exact DROP rule could not be verified"
+            logging.error(f"[FAILED] Host {attacker_ip} isolation verification failed.")
+            return {"success": False, "verified": False, "mode": "firewall", "ip": attacker_ip, "error": error}
+
+        ACTIVE_ISOLATIONS.add(attacker_ip)
+        logging.info(f"[SUCCESS] Host {attacker_ip} isolation verified in the system firewall.")
+        return {"success": True, "verified": True, "mode": "firewall", "ip": attacker_ip, "error": None}
+    except Exception as e:
+        logging.error(f"[FAILED] Isolation failed for {attacker_ip}: {e}")
+        return {"success": False, "verified": False, "mode": "firewall", "ip": attacker_ip, "error": str(e)}
+
+def rollback_isolation(attacker_ip: str) -> Dict[str, Any]:
+    """Remove one validated isolation rule and verify that it is absent."""
+    try:
+        attacker_ip = validate_ip_address(attacker_ip)
+    except ValueError as exc:
+        logging.error(f"[SOAR] Rollback rejected: {exc}")
+        return {"success": False, "verified": False, "ip": str(attacker_ip), "error": str(exc)}
+
     logging.info(f"[CHAKRAVYUH AI] Removing isolation for host: {attacker_ip} on {platform.system()}")
-    if attacker_ip in ACTIVE_ISOLATIONS:
-        ACTIVE_ISOLATIONS.remove(attacker_ip)
+
+    if is_protected_ip(attacker_ip):
+        ACTIVE_ISOLATIONS.discard(attacker_ip)
+        return {"success": True, "verified": True, "ip": attacker_ip, "mode": "simulation", "error": None}
 
     try:
         if IS_WINDOWS:
             rule_name = f"Chakravyuh-Block-{attacker_ip}"
-            del_cmd = f'netsh advfirewall firewall delete rule name="{rule_name}"'
-            subprocess.run(del_cmd, shell=True, capture_output=True, timeout=2.0)
-            logging.info(f"[SUCCESS] Windows Firewall rule removed for {attacker_ip}.")
+            result = subprocess.run(
+                ["netsh", "advfirewall", "firewall", "delete", "rule", f"name={rule_name}"],
+                capture_output=True,
+                timeout=3.0,
+            )
+        elif IS_LINUX:
+            address = ipaddress.ip_address(attacker_ip)
+            firewall = "ip6tables" if address.version == 6 else "iptables"
+            if not _linux_rule_exists(attacker_ip):
+                ACTIVE_ISOLATIONS.discard(attacker_ip)
+                return {"success": True, "verified": True, "ip": attacker_ip, "mode": "firewall", "error": None}
+            result = subprocess.run(
+                ["sudo", "-n", firewall, "-D", "INPUT", "-s", attacker_ip, "-j", "DROP"],
+                capture_output=True,
+                timeout=2.0,
+            )
         else:
-            rule_cmd = f"sudo -n iptables -D INPUT -s {attacker_ip} -j DROP"
-            subprocess.run(rule_cmd.split(), capture_output=True, timeout=1.5)
-            logging.info(f"[SUCCESS] Traffic restored for {attacker_ip} via iptables.")
-        return True
+            return {"success": False, "verified": False, "ip": attacker_ip, "mode": "unsupported", "error": f"Unsupported OS: {platform.system()}"}
+
+        if result.returncode != 0:
+            error = _command_error(result) or f"Firewall command exited with {result.returncode}"
+            logging.error(f"[FAILED] Isolation rollback failed for {attacker_ip}: {error}")
+            return {"success": False, "verified": False, "ip": attacker_ip, "mode": "firewall", "error": error}
+
+        verified = not is_firewall_rule_active(attacker_ip)
+        if not verified:
+            error = "Firewall deletion completed but the exact DROP rule is still active"
+            logging.error(f"[FAILED] Isolation rollback verification failed for {attacker_ip}.")
+            return {"success": False, "verified": False, "ip": attacker_ip, "mode": "firewall", "error": error}
+
+        ACTIVE_ISOLATIONS.discard(attacker_ip)
+        logging.info(f"[SUCCESS] Isolation removal verified for {attacker_ip}.")
+        return {"success": True, "verified": True, "ip": attacker_ip, "mode": "firewall", "error": None}
     except Exception as e:
-        logging.warning(f"[INFO] Isolation rollback staged for {attacker_ip} ({e})")
-        return False
+        logging.error(f"[FAILED] Isolation rollback failed for {attacker_ip}: {e}")
+        return {"success": False, "verified": False, "ip": attacker_ip, "mode": "firewall", "error": str(e)}
 
 def rollback_all_isolations() -> List[str]:
     """Restores connectivity for all currently isolated hosts."""
     restored = []
     for ip in list(ACTIVE_ISOLATIONS):
-        rollback_isolation(ip)
-        restored.append(ip)
-    
-    # Linux Netfilter fallback flush of specific drop rules
-    if IS_LINUX:
-        try:
-            subprocess.run("sudo -n iptables -F INPUT", shell=True, capture_output=True, timeout=1.5)
-        except Exception:
-            pass
+        result = rollback_isolation(ip)
+        if result["success"] and result["verified"]:
+            restored.append(ip)
             
     return restored
 
 # =========================================================================
 # ATTACK-SPECIFIC AUTO-REMEDIATION PLAYBOOKS ("FIX THE ISSUE")
 # =========================================================================
+
+def _remediation_status(isolation: Dict[str, Any]) -> str:
+    if isolation.get("mode") == "simulation":
+        return "SIMULATED"
+    if isolation.get("success") and isolation.get("verified"):
+        return "REMEDIATED"
+    return "FAILED"
+
+
+def _isolation_step(isolation: Dict[str, Any]) -> str:
+    if isolation.get("mode") == "simulation":
+        return f"Local simulation source {isolation['ip']} identified; no firewall rule applied"
+    if isolation.get("success") and isolation.get("verified"):
+        return f"Exact firewall DROP rule verified for {isolation['ip']}"
+    return f"Firewall isolation failed for {isolation.get('ip')}: {isolation.get('error') or 'unknown error'}"
 
 def playbook_dos_flood(attacker_ip: str) -> Dict[str, Any]:
     """
@@ -158,26 +292,37 @@ def playbook_dos_flood(attacker_ip: str) -> Dict[str, Any]:
       4. Apply ingress rate-limiting policy
     """
     steps = []
-    isolate_host(attacker_ip)
-    steps.append(f"Netfilter drop rule applied for {attacker_ip}")
+    isolation = isolate_host(attacker_ip)
+    steps.append(_isolation_step(isolation))
 
-    kill_active_connections(attacker_ip)
-    steps.append(f"Active connection tracking entries purged for {attacker_ip}")
+    if isolation.get("success"):
+        connections_terminated = kill_active_connections(attacker_ip)
+        steps.append(
+            f"Active connection teardown {'completed' if connections_terminated else 'failed'} for {attacker_ip}"
+        )
 
     # Activate kernel SYN Cookies on Linux if supported
     if IS_LINUX:
         try:
-            subprocess.run("sudo -n sysctl -w net.ipv4.tcp_syncookies=1", shell=True, capture_output=True, timeout=1.0)
-            steps.append("Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)")
-        except Exception:
-            steps.append("TCP SYN Cookies policy staged")
+            syncookie_result = subprocess.run(
+                ["sudo", "-n", "sysctl", "-w", "net.ipv4.tcp_syncookies=1"],
+                capture_output=True,
+                timeout=1.0,
+            )
+            if syncookie_result.returncode == 0:
+                steps.append("Kernel TCP SYN Cookies enabled (net.ipv4.tcp_syncookies=1)")
+            else:
+                steps.append(f"TCP SYN Cookies activation failed: {_command_error(syncookie_result)}")
+        except Exception as exc:
+            steps.append(f"TCP SYN Cookies activation failed: {exc}")
             
-    steps.append("Ingress traffic rate-limiting policy activated on defense interface")
+    steps.append("Ingress rate-limiting recommendation staged (no rate-limit command executed)")
     
     return {
         "playbook": "DoS/Flood Mitigation & Self-Healing",
         "threat_ip": attacker_ip,
-        "status": "REMEDIATED",
+        "status": _remediation_status(isolation),
+        "isolation": isolation,
         "timestamp": time.time(),
         "steps": steps
     }
@@ -192,11 +337,12 @@ def playbook_bruteforce(attacker_ip: str) -> Dict[str, Any]:
       4. Log credential security audit alert
     """
     steps = []
-    isolate_host(attacker_ip)
-    steps.append(f"Authentication endpoint firewall quarantine applied to {attacker_ip}")
+    isolation = isolate_host(attacker_ip)
+    steps.append(_isolation_step(isolation))
 
-    kill_active_connections(attacker_ip)
-    steps.append("Active unauthorized authentication handshakes severed")
+    if isolation.get("success"):
+        connections_terminated = kill_active_connections(attacker_ip)
+        steps.append(f"Authentication session teardown {'completed' if connections_terminated else 'failed'}")
 
     # Simulate Fail2ban jail rule insertion
     steps.append(f"Fail2ban jail entry created: [jail: chakravyuh-auth, ban_time: 3600s, ip: {attacker_ip}]")
@@ -206,7 +352,8 @@ def playbook_bruteforce(attacker_ip: str) -> Dict[str, Any]:
     return {
         "playbook": "Credential Brute-Force Containment & Account Safeguard",
         "threat_ip": attacker_ip,
-        "status": "REMEDIATED",
+        "status": _remediation_status(isolation),
+        "isolation": isolation,
         "timestamp": time.time(),
         "steps": steps
     }
@@ -221,11 +368,12 @@ def playbook_infiltration(attacker_ip: str) -> Dict[str, Any]:
       4. Stage forensic snapshot in events audit log
     """
     steps = []
-    isolate_host(attacker_ip)
-    steps.append(f"Host micro-isolation engaged against exploit vector {attacker_ip}")
+    isolation = isolate_host(attacker_ip)
+    steps.append(_isolation_step(isolation))
 
-    kill_active_connections(attacker_ip)
-    steps.append(f"Terminated rogue child sockets and interactive shell pipes for {attacker_ip}")
+    if isolation.get("success"):
+        connections_terminated = kill_active_connections(attacker_ip)
+        steps.append(f"Exploit socket teardown {'completed' if connections_terminated else 'failed'} for {attacker_ip}")
 
     steps.append("Integrity hash check completed on sensitive system binaries (/etc/passwd, /bin/sh)")
     steps.append("Privilege escalation vectors blocked: session sandbox policy enforced")
@@ -234,7 +382,8 @@ def playbook_infiltration(attacker_ip: str) -> Dict[str, Any]:
     return {
         "playbook": "Infiltration & RCE Exploit Containment",
         "threat_ip": attacker_ip,
-        "status": "REMEDIATED",
+        "status": _remediation_status(isolation),
+        "isolation": isolation,
         "timestamp": time.time(),
         "steps": steps
     }
@@ -249,11 +398,12 @@ def playbook_bot_lateral(attacker_ip: str) -> Dict[str, Any]:
       4. Stage endpoint quarantine scan
     """
     steps = []
-    isolate_host(attacker_ip)
-    steps.append(f"Segmented node {attacker_ip} from internal lateral propagation paths")
+    isolation = isolate_host(attacker_ip)
+    steps.append(_isolation_step(isolation))
 
-    kill_active_connections(attacker_ip)
-    steps.append("Severed outbound C2 Command & Control heartbeat beacons")
+    if isolation.get("success"):
+        connections_terminated = kill_active_connections(attacker_ip)
+        steps.append(f"C2 socket teardown {'completed' if connections_terminated else 'failed'}")
 
     steps.append("ST-GNN neighbor routing table updated: rerouting traffic away from compromised host")
     steps.append("Endpoint agent memory scan queued to detect lateral dropper artifacts")
@@ -261,7 +411,8 @@ def playbook_bot_lateral(attacker_ip: str) -> Dict[str, Any]:
     return {
         "playbook": "Botnet C2 Neutralization & Lateral Quarantine",
         "threat_ip": attacker_ip,
-        "status": "REMEDIATED",
+        "status": _remediation_status(isolation),
+        "isolation": isolation,
         "timestamp": time.time(),
         "steps": steps
     }
@@ -283,21 +434,24 @@ def execute_remediation_playbook(threat_type: str, attacker_ip: str) -> Dict[str
         result = playbook_bot_lateral(attacker_ip)
     else:
         # Generic threat containment playbook
-        isolate_host(attacker_ip)
-        kill_active_connections(attacker_ip)
+        isolation = isolate_host(attacker_ip)
+        if isolation.get("success"):
+            kill_active_connections(attacker_ip)
         result = {
             "playbook": f"Generic Security Remediation ({threat_type})",
             "threat_ip": attacker_ip,
-            "status": "REMEDIATED",
+            "status": _remediation_status(isolation),
+            "isolation": isolation,
             "timestamp": time.time(),
             "steps": [
-                f"Netfilter isolation rule applied for {attacker_ip}",
+                _isolation_step(isolation),
                 f"Active socket sessions severed for {attacker_ip}",
                 "Self-healing telemetry baseline verified"
             ]
         }
 
-    logging.info(f"[SOAR PLAYBOOK COMPLETE] {result['playbook']} executed for {attacker_ip}.")
+    log_method = logging.info if result["status"] in ("REMEDIATED", "SIMULATED") else logging.error
+    log_method(f"[SOAR PLAYBOOK {result['status']}] {result['playbook']} executed for {attacker_ip}.")
     return result
 
 def graceful_shutdown_host():

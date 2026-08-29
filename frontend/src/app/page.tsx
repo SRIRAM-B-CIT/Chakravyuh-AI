@@ -13,8 +13,6 @@ import { HorizonChart } from "@/components/HorizonChart";
 import { LiveLogs } from "@/components/LiveLogs";
 import { CompactSoarBar } from "@/components/CompactSoarBar";
 import { CommandMenu } from "@/components/ui/CommandMenu";
-import { CinematicLanding } from "@/components/landing/CinematicLanding";
-import { BlockchainTransition } from "@/components/landing/BlockchainTransition";
 
 import { useSoarActions } from "@/hooks/useSoarActions";
 import { useTelemetryStream } from "@/hooks/useTelemetryStream";
@@ -128,8 +126,6 @@ export default function DashboardPage() {
   const actions = useSoarActions(telemetry.refresh);
   const [uptimeSeconds, setUptimeSeconds] = useState(1540);
 
-  // Directly starts on dashboard (no puzzle loader)
-  const [viewState, setViewState] = useState<"landing" | "transitioning" | "dashboard">("dashboard");
   const [isCommandMenuOpen, setIsCommandMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -168,49 +164,23 @@ export default function DashboardPage() {
   };
 
   return (
-    <>
-      {/* 1. Blockchain Consensus Sequence Overlay */}
-      {viewState === "transitioning" && (
-        <BlockchainTransition onComplete={() => setViewState("dashboard")} />
-      )}
+    <DashboardShell state={telemetry.state}>
+      <TopHeader
+        status={telemetry.status}
+        uptime={uptime}
+        loading={actions.loading}
+        onOpenCommandMenu={() => setIsCommandMenuOpen(true)}
+        onAction={runHeaderAction}
+        onRefresh={telemetry.refresh}
+      />
 
-      {/* 2. Platform Overview / Landing View Overlay */}
-      {viewState === "landing" && (
-        <DashboardShell state={telemetry.state}>
-          <CinematicLanding
-            onEnterDashboard={() => setViewState("dashboard")}
-            onStartBlockchainSequence={() => setViewState("transitioning")}
-          />
-        </DashboardShell>
-      )}
-
-      {/* 3. SOC Command Center Dashboard */}
-      <div
-        className={
-          viewState === "dashboard"
-            ? "block opacity-100 transition-opacity duration-300"
-            : "hidden opacity-0"
-        }
+      <motion.main
+        id="dashboard"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="mx-auto w-full max-w-[1800px] space-y-4 p-3 md:p-5 flex-1"
       >
-        <DashboardShell state={telemetry.state}>
-          <TopHeader
-            status={telemetry.status}
-            uptime={uptime}
-            loading={actions.loading}
-            currentView="dashboard"
-            onSwitchView={(v) => setViewState(v)}
-            onOpenCommandMenu={() => setIsCommandMenuOpen(true)}
-            onAction={runHeaderAction}
-            onRefresh={telemetry.refresh}
-          />
-
-          <motion.main
-            id="dashboard"
-            variants={containerVariants}
-            initial="hidden"
-            animate={viewState === "dashboard" ? "show" : "hidden"}
-            className="mx-auto w-full max-w-[1800px] space-y-4 p-3 md:p-5 flex-1"
-          >
             {actions.error && (
               <motion.div
                 variants={itemVariants}
@@ -270,19 +240,16 @@ export default function DashboardPage() {
               <IncidentSummary state={telemetry.state} />
               <ModelHealth state={telemetry.state} />
             </motion.div>
-          </motion.main>
+      </motion.main>
 
-          <StatusStrip connected={telemetry.status !== "disconnected"} />
+      <StatusStrip connected={telemetry.status !== "disconnected"} />
 
-          {/* Quick Command Palette Dialog */}
-          <CommandMenu
-            isOpen={isCommandMenuOpen}
-            onClose={() => setIsCommandMenuOpen(false)}
-            onSelectAction={handleCommandAction}
-            srcIp={telemetry.state.src_ip}
-          />
-        </DashboardShell>
-      </div>
-    </>
+      <CommandMenu
+        isOpen={isCommandMenuOpen}
+        onClose={() => setIsCommandMenuOpen(false)}
+        onSelectAction={handleCommandAction}
+        srcIp={telemetry.state.src_ip}
+      />
+    </DashboardShell>
   );
 }

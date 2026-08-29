@@ -11,7 +11,14 @@ import numpy as np
 import pyshark
 import torch
 
-from soar_agent import isolate_host, rollback_isolation, execute_remediation_playbook, get_firewall_action_string, IS_WINDOWS
+from soar_agent import (
+    isolate_host,
+    rollback_isolation,
+    execute_remediation_playbook,
+    get_firewall_action_string,
+    validate_ip_address,
+    IS_WINDOWS,
+)
 from model_rssm_gnn import NetworkWorldModel, FEATURE_NAMES, MITRE_CLASSES
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -49,6 +56,15 @@ BALANCED_SYN_ACK_RATIO = float(os.getenv("BALANCED_SYN_ACK_RATIO", "1.5"))
 ASYMMETRIC_SYN_ACK_RATIO = float(os.getenv("ASYMMETRIC_SYN_ACK_RATIO", "3.0"))
 NOMINAL_GUARDRAIL_RISK = float(os.getenv("NOMINAL_GUARDRAIL_RISK", "0.05"))
 SEQUENCE_LENGTH = 10
+APP_PORTS = {
+    53, 5353, 5355,       # DNS, mDNS, LLMNR
+    67, 68,               # DHCP
+    123,                  # NTP
+    1900,                 # SSDP / UPnP
+    3000, 5000, 8000,     # Next.js, demo storefront, FastAPI
+    5037,                 # ADB
+    80, 443, 8080, 8443,  # Standard web
+}
 
 # Keep temporal histories separate per source so unrelated hosts are never
 # combined into one NetDreamer sequence.
@@ -166,6 +182,100 @@ def classify_traffic_profile(profile):
         return "VOLUMETRIC_ATTACK"
 
     return "HIGH_VOLUME_UNCERTAIN"
+
+
+def calculate_source_attack_evidence(packets, window_seconds):
+    """Build independently attributable attack evidence for every source IP."""
+    grouped_packets = defaultdict(list)
+    for packet in packets:
+        source = packet.get("src")
+        if not source or source == GATEWAY_IP or str(source).startswith("127.0.0.5"):
+            continue
+        try:
+            source = validate_ip_address(source)
+        except ValueError:
+            continue
+        grouped_packets[source].append(packet)
+
+    attributable_total = max(1, sum(len(group) for group in grouped_packets.values()))
+    evidence_by_source = {}
+    for source, source_packets in grouped_packets.items():
+        packet_count = len(source_packets)
+        packet_share = packet_count / attributable_total
+        packet_velocity = packet_count / window_seconds
+        syn_count = sum(1 for packet in source_packets if int(packet.get("flags", 0) or 0) & 0x02)
+        ack_count = sum(1 for packet in source_packets if int(packet.get("flags", 0) or 0) & 0x10)
+        syn_rate = syn_count / window_seconds
+        syn_ratio = syn_count / max(packet_count, 1)
+        syn_ack_ratio = syn_count / max(ack_count, 1)
+        destination_ports = {
+            packet.get("dst_port") for packet in source_packets
+            if packet.get("dst_port") is not None
+        }
+        meaningful_ports = {
+            port for port in destination_ports
+            if port not in APP_PORTS and port < 32768
+        }
+        destination_ips = {
+            packet.get("dst") for packet in source_packets
+            if packet.get("dst") and not str(packet.get("dst")).startswith(("224.", "239.", "255.", "ff02::", "fe80:"))
+        }
+
+        reasons = []
+        # Volume alone is insufficient: require a material share of the window
+        # or asymmetric handshakes before attributing a flood to this source.
+        if packet_velocity >= 75.0 and (packet_share >= 0.25 or syn_ack_ratio > 3.0):
+            reasons.append("HIGH_PACKET_CONTRIBUTION")
+        if syn_rate >= 20.0 and packet_count >= 30 and syn_ack_ratio > 3.0:
+            reasons.append("SYN_FLOOD_ASYMMETRY")
+        if syn_ack_ratio > 3.0 and packet_count >= 10:
+            reasons.append("SYN_ACK_ASYMMETRY")
+        if len(meaningful_ports) >= 10 and packet_count >= 20:
+            reasons.append("PORT_SCAN_DIVERSITY")
+        if syn_ratio >= 0.60 and packet_count >= 50 and syn_ack_ratio > 3.0:
+            reasons.append("REPEATED_CONNECTION_PROBES")
+
+        evidence_score = (
+            min(packet_velocity / 75.0, 4.0)
+            + min(packet_share * 4.0, 4.0)
+            + min(syn_ack_ratio / 3.0, 4.0)
+            + min(len(meaningful_ports) / 10.0, 4.0)
+        )
+        evidence_by_source[source] = {
+            "packet_count": packet_count,
+            "packet_share": round(packet_share, 4),
+            "packet_velocity": round(packet_velocity, 2),
+            "syn_count": syn_count,
+            "ack_count": ack_count,
+            "syn_ack_ratio": round(syn_ack_ratio, 4),
+            "destination_port_count": len(destination_ports),
+            "meaningful_port_count": len(meaningful_ports),
+            "destination_ip_count": len(destination_ips),
+            "evidence_score": round(evidence_score, 4),
+            "is_attack_candidate": bool(reasons),
+            "reasons": reasons,
+        }
+
+    return evidence_by_source
+
+
+def select_verified_attack_source(evidence_by_source):
+    """Choose only a source that independently satisfies attack evidence rules."""
+    candidates = [
+        (source, evidence)
+        for source, evidence in evidence_by_source.items()
+        if evidence["is_attack_candidate"]
+    ]
+    if not candidates:
+        return None, None
+    return max(
+        candidates,
+        key=lambda item: (
+            item[1]["evidence_score"],
+            item[1]["packet_count"],
+            item[0],
+        ),
+    )
 
 
 def write_log(message):
@@ -306,7 +416,8 @@ def build_dynamic_topology(attacker_ip, attacker_risk, is_isolated, active_ip_co
 def save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated,
                active_ip_counts=None, edge_traffic_map=None, rollout_values=None,
                raw_model_risk=None, traffic_profile=None,
-               traffic_profile_label="NORMAL_TRAFFIC", guardrail_action="NONE"):
+               traffic_profile_label="NORMAL_TRAFFIC", guardrail_action="NONE",
+               attack_attribution=None, soar_result=None):
     if active_ip_counts is None:
         active_ip_counts = {src_ip: 148, DEFENSE_IP: 148, GATEWAY_IP: 24, INTERNAL_SERVER_IP: 18}
     if edge_traffic_map is None:
@@ -331,6 +442,12 @@ def save_state(src_ip, label_name, pred_proba, future_threat_score, is_isolated,
         "guardrail_action": guardrail_action,
         "traffic_profile": traffic_profile_label,
         "traffic_profile_metrics": traffic_profile or {},
+        "attack_attribution": attack_attribution or {
+            "verified": False,
+            "source_ip": None,
+            "evidence": None,
+        },
+        "soar_result": soar_result,
         "isolated": bool(is_isolated),
         "netfilter_drops": "41.3k Drops" if is_isolated else "0 Drops",
         "rollout": [r0, r1, r2, r3],
@@ -746,6 +863,7 @@ def start_live_defense(interface=None, window_seconds=1.5):
     last_traffic_profile = "NORMAL_TRAFFIC"
     rolling_window = max(1.5, min(float(window_seconds), 2.0))
     remediated_threats = set()
+    remediation_results = {}
 
     try:
         while not stop_sniffer_event.is_set():
@@ -759,22 +877,18 @@ def start_live_defense(interface=None, window_seconds=1.5):
             if window_packets:
                 traffic_metrics = profile_window_traffic(window_packets)
                 traffic_profile = classify_traffic_profile(traffic_metrics)
+                source_evidence = calculate_source_attack_evidence(window_packets, rolling_window)
+                verified_attack_source, verified_source_evidence = select_verified_attack_source(source_evidence)
                 ip_counts = Counter()
                 for p in window_packets:
                     src = p.get('src')
                     if src and src != GATEWAY_IP and not src.startswith("127.0.0.5"):  # Exclude systemd-resolved DNS resolver
                         ip_counts[src] += 1
 
-                # Prioritize active threat source IPs:
-                # 1. External threat IPs (not internal/loopback/defense)
-                external_candidates = [ip for ip in ip_counts if not is_internal_or_loopback(ip)]
-                # 2. Local test candidate (127.0.0.1 explicitly for localhost benchmark test scripts)
-                local_test_candidates = [ip for ip in ip_counts if ip in ("127.0.0.1", "::1", "localhost")]
-
-                if external_candidates:
-                    src_ip = Counter({ip: ip_counts[ip] for ip in external_candidates}).most_common(1)[0][0]
-                elif local_test_candidates:
-                    src_ip = Counter({ip: ip_counts[ip] for ip in local_test_candidates}).most_common(1)[0][0]
+                # A verified attack contributor always wins attribution. For
+                # ordinary traffic, display the actual highest-volume source.
+                if verified_attack_source:
+                    src_ip = verified_attack_source
                 elif ip_counts:
                     src_ip = ip_counts.most_common(1)[0][0]
                 else:
@@ -793,16 +907,6 @@ def start_live_defense(interface=None, window_seconds=1.5):
                     syn_ratio = len(syn_pkts) / (pkt_count + 1.0)
 
                     # System & application services excluded from port scan/flood false triggers
-                    APP_PORTS = {
-                        53, 5353, 5355,       # DNS (systemd-resolved), mDNS, LLMNR
-                        67, 68,               # DHCP
-                        123,                  # NTP time sync
-                        1900,                 # SSDP / UPnP
-                        5000,                 # E-Commerce Demo Storefront
-                        5037,                 # ADB
-                        8000, 3000,           # FastAPI / Next.js
-                        80, 443, 8080, 8443   # Standard Web
-                    }
                     all_dst_ports = set(p.get('dst_port') for p in target_packets if p.get('dst_port'))
                     meaningful_ports = {p for p in all_dst_ports if p is not None and p not in APP_PORTS and p < 32768}
                     non_app_packets = [p for p in target_packets
@@ -848,21 +952,34 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         except Exception:
                             pass
 
-                    # 2. Precise Adversarial Attack Verification
-                    # - DoS / Flood: High packet velocity or SYN flood surge
-                    is_dos_attack = (pkt_velocity >= 75.0) or (syn_rate >= 20.0 and pkt_count >= 30) or (syn_ratio >= 0.50 and pkt_count >= 40)
-                    
-                    # - SYN Recon Port Scan: Sweeping 10+ distinct ports
-                    is_recon_port_scan = (len(meaningful_ports) >= 10 and pkt_count >= 20)
-                    
-                    # - Credential Brute-Force: High-frequency authentication probing
-                    is_brute_force_attack = (syn_rate >= 15.0 and pkt_count >= 40) or (syn_ratio >= 0.60 and pkt_count >= 50 and non_app_rate >= 10.0)
-                    
-                    # - Infiltration: Exploit delivery targeting vulnerable endpoints
-                    is_infiltration_attack = (not is_protected and pkt_count >= 30 and non_app_rate >= 10.0 and nn_risk >= 0.85 and (ml_label == "Infiltration" or len(meaningful_ports) >= 3))
-                    
-                    # - Botnet C2 & Lateral Spread: Internal spread across multiple unique hosts
-                    is_bot_lateral_attack = (not is_protected and dst_ip_count >= 4 and len(non_app_packets) >= 25 and (ml_label == "Bot/LateralMovement" or syn_rate >= 10.0))
+                    # 2. Use only evidence calculated for this exact source. A
+                    # window-wide surge can no longer be assigned to an
+                    # unrelated external IP with only a few packets.
+                    attribution_verified = (
+                        verified_attack_source == src_ip
+                        and verified_source_evidence is not None
+                    )
+                    attributed_reasons = set(
+                        verified_source_evidence.get("reasons", [])
+                        if attribution_verified else []
+                    )
+                    is_dos_attack = bool(attributed_reasons.intersection({
+                        "HIGH_PACKET_CONTRIBUTION",
+                        "SYN_FLOOD_ASYMMETRY",
+                        "SYN_ACK_ASYMMETRY",
+                    }))
+                    is_recon_port_scan = "PORT_SCAN_DIVERSITY" in attributed_reasons
+                    is_brute_force_attack = "REPEATED_CONNECTION_PROBES" in attributed_reasons
+                    is_infiltration_attack = (
+                        attribution_verified and not is_protected and pkt_count >= 30
+                        and non_app_rate >= 10.0 and nn_risk >= 0.85
+                        and (ml_label == "Infiltration" or len(meaningful_ports) >= 3)
+                    )
+                    is_bot_lateral_attack = (
+                        attribution_verified and not is_protected and dst_ip_count >= 4
+                        and len(non_app_packets) >= 25
+                        and (ml_label == "Bot/LateralMovement" or syn_rate >= 10.0)
+                    )
 
                     if is_dos_attack:
                         label_name = "DoS/Flood"
@@ -906,16 +1023,56 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         future_threat_score = min(NOMINAL_GUARDRAIL_RISK, 0.0999)
                         rollout_list = [future_threat_score] * 4
                         guardrail_action = "FALSE_POSITIVE_SUPPRESSED"
-                    elif traffic_profile == "VOLUMETRIC_ATTACK":
+                    elif traffic_profile == "VOLUMETRIC_ATTACK" and attribution_verified:
                         label_name = "DoS/Flood"
                         pred_proba = max(pred_proba, 0.90)
                         future_threat_score = max(future_threat_score, nn_risk, 0.90)
                         rollout_list = [max(float(value), 0.90) for value in rollout_list]
                         guardrail_action = "ATTACK_CONFIRMED"
+                    elif traffic_profile == "VOLUMETRIC_ATTACK":
+                        label_name = "Suspicious High Volume / Attribution Pending"
+                        future_threat_score = max(nn_risk, 0.70)
+                        rollout_list = [max(float(value), 0.70) for value in rollout_list]
+                        guardrail_action = "ATTACK_UNATTRIBUTED"
 
                     guardrail_suppressed = traffic_profile == "LEGITIMATE_FLASH_CROWD"
-                    is_isolated = (not guardrail_suppressed and label_name != "Benign" and pred_proba >= 0.90 and future_threat_score >= 0.90)
-                    
+                    should_isolate = (
+                        attribution_verified
+                        and not guardrail_suppressed
+                        and label_name != "Benign"
+                        and pred_proba >= 0.90
+                        and future_threat_score >= 0.90
+                    )
+                    threat_key = (src_ip, label_name)
+                    playbook_res = remediation_results.get(threat_key)
+                    if should_isolate and threat_key not in remediated_threats:
+                        write_log(f"ALERT: Verified attack contributor {src_ip}! Triggering targeted micro-isolation...")
+                        playbook_res = execute_remediation_playbook(label_name, src_ip)
+                        remediation_results[threat_key] = playbook_res
+                        attempted_isolation = playbook_res.get("isolation", {})
+                        if attempted_isolation.get("verified"):
+                            action_str = get_firewall_action_string(src_ip, "block")
+                            write_log(f"ACTION VERIFIED: {action_str}")
+                        elif attempted_isolation.get("mode") == "simulation":
+                            write_log(f"SOAR SIMULATION: Correct local attack source {src_ip} identified; no firewall rule applied.")
+                        else:
+                            write_log(f"SOAR FAILED: Isolation for {src_ip} was not verified: {attempted_isolation.get('error')}")
+                        for step in playbook_res.get("steps", []):
+                            write_log(f"SOAR REMEDIATION: {step}")
+                        if playbook_res.get("status") in ("REMEDIATED", "SIMULATED"):
+                            remediated_threats.add(threat_key)
+
+                    isolation_result = (playbook_res or {}).get("isolation", {})
+                    is_isolated = bool(
+                        isolation_result.get("success")
+                        and isolation_result.get("verified")
+                    )
+                    attack_attribution = {
+                        "verified": attribution_verified,
+                        "source_ip": verified_attack_source,
+                        "evidence": verified_source_evidence,
+                    }
+
                     # Save state atomically on every cycle
                     save_state(
                         src_ip, label_name, pred_proba, future_threat_score, is_isolated,
@@ -924,6 +1081,8 @@ def start_live_defense(interface=None, window_seconds=1.5):
                         traffic_profile=traffic_metrics,
                         traffic_profile_label=traffic_profile,
                         guardrail_action=guardrail_action,
+                        attack_attribution=attack_attribution,
+                        soar_result=playbook_res,
                     )
 
                     # Write logs on threat change or periodic interval (every 3.0s)
@@ -943,28 +1102,21 @@ def start_live_defense(interface=None, window_seconds=1.5):
 
                     if not is_threat:
                         remediated_threats.clear()
-
-                    threat_key = (src_ip, label_name)
-                    if is_isolated and threat_key not in remediated_threats:
-                        remediated_threats.add(threat_key)
-                        write_log(f"ALERT: Intercepting threat from {src_ip}! Triggering host micro-isolation & active neutralization...")
-                        action_str = get_firewall_action_string(src_ip, "block")
-                        write_log(f"ACTION: {action_str}")
-                        playbook_res = execute_remediation_playbook(label_name, src_ip)
-                        for step in playbook_res.get("steps", []):
-                            write_log(f"SOAR REMEDIATION: {step}")
+                        remediation_results.clear()
                 else:
                     if now - last_log_time >= 3.0:
                         save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
                         write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
                         last_log_time = now
                         remediated_threats.clear()
+                        remediation_results.clear()
             else:
                 if now - last_log_time >= 3.0:
                     save_state("192.168.29.124", "Benign", 0.98, 0.05, False)
                     write_log(f"State: Benign | ML Conf: 98.0% | RSSM K-Horizon Risk: 5.0% | Source IP: 192.168.29.124")
                     last_log_time = now
                     remediated_threats.clear()
+                    remediation_results.clear()
 
     except KeyboardInterrupt:
         stop_sniffer_event.set()

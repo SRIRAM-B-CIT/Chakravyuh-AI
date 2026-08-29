@@ -139,25 +139,36 @@ def get_logs(limit: int = 60):
 
 @app.post("/api/soar/isolate")
 def isolate_endpoint(req: HostActionRequest):
-    ip = req.ip.strip()
-    if not ip:
-        raise HTTPException(status_code=400, detail="IP address required")
+    try:
+        ip = soar_agent.validate_ip_address(req.ip)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     
     # Execute SOAR isolation
-    soar_agent.isolate_host(ip)
+    result = soar_agent.isolate_host(ip)
     write_audit_log(f"ALERT: Intercepting threat from {ip}! Triggering host micro-isolation...")
-    action_str = soar_agent.get_firewall_action_string(ip, "block")
-    write_audit_log(f"ACTION: {action_str}")
 
-    # Update state file
+    if not result.get("success"):
+        write_audit_log(f"SOAR FAILED: Isolation for {ip} was not applied: {result.get('error')}")
+        raise HTTPException(status_code=500, detail={"code": "ISOLATION_FAILED", "result": result})
+
+    if result.get("verified"):
+        action_str = soar_agent.get_firewall_action_string(ip, "block")
+        write_audit_log(f"ACTION VERIFIED: {action_str}")
+    else:
+        write_audit_log(f"SOAR SIMULATION: Local source {ip} identified; no firewall rule applied.")
+
+    # Only a verified firewall rule is represented as isolated telemetry.
+    is_verified = bool(result.get("verified"))
     state = load_current_state()
-    state["isolated"] = True
-    state["netfilter_drops"] = "41.3k Drops"
+    state["isolated"] = is_verified
+    state["soar_result"] = result
+    state["netfilter_drops"] = "41.3k Drops" if is_verified else "0 Drops"
     if "topology" in state and "nodes" in state["topology"]:
         for node in state["topology"]["nodes"]:
             if node["ip"] == ip:
-                node["status"] = "ISOLATED"
-                node["is_isolated"] = True
+                node["status"] = "ISOLATED" if is_verified else "SIMULATED"
+                node["is_isolated"] = is_verified
 
     try:
         with open(STATE_JSON, "w") as f:
@@ -166,20 +177,26 @@ def isolate_endpoint(req: HostActionRequest):
         print(f"Failed to update state: {e}")
 
     return {
-        "status": "success",
-        "action": "isolated",
+        "status": "success" if is_verified else "simulated",
+        "action": "isolated" if is_verified else "simulation_only",
         "ip": ip,
-        "message": f"Host {ip} isolated successfully."
+        "verified": is_verified,
+        "result": result,
+        "message": f"Host {ip} isolation verified." if is_verified else f"Local source {ip} identified; firewall isolation was not applied."
     }
 
 @app.post("/api/soar/rollback")
 def rollback_endpoint(req: HostActionRequest):
-    ip = req.ip.strip()
-    if not ip:
-        raise HTTPException(status_code=400, detail="IP address required")
+    try:
+        ip = soar_agent.validate_ip_address(req.ip)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     
     # Execute SOAR rollback
-    soar_agent.rollback_isolation(ip)
+    result = soar_agent.rollback_isolation(ip)
+    if not result.get("success") or not result.get("verified"):
+        write_audit_log(f"SOAR FAILED: Rollback for {ip} was not verified: {result.get('error')}")
+        raise HTTPException(status_code=500, detail={"code": "ROLLBACK_FAILED", "result": result})
     action_str = soar_agent.get_firewall_action_string(ip, "unblock")
     write_audit_log(f"ACTION: 1-Click Rollback Restored. {action_str}")
 
@@ -202,6 +219,8 @@ def rollback_endpoint(req: HostActionRequest):
         "status": "success",
         "action": "rollback",
         "ip": ip,
+        "verified": True,
+        "result": result,
         "message": f"Host {ip} isolation successfully rolled back."
     }
 
@@ -251,10 +270,11 @@ def get_soar_playbooks():
 @app.post("/api/soar/remediate")
 def remediate_threat_endpoint(req: RemediationRequest):
     """Executes the full automated SOAR self-healing playbook for a detected threat."""
-    ip = req.ip.strip()
+    try:
+        ip = soar_agent.validate_ip_address(req.ip)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     threat_type = req.threat_type or "DoS/Flood"
-    if not ip:
-        raise HTTPException(status_code=400, detail="IP address required")
 
     write_audit_log(f"SOAR TRIGGER: Initiating automated self-healing remediation for {threat_type} from {ip}...")
     
@@ -264,16 +284,20 @@ def remediate_threat_endpoint(req: RemediationRequest):
     for step in result.get("steps", []):
         write_audit_log(f"SOAR ACTION: {step}")
 
-    # Update state file to reflect isolated & remediated status
+    isolation = result.get("isolation", {})
+    is_verified = bool(isolation.get("success") and isolation.get("verified"))
+
+    # Update state only when the exact firewall rule was verified.
     state = load_current_state()
-    state["isolated"] = True
-    state["netfilter_drops"] = "41.3k Drops"
+    state["isolated"] = is_verified
+    state["soar_result"] = result
+    state["netfilter_drops"] = "41.3k Drops" if is_verified else "0 Drops"
     if "topology" in state and "nodes" in state["topology"]:
         for node in state["topology"]["nodes"]:
             if node["ip"] == ip:
-                node["status"] = "ISOLATED"
-                node["is_isolated"] = True
-                node["role"] = f"Isolated Threat ({threat_type})"
+                node["status"] = "ISOLATED" if is_verified else result.get("status", "FAILED")
+                node["is_isolated"] = is_verified
+                node["role"] = f"Threat ({threat_type}) - {result.get('status', 'FAILED')}"
 
     try:
         with open(STATE_JSON, "w") as f:
@@ -281,11 +305,14 @@ def remediate_threat_endpoint(req: RemediationRequest):
     except Exception as e:
         print(f"Failed to update state: {e}")
 
-    write_audit_log(f"SOAR STATUS: Remediation playbook '{result['playbook']}' successfully executed.")
+    write_audit_log(f"SOAR STATUS: Remediation playbook '{result['playbook']}' finished with status {result['status']}.")
+    if result.get("status") == "FAILED":
+        raise HTTPException(status_code=500, detail={"code": "REMEDIATION_FAILED", "result": result})
     return {
-        "status": "success",
+        "status": result["status"].lower(),
         "threat_ip": ip,
         "threat_type": threat_type,
+        "verified": is_verified,
         "playbook_result": result
     }
 
@@ -483,4 +510,3 @@ if __name__ == "__main__":
     import uvicorn
     print("Starting Chakravyuh AI High-Performance Defense Server on http://0.0.0.0:8000")
     uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True)
-

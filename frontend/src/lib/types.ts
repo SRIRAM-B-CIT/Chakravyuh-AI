@@ -4,7 +4,7 @@ export interface TopologyNode {
   label: string;
   role: string;
   risk_score: number;
-  status: "SAFE" | "MONITORING" | "ISOLATED" | "ATTACKER";
+  status: "SAFE" | "MONITORING" | "ISOLATED" | "ATTACKER" | "SIMULATED" | "FAILED";
   packet_count: number;
   byte_rate: string;
   is_defense: boolean;
@@ -45,7 +45,14 @@ export interface SystemState {
   label: string;
   ml_conf: number;
   risk_score: number;
+  raw_model_risk?: number;
+  guardrail_action?: "NONE" | "FALSE_POSITIVE_SUPPRESSED" | "ATTACK_CONFIRMED" | "ATTACK_UNATTRIBUTED";
+  attack_attribution?: {
+    verified: boolean;
+    source_ip: string | null;
+  };
   isolated: boolean;
+  netfilter_drops?: string;
   rollout: number[];
   rollout_series?: RolloutSeries;
   topology: TopologyData;

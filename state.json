@@ -1,25 +1,31 @@
 {
-  "src_ip": "20.184.175.8",
+  "src_ip": "127.0.0.1",
   "label": "Benign",
   "ml_conf": 0.98,
   "risk_score": 0.05,
-  "raw_model_risk": 1.0,
+  "raw_model_risk": 0.0,
   "guardrail_action": "NONE",
   "traffic_profile": "NORMAL_TRAFFIC",
   "traffic_profile_metrics": {
-    "total_packets": 20,
-    "unique_source_ips": 5,
-    "unique_destination_ports": 6,
-    "source_ip_entropy": 2.0086949695628418,
-    "destination_port_entropy": 2.41896119556797,
-    "syn_count": 5,
-    "ack_count": 12,
-    "syn_ack_ratio": 0.4166666666666667,
-    "ingress_payload_bytes": 99,
-    "egress_payload_bytes": 3210,
-    "ingress_egress_payload_ratio": 0.0308411214953271,
-    "inter_arrival_jitter": 2.2763212500528027
+    "total_packets": 41,
+    "unique_source_ips": 3,
+    "unique_destination_ports": 11,
+    "source_ip_entropy": 1.065805532168839,
+    "destination_port_entropy": 3.086280045756848,
+    "syn_count": 12,
+    "ack_count": 28,
+    "syn_ack_ratio": 0.42857142857142855,
+    "ingress_payload_bytes": 2265,
+    "egress_payload_bytes": 8839,
+    "ingress_egress_payload_ratio": 0.2562507070935626,
+    "inter_arrival_jitter": 3.463499806425928
   },
+  "attack_attribution": {
+    "verified": false,
+    "source_ip": null,
+    "evidence": null
+  },
+  "soar_result": null,
   "isolated": false,
   "netfilter_drops": "0 Drops",
   "rollout": [
@@ -75,7 +81,7 @@
         "role": "Defense Controller",
         "risk_score": 0.05,
         "status": "SAFE",
-        "packet_count": 6,
+        "packet_count": 8,
         "byte_rate": "3.8 MB/s",
         "is_defense": true,
         "is_isolated": false
@@ -93,13 +99,13 @@
         "is_isolated": false
       },
       {
-        "id": "20.184.175.8",
-        "ip": "20.184.175.8",
+        "id": "127.0.0.1",
+        "ip": "127.0.0.1",
         "label": "Attacker",
         "role": "External Node",
         "risk_score": 0.05,
         "status": "SAFE",
-        "packet_count": 3,
+        "packet_count": 30,
         "byte_rate": "340 KB/s",
         "is_defense": false,
         "is_isolated": false
@@ -138,9 +144,9 @@
       },
       {
         "id": "e-att-def",
-        "source": "20.184.175.8",
+        "source": "127.0.0.1",
         "target": "192.168.29.104",
-        "weight": 3,
+        "weight": 30,
         "traffic": "Safe Path",
         "protocol": "TCP/SYN",
         "animated": false,
@@ -148,7 +154,7 @@
       },
       {
         "id": "e-att-srv",
-        "source": "20.184.175.8",
+        "source": "127.0.0.1",
         "target": "192.168.29.42",
         "weight": 34,
         "traffic": "Internal Route",
@@ -161,8 +167,8 @@
       "total_nodes": 4,
       "total_edges": 5,
       "threat_level": "NORMAL",
-      "active_flows": 20
+      "active_flows": 41
     }
   },
-  "last_updated": 1788007646.0809853
+  "last_updated": 1788018068.6926236
 }

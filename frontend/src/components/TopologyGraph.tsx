@@ -20,20 +20,40 @@ const fallbackEdges = [
   { id: "fallback-gateway-defense", sourceIndex: 0, targetIndex: 1, threat: false },
   { id: "fallback-gateway-server", sourceIndex: 0, targetIndex: 2, threat: false },
   { id: "fallback-defense-server", sourceIndex: 1, targetIndex: 2, threat: false },
-  { id: "fallback-defense-threat", sourceIndex: 1, targetIndex: 3, threat: true },
-  { id: "fallback-server-threat", sourceIndex: 2, targetIndex: 3, threat: true },
+  { id: "fallback-defense-source", sourceIndex: 1, targetIndex: 3, threat: false },
+  { id: "fallback-server-source", sourceIndex: 2, targetIndex: 3, threat: false },
 ];
 
-function nodeColor(node: TopologyNode) {
+function nodeColor(node: TopologyNode, isThreat: boolean) {
   if (node.is_defense || node.label.toLowerCase() === "defense")
     return { stroke: "#38BDF8", fill: "#38BDF8" };
   if (node.label.toLowerCase() === "gateway")
     return { stroke: "#10B981", fill: "#10B981" };
-  if (node.label.toLowerCase() === "attacker")
+  if (isThreat)
     return { stroke: "#EF4444", fill: "#EF4444" };
   if (node.label.toLowerCase() === "server")
     return { stroke: "#10B981", fill: "#10B981" };
-  return { stroke: "#94A3B8", fill: "#64748B" };
+  return { stroke: "#10B981", fill: "#10B981" };
+}
+
+function isNodeThreat(node: TopologyNode, state?: SystemState) {
+  const isConfirmedSource =
+    state?.guardrail_action === "ATTACK_CONFIRMED" &&
+    state.attack_attribution?.verified === true &&
+    state.attack_attribution.source_ip === node.ip;
+
+  return Boolean(
+    node.status === "ATTACKER" ||
+    node.status === "ISOLATED" ||
+    node.is_isolated ||
+    node.risk_score >= 0.7 ||
+    isConfirmedSource
+  );
+}
+
+function nodeDisplayLabel(node: TopologyNode, isThreat: boolean) {
+  if (node.label.toLowerCase() === "attacker" && !isThreat) return "SOURCE";
+  return node.label.toUpperCase();
 }
 
 export function TopologyGraph({ topology, state }: TopologyGraphProps) {
@@ -48,6 +68,12 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
     [nodes]
   );
   const selected = nodes.find((node) => node.id === selectedId);
+  const hasActiveThreat = Boolean(
+    state &&
+    state.risk_score >= 0.7 &&
+    state.label !== "Benign" &&
+    state.label !== "Legitimate Flash Crowd / High Concurrency"
+  );
   const graphEdges = topology?.edges?.length
     ? topology.edges
     : fallbackEdges.map((edge) => ({
@@ -56,7 +82,9 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
         target: nodes[edge.targetIndex]?.id || "",
         threat: edge.threat,
       }));
-  const threatEdges = graphEdges.filter((edge) => edge.threat);
+  const isThreatEdge = (edge: (typeof graphEdges)[number]) =>
+    hasActiveThreat && edge.threat === true;
+  const threatEdges = graphEdges.filter(isThreatEdge);
   const positionFor = (id: string) =>
     positions.find(({ node }) => node.id === id);
 
@@ -122,9 +150,7 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
             const source = positionFor(edge.source);
             const target = positionFor(edge.target);
             if (!source || !target) return null;
-            const threat = Boolean(
-              edge.threat || (edge.weight && edge.weight > 50)
-            );
+            const threat = isThreatEdge(edge);
             const controlY = source.y < target.y ? Math.min(source.y, target.y) - 18 : Math.max(source.y, target.y) + 18;
             return threat ? (
               <path
@@ -153,13 +179,10 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
 
           {/* Graph Nodes */}
           {positions.map(({ node, x, y }) => {
-            const colors = nodeColor(node);
+            const isThreatNode = isNodeThreat(node, state);
+            const colors = nodeColor(node, isThreatNode);
             const active = selectedId === node.id;
-            const isThreatNode =
-              node.status === "ATTACKER" ||
-              node.status === "ISOLATED" ||
-              node.risk_score >= 0.7 ||
-              node.label.toLowerCase() === "attacker";
+            const displayLabel = nodeDisplayLabel(node, isThreatNode);
 
             return (
               <g
@@ -170,7 +193,7 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
                 className="cursor-pointer outline-none transition-transform"
                 tabIndex={0}
                 role="button"
-                aria-label={`Inspect ${node.label} ${node.ip}`}
+                aria-label={`Inspect ${displayLabel.toLowerCase()} ${node.ip}`}
               >
                 <circle r={active ? 3.8 : 2.6} fill={colors.fill} opacity="0.15" />
                 <circle
@@ -197,7 +220,7 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
                   fontFamily="sans-serif"
                   fontWeight="bold"
                 >
-                  {node.label.toUpperCase()}
+                  {displayLabel}
                 </text>
                 <text
                   y="8"
@@ -254,7 +277,7 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
                   NODE TELEMETRY
                 </p>
                 <h3 className="text-xs font-bold text-[var(--foreground)] font-mono">
-                  {selected.label}
+                  {nodeDisplayLabel(selected, isNodeThreat(selected, state))}
                 </h3>
               </div>
             </div>
@@ -278,7 +301,7 @@ export function TopologyGraph({ topology, state }: TopologyGraphProps) {
             </div>
             <div className="flex justify-between border-b border-[var(--border-muted)] pb-1">
               <dt className="text-[var(--muted-text)]">STATUS</dt>
-              <dd style={{ color: nodeColor(selected).stroke }} className="font-bold">
+              <dd style={{ color: nodeColor(selected, isNodeThreat(selected, state)).stroke }} className="font-bold">
                 {selected.status}
               </dd>
             </div>
