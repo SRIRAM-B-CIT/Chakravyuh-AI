@@ -15,68 +15,69 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 const STATE_FILE = path.join(__dirname, 'state.json');
+const HERO_IMAGE_FILE = path.join(__dirname, 'assets', 'marketplace-hero.png');
 
 // In-memory product catalog
 const PRODUCTS = [
   {
     id: 1,
-    name: "Chakravyuh Edge Sensor X1",
-    category: "Hardware Appliance",
-    price: "$1,499.00",
+    name: "Auralite Studio Pro Headphones",
+    category: "Audio",
+    price: "$249.00",
     rating: "4.9 ★",
-    stock: "In Stock (24 units)",
-    image: "🛡️",
-    desc: "Low-latency hardware telemetry probe with AF_PACKET native wire capture."
+    stock: "In stock · Free delivery tomorrow",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85",
+    desc: "Wireless over-ear headphones with adaptive noise cancellation and 40-hour battery life."
   },
   {
     id: 2,
-    name: "Quantum Neural Accelerator",
-    category: "AI Coprocessor",
-    price: "$2,850.00",
-    rating: "5.0 ★",
-    stock: "In Stock (12 units)",
-    image: "🧠",
-    desc: "Dedicated tensor acceleration card for ST-GNN spatial graph inference."
+    name: "Vela Active GPS Smartwatch",
+    category: "Wearables",
+    price: "$189.00",
+    rating: "4.7 ★",
+    stock: "In stock · Prime delivery",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85",
+    desc: "A lightweight everyday smartwatch with health tracking, GPS and a bright AMOLED display."
   },
   {
     id: 3,
-    name: "Zero-Trust HSM Security Token",
-    category: "Authentication",
-    price: "$320.00",
+    name: "Northline Commuter Backpack",
+    category: "Travel",
+    price: "$79.95",
     rating: "4.8 ★",
-    stock: "In Stock (150 units)",
-    image: "🔑",
-    desc: "FIPS 140-3 Level 4 hardware security module with anti-tamper enclave."
+    stock: "Only 9 left in stock",
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85",
+    desc: "Weather-resistant 22L backpack with a padded laptop sleeve and organised daily-carry storage."
   },
   {
     id: 4,
-    name: "Autonomous SOAR Containment Node",
-    category: "Security Software",
-    price: "$4,200.00/yr",
-    rating: "5.0 ★",
-    stock: "Enterprise License",
-    image: "⚡",
-    desc: "Self-healing Netfilter & conntrack micro-isolation automation engine."
+    name: "Stride One Everyday Trainers",
+    category: "Footwear",
+    price: "$94.00",
+    rating: "4.6 ★",
+    stock: "In stock · Free returns",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85",
+    desc: "Breathable performance trainers with responsive cushioning for commutes and daily workouts."
   },
   {
     id: 5,
-    name: "Encrypted Fiber Mesh Gateway",
-    category: "Infrastructure",
-    price: "$3,650.00",
-    rating: "4.9 ★",
-    stock: "In Stock (8 units)",
-    image: "🌐",
-    desc: "100 Gbps line-rate IPsec / WireGuard mesh routing interface."
+    name: "Arc Mini 5G Smartphone",
+    category: "Mobiles",
+    price: "$599.00",
+    rating: "4.7 ★",
+    stock: "In stock · Ships today",
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=85",
+    desc: "Compact 5G phone with a vivid OLED display, dual camera system and all-day battery."
   },
   {
     id: 6,
-    name: "Forensic Memory Snapshot Appliance",
-    category: "Incident Response",
-    price: "$1,890.00",
-    rating: "4.7 ★",
-    stock: "In Stock (35 units)",
-    image: "💾",
-    desc: "Continuous physical RAM snapshot ring-buffer for post-incident triage."
+    name: "Sonora Room Smart Speaker",
+    category: "Smart Home",
+    price: "$129.00",
+    rating: "4.8 ★",
+    stock: "In stock · Free delivery",
+    image: "https://images.unsplash.com/photo-1589003077984-894e133dabab?auto=format&fit=crop&w=700&q=85",
+    desc: "Room-filling wireless speaker with multi-room audio, voice control and privacy controls."
   }
 ];
 
@@ -107,7 +108,11 @@ function getDefenseState() {
       const ageSeconds = (Date.now() / 1000) - (data.last_updated || 0);
       const isSnifferLive = ageSeconds < 5.0;
       const isIsolated = Boolean(data.isolated);
-      const isThreat = data.label && data.label !== "Benign";
+      const benignLabels = new Set([
+        "Benign",
+        "Legitimate Flash Crowd / High Concurrency"
+      ]);
+      const isThreat = data.label && !benignLabels.has(data.label);
 
       return {
         active: isSnifferLive,
@@ -140,6 +145,22 @@ const server = http.createServer((req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
+    return;
+  }
+
+  if (pathname === '/assets/marketplace-hero.png') {
+    fs.readFile(HERO_IMAGE_FILE, (error, image) => {
+      if (error) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Asset not found');
+        return;
+      }
+      res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Cache-Control': 'public, max-age=3600'
+      });
+      res.end(image);
+    });
     return;
   }
 
@@ -615,6 +636,360 @@ function getStorefrontHtml() {
       from { transform: translateY(20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
+
+    /* Mature retail storefront */
+    body {
+      background: #eaeded;
+      color: #0f1111;
+      font-family: Arial, Helvetica, sans-serif;
+      background-image: none;
+    }
+    .retail-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 0;
+      color: #fff;
+      background: #101827;
+      border: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,.28);
+    }
+    .retail-main {
+      min-height: 68px;
+      padding: 9px 18px;
+      display: grid;
+      grid-template-columns: auto minmax(280px, 1fr) minmax(390px, auto) auto;
+      align-items: center;
+      gap: 16px;
+    }
+    .retail-logo {
+      color: #fff;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      white-space: nowrap;
+    }
+    .retail-logo span { color: #f6b73c; }
+    .retail-logo small {
+      display: block;
+      margin-top: -2px;
+      color: #aab7c7;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .search-bar {
+      height: 43px;
+      display: grid;
+      grid-template-columns: auto 1fr 48px;
+      overflow: hidden;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 0 2px transparent;
+    }
+    .search-bar:focus-within { box-shadow: 0 0 0 3px #f6b73c; }
+    .search-bar select {
+      padding: 0 12px;
+      border: 0;
+      border-right: 1px solid #d5d9d9;
+      color: #475569;
+      background: #f3f4f6;
+      font-size: 12px;
+    }
+    .search-bar input {
+      min-width: 0;
+      border: 0;
+      padding: 0 14px;
+      color: #111827;
+      font-size: 14px;
+      outline: 0;
+    }
+    .search-bar button {
+      border: 0;
+      background: #f6b73c;
+      color: #111827;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .ops-console {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(104px, 1fr));
+      gap: 5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .ops-metric {
+      min-height: 40px;
+      padding: 6px 9px;
+      border: 1px solid #334155;
+      border-radius: 5px;
+      background: #172235;
+    }
+    .ops-label {
+      display: block;
+      color: #94a3b8;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .ops-value {
+      display: block;
+      margin-top: 2px;
+      color: #f8fafc;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ops-value.good { color: #5ee6ad; }
+    .ops-value.warn { color: #ffd166; }
+    .ops-value.bad { color: #ff8b8b; }
+    .ops-metric.degraded-state { border-color: #ef4444; background: #321b25; }
+    .ops-metric.protected-state { border-color: #0ea5e9; background: #102b3b; }
+    .account-links {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .account-links strong { display: block; font-size: 13px; }
+    .cart { font-size: 22px; }
+    .category-nav {
+      min-height: 36px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      overflow-x: auto;
+      color: #f8fafc;
+      background: #223047;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .category-nav a { color: inherit; text-decoration: none; }
+    .category-nav a:hover { text-decoration: underline; }
+    .category-nav .nav-promo { margin-left: auto; color: #ffd166; font-weight: 700; }
+    .retail-hero {
+      position: relative;
+      min-height: 420px;
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      color: #fff;
+      background: #061120 url('/assets/marketplace-hero.png') center/cover no-repeat;
+    }
+    .retail-hero::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0;
+      height: 130px;
+      background: linear-gradient(transparent, #eaeded);
+      pointer-events: none;
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      width: min(520px, 42%);
+      padding: 48px;
+    }
+    .hero-eyebrow {
+      color: #f6b73c;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .hero-copy h1 {
+      margin: 9px 0 12px;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+    .hero-copy p {
+      max-width: 420px;
+      color: #d7e0ea;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .hero-cta {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 12px 20px;
+      border-radius: 5px;
+      color: #101827;
+      background: #f6b73c;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .notice-wrap {
+      position: relative;
+      z-index: 5;
+      max-width: 1460px;
+      margin: -62px auto 0;
+      padding: 0 18px;
+    }
+    .retail-service-bar {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid #d5d9d9;
+      background: #fff;
+      box-shadow: 0 3px 12px rgba(15,23,42,.12);
+      font-size: 13px;
+    }
+    .service-copy strong { color: #111827; }
+    .service-copy span { color: #64748b; }
+    .benchmark-actions { display: flex; gap: 8px; }
+    .retail-button {
+      min-height: 34px;
+      padding: 0 14px;
+      border: 1px solid #d5a129;
+      border-radius: 5px;
+      background: #ffd873;
+      color: #111827;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .retail-button.secondary { border-color: #cbd5e1; background: #f8fafc; }
+    .section-heading {
+      max-width: 1460px;
+      margin: 30px auto 14px;
+      padding: 0 18px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+    }
+    .section-heading h2 { font-size: 24px; }
+    .section-heading a { color: #007185; font-size: 13px; text-decoration: none; }
+    .grid {
+      max-width: 1460px;
+      margin: 0 auto 48px;
+      padding: 0 18px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      min-width: 0;
+      padding: 0 0 18px;
+      border: 1px solid #d5d9d9;
+      border-radius: 2px;
+      color: #0f1111;
+      background: #fff;
+      box-shadow: none;
+    }
+    .product-card:hover {
+      border-color: #aab7c4;
+      transform: none;
+      box-shadow: 0 4px 15px rgba(15,23,42,.12);
+    }
+    .product-image-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1.35;
+      margin-bottom: 15px;
+      overflow: hidden;
+      background: #f7f8f8;
+    }
+    .product-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform .25s ease;
+    }
+    .product-card:hover .product-image { transform: scale(1.025); }
+    .product-content { padding: 0 16px; }
+    .category { color: #64748b; font-family: Arial, sans-serif; font-size: 10px; }
+    .product-title { min-height: 42px; margin: 6px 0; font-size: 16px; line-height: 1.3; }
+    .rating { color: #e89b00; font-size: 13px; }
+    .desc { min-height: 48px; color: #565959; font-size: 12px; line-height: 1.45; }
+    .price { color: #0f1111; font-family: Arial, sans-serif; font-size: 22px; }
+    .stock { display: block; margin-top: 3px; color: #007600; font-size: 11px; }
+    .card-footer {
+      margin: 14px 16px 0;
+      padding-top: 13px;
+      border-color: #e7e9ec;
+      align-items: end;
+    }
+    .add-cart {
+      padding: 8px 12px;
+      border: 1px solid #fcd200;
+      border-radius: 999px;
+      background: #ffd814;
+      color: #0f1111;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .alert-banner, .soar-protected-banner {
+      position: fixed;
+      top: 112px;
+      right: 18px;
+      z-index: 100;
+      max-width: 500px;
+      margin: 0;
+      padding: 0;
+    }
+    .alert-box, .soar-protected-box {
+      border-radius: 6px;
+      padding: 12px 15px;
+      color: #fff;
+      background: #991b1b;
+      box-shadow: 0 8px 24px rgba(15,23,42,.3);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+    }
+    .soar-protected-box { border-color: #0f766e; background: #075985; color: #fff; }
+    .dos-outage-modal { background: rgba(15,23,42,.72); }
+    .outage-box {
+      max-width: 560px;
+      padding: 32px;
+      border: 0;
+      border-top: 5px solid #b91c1c;
+      border-radius: 4px;
+      color: #111827;
+      background: #fff;
+      box-shadow: 0 24px 70px rgba(0,0,0,.35);
+    }
+    .outage-icon { font-size: 0; }
+    .outage-icon::after { content: 'SERVICE UNAVAILABLE'; color: #b91c1c; font-size: 12px; letter-spacing: .14em; font-weight: 800; }
+    .outage-title { color: #991b1b; font-family: Arial, sans-serif; font-size: 26px; }
+    .outage-desc { color: #475569; }
+    .outage-stats { color: #7f1d1d; background: #fff7f7; border-color: #fecaca; }
+    .toast { color: #fff; background: #172235; border-color: #64748b; font-family: Arial, sans-serif; }
+    @media (max-width: 1180px) {
+      .retail-main { grid-template-columns: auto 1fr auto; }
+      .account-links { display: none; }
+      .ops-console { grid-column: 1 / -1; grid-template-columns: repeat(4, 1fr); }
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 780px) {
+      .retail-main { grid-template-columns: 1fr; }
+      .search-bar { grid-row: 2; }
+      .ops-console { grid-template-columns: repeat(2, 1fr); }
+      .category-nav { padding: 0 12px; gap: 14px; }
+      .retail-hero { min-height: 390px; background-position: 58% center; }
+      .hero-copy { width: 72%; padding: 28px 22px 90px; }
+      .hero-copy h1 { font-size: 36px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .retail-service-bar { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 500px) {
+      .hero-copy { width: 92%; }
+      .grid { grid-template-columns: 1fr; }
+      .ops-console { grid-template-columns: 1fr 1fr; }
+      .benchmark-actions { width: 100%; }
+      .retail-button { flex: 1; }
+    }
   </style>
 </head>
 <body>
@@ -622,46 +997,53 @@ function getStorefrontHtml() {
   <div id="dosOutageModal" class="dos-outage-modal">
     <div class="outage-box">
       <div class="outage-icon">💥</div>
-      <div class="outage-title">504 GATEWAY TIMEOUT</div>
-      <div style="font-size: 1.1rem; font-weight: 800; color: #fca5a5; margin-bottom: 0.75rem;">
-        CRITICAL SERVICE OUTAGE: SERVER OVERWHELMED
+      <div class="outage-title">Checkout temporarily unavailable</div>
+      <div style="font-size: 1.05rem; font-weight: 800; color: #991b1b; margin-bottom: 0.75rem;">
+        We're having trouble processing requests
       </div>
       <p class="outage-desc">
-        The storefront on <strong>Port 5000</strong> is completely frozen and unresponsive due to unmitigated high-density DoS assault. Server socket queue is exhausted (100% capacity).
+        Unusually high traffic is delaying checkout requests. ChakraMart is monitoring the service and will restore normal access automatically when the traffic source is contained.
       </p>
       <div class="outage-stats">
-        <div>• STATUS: 504 GATEWAY TIMEOUT / CONNECTION BACKLOG FULL</div>
-        <div id="outageRps">• ATTACK VELOCITY: 450 req/s</div>
-        <div>• DEFENSE STATUS: <span style="color:#ef4444; font-weight:800;">INACTIVE (UNPROTECTED)</span></div>
-        <div>• REMEDY: Start Chakravyuh AI Sniffer (Terminal 3) to trigger SOAR Micro-Isolation</div>
+        <div>• SERVICE STATUS: 504 GATEWAY TIMEOUT</div>
+        <div id="outageRps">• LIVE TRAFFIC: 450 req/s</div>
+        <div>• DEFENSE STATUS: <span style="color:#991b1b; font-weight:800;">AWAITING MITIGATION</span></div>
+        <div>• NEXT STEP: Chakravyuh AI will isolate the verified source when detection is confirmed</div>
       </div>
-      <p style="font-size:0.75rem; color:var(--text-muted);">
-        * Once Chakravyuh AI SOAR detects & isolates the attacker, this page will automatically unfreeze and restore 4ms instant access.
+      <p style="font-size:0.75rem; color:#64748b;">
+        This page checks service health automatically. No manual refresh is required.
       </p>
     </div>
   </div>
 
-  <header>
-    <div class="header-inner">
-      <div class="logo">
-        🛡️ <div>CHAKRA<span>MART</span> <small style="font-size:0.6rem; color:var(--text-muted); font-weight:600; display:block;">TARGET APP · PORT 5000</small></div>
-      </div>
-      <div class="status-panel">
-        <div id="latencyGauge" class="latency-pill">
-          <div class="pulse-dot"></div>
-          <span id="latencyText">PING: 4ms · NOMINAL HEALTH (0 req/s)</span>
-        </div>
-        <div style="color:var(--text-muted);">TOTAL REQ: <span id="reqCounter" style="color:var(--text-main); font-weight:700;">0</span></div>
-      </div>
+  <header class="retail-header">
+    <div class="retail-main">
+      <a class="retail-logo" href="/">chakra<span>mart</span><small>Everything, delivered</small></a>
+      <form class="search-bar" onsubmit="event.preventDefault(); showToast('Search is ready for the live demo');">
+        <select aria-label="Search category"><option>All</option><option>Electronics</option><option>Fashion</option><option>Home</option></select>
+        <input type="search" aria-label="Search products" placeholder="Search ChakraMart" />
+        <button type="submit" aria-label="Search">⌕</button>
+      </form>
+      <aside class="ops-console" aria-label="Live storefront and defense telemetry">
+        <div class="ops-metric"><span class="ops-label">Traffic received</span><span id="reqCounter" class="ops-value">0 requests</span></div>
+        <div class="ops-metric"><span class="ops-label">Receiving now</span><span id="rpsCounter" class="ops-value">0 req/s</span></div>
+        <div class="ops-metric"><span class="ops-label">Defense</span><span id="defenseStatus" class="ops-value good">Monitoring</span></div>
+        <div class="ops-metric"><span class="ops-label">Service message</span><span id="trafficMessage" class="ops-value good">No errors</span></div>
+        <div id="latencyGauge" class="ops-metric" style="grid-column:1/-1; min-height:28px;"><span class="ops-label">Health</span><span id="latencyText" class="ops-value good">4ms · Nominal</span></div>
+      </aside>
+      <div class="account-links"><span>Hello, sign in<strong>Account & Lists</strong></span><span>Returns<strong>& Orders</strong></span><span class="cart">🛒</span></div>
     </div>
+    <nav class="category-nav" aria-label="Store categories">
+      <a href="#deals"><strong>☰ All</strong></a><a href="#deals">Today's Deals</a><a href="#deals">Mobiles</a><a href="#deals">Electronics</a><a href="#deals">Fashion</a><a href="#deals">Home & Kitchen</a><a href="#deals">Audio</a><a href="#deals">New Releases</a><a href="#deals" class="nav-promo">Secure shopping, uninterrupted</a>
+    </nav>
   </header>
 
   <div id="alertBanner" class="alert-banner">
     <div class="alert-box">
       <span style="font-size: 1.5rem;">🚨</span>
       <div>
-        <strong style="color:#ef4444;">CRITICAL SERVICE DEGRADATION (ACTIVE DoS SURGE):</strong> 
-        Volumetric traffic overload detected! High response latency & transaction timeouts active until Chakravyuh AI micro-isolates the threat source.
+        <strong>Checkout disruption detected:</strong>
+        Traffic volume is causing elevated response times. Defense verification is in progress.
       </div>
     </div>
   </div>
@@ -670,35 +1052,29 @@ function getStorefrontHtml() {
     <div class="soar-protected-box">
       <span style="font-size: 1.5rem;">🛡️</span>
       <div>
-        <strong style="color:#38bdf8;">AUTONOMOUS SOAR ACTIVE:</strong> 
-        Attacker host isolated via dynamic Netfilter kernel rules! Storefront operating at 4ms nominal latency with zero customer downtime.
+        <strong>Service protected:</strong>
+        The verified traffic source has been isolated and checkout is responding normally.
       </div>
     </div>
   </div>
 
-  <section class="hero">
-    <h1>Autonomous <span>Cyber Resilience</span> Benchmark</h1>
-    <p>Target E-Commerce Web Service used for live DoS Flood & Micro-Isolation verification.</p>
-  </section>
-
-  <section class="banner-defense">
-    <div class="defense-card">
-      <div class="info">
-        <div style="font-size: 1.5rem;">⚡</div>
-        <div>
-          <h3 style="font-size: 0.85rem; font-weight: 800; color: #f8fafc;">Live Defense Benchmark Controls</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
-            Target Endpoint: <code style="color:#38bdf8;">http://localhost:5000</code> | SOC Command Dashboard: <code style="color:#38bdf8;">http://localhost:3000</code>
-          </p>
-        </div>
-      </div>
-      <div style="display:flex; gap:0.6rem;">
-        <button class="btn" onclick="testCheckout(this)">⚡ Place Test Order</button>
-        <button class="btn btn-danger" onclick="triggerBrowserAttackBurst(this)">💥 Test Attack Burst</button>
-      </div>
+  <section class="retail-hero">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">The new essentials edit</div>
+      <h1>Designed for every day.</h1>
+      <p>Discover considered technology, travel and lifestyle picks with fast delivery and easy returns.</p>
+      <a class="hero-cta" href="#deals">Shop featured deals</a>
     </div>
   </section>
 
+  <div class="notice-wrap">
+    <div class="retail-service-bar">
+      <div class="service-copy"><strong>ChakraMart service monitor</strong><br><span>Live checkout target on port 5000 · protected by Chakravyuh AI</span></div>
+      <div class="benchmark-actions"><button class="retail-button secondary" onclick="testCheckout(this)">Place test order</button><button class="retail-button" onclick="triggerBrowserAttackBurst(this)">Run traffic test</button></div>
+    </div>
+  </div>
+
+  <div class="section-heading" id="deals"><div><h2>Today's featured deals</h2><span style="color:#64748b;font-size:13px;">Popular picks across electronics, travel and home</span></div><a href="#deals">See all deals</a></div>
   <main class="grid" id="productGrid"></main>
 
   <div id="toast" class="toast"></div>
@@ -712,17 +1088,15 @@ function getStorefrontHtml() {
       card.className = 'product-card';
       card.innerHTML = \`
         <div>
-          <div class="card-icon">\${p.image}</div>
-          <div class="category">\${p.category}</div>
-          <h2 class="product-title">\${p.name}</h2>
-          <p class="desc">\${p.desc}</p>
+          <div class="product-image-wrap"><img class="product-image" src="\${p.image}" alt="\${p.name}" loading="lazy" /></div>
+          <div class="product-content"><div class="category">\${p.category}</div><h2 class="product-title">\${p.name}</h2><div class="rating">\${p.rating}</div><p class="desc">\${p.desc}</p></div>
         </div>
         <div class="card-footer">
           <div>
             <div class="price">\${p.price}</div>
-            <small style="color:var(--text-muted); font-size:0.65rem;">\${p.stock}</small>
+            <small class="stock">\${p.stock}</small>
           </div>
-          <button class="btn" onclick="orderProduct('\${p.name}', this)">Buy Now</button>
+          <button class="add-cart" onclick="orderProduct('\${p.name}', this)">Add to cart</button>
         </div>
       \`;
       grid.appendChild(card);
@@ -784,6 +1158,7 @@ function getStorefrontHtml() {
 
     // In-browser rapid attack burst simulator (sends 400 requests in 3 seconds)
     function triggerBrowserAttackBurst(btn) {
+      const originalText = btn.innerText;
       btn.innerText = "Attacking...";
       btn.disabled = true;
       showToast("💥 Launching simulated volumetric traffic burst (400 requests)...", true);
@@ -796,7 +1171,7 @@ function getStorefrontHtml() {
         }
         if (count >= 400) {
           clearInterval(burstInterval);
-          btn.innerText = "💥 Test Attack Burst";
+          btn.innerText = originalText;
           btn.disabled = false;
         }
       }, 100);
@@ -808,6 +1183,9 @@ function getStorefrontHtml() {
       const gauge = document.getElementById('latencyGauge');
       const text = document.getElementById('latencyText');
       const reqCount = document.getElementById('reqCounter');
+      const rpsCounter = document.getElementById('rpsCounter');
+      const defenseStatus = document.getElementById('defenseStatus');
+      const trafficMessage = document.getElementById('trafficMessage');
       const banner = document.getElementById('alertBanner');
       const soarBanner = document.getElementById('soarBanner');
       const outageModal = document.getElementById('dosOutageModal');
@@ -818,35 +1196,61 @@ function getStorefrontHtml() {
         const data = await res.json();
         const latency = Date.now() - start;
         
-        reqCount.innerText = data.totalRequests || 0;
+        reqCount.innerText = \`\${data.totalRequests || 0} requests\`;
         const rps = data.currentRps || 0;
+        rpsCounter.innerText = \`\${rps} req/s\`;
 
         if (data.isUnderAttack) {
           // Scenario A: Defense is OFF / Attack unmitigated -> Freezes UI with 504 Modal
-          gauge.className = 'latency-pill degraded';
-          text.innerText = \`504 TIMEOUT: \${latency}ms · DOS ATTACK (\${rps} req/s)\`;
+          gauge.className = 'ops-metric degraded-state';
+          text.className = 'ops-value bad';
+          text.innerText = \`504 timeout · \${latency}ms\`;
+          rpsCounter.className = 'ops-value bad';
+          defenseStatus.className = 'ops-value warn';
+          defenseStatus.innerText = data.isDefenseActive ? 'Verifying threat' : 'Defense offline';
+          trafficMessage.className = 'ops-value bad';
+          trafficMessage.innerText = 'Checkout congestion';
           banner.style.display = 'block';
           soarBanner.style.display = 'none';
           outageModal.style.display = 'flex';
-          outageRps.innerText = \`• ATTACK VELOCITY: \${rps} req/s (PORT 5000 OVERWHELMED)\`;
+          outageRps.innerText = \`• LIVE TRAFFIC: \${rps} req/s (SERVICE CONGESTED)\`;
         } else if (data.status === "PROTECTED_BY_SOAR" || data.isIsolated) {
           // Scenario B: Defense is ON -> Attacker Isolated by SOAR
-          gauge.className = 'latency-pill protected';
-          text.innerText = \`PING: \${latency}ms · PROTECTED BY SOAR (\${rps} req/s)\`;
+          gauge.className = 'ops-metric protected-state';
+          text.className = 'ops-value good';
+          text.innerText = \`\${latency}ms · Protected\`;
+          rpsCounter.className = 'ops-value warn';
+          defenseStatus.className = 'ops-value good';
+          defenseStatus.innerText = 'SOAR protected';
+          trafficMessage.className = 'ops-value good';
+          trafficMessage.innerText = \`Blocked \${data.threatLabel || 'threat'}\`;
           banner.style.display = 'none';
           soarBanner.style.display = 'block';
           outageModal.style.display = 'none';
         } else {
           // Nominal Safe
-          gauge.className = 'latency-pill';
-          text.innerText = \`PING: \${latency}ms · NOMINAL HEALTH (\${rps} req/s)\`;
+          gauge.className = 'ops-metric';
+          text.className = 'ops-value good';
+          text.innerText = \`\${latency}ms · Nominal\`;
+          rpsCounter.className = rps > 15 ? 'ops-value warn' : 'ops-value good';
+          defenseStatus.className = data.isDefenseActive ? 'ops-value good' : 'ops-value warn';
+          defenseStatus.innerText = data.isDefenseActive ? 'Monitoring' : 'Defense offline';
+          trafficMessage.className = 'ops-value good';
+          trafficMessage.innerText = 'No errors';
           banner.style.display = 'none';
           soarBanner.style.display = 'none';
           outageModal.style.display = 'none';
         }
       } catch (err) {
-        gauge.className = 'latency-pill degraded';
-        text.innerText = 'PING: TIMEOUT (5000ms+) · SERVER UNRESPONSIVE';
+        gauge.className = 'ops-metric degraded-state';
+        text.className = 'ops-value bad';
+        text.innerText = 'Health check timeout';
+        rpsCounter.className = 'ops-value bad';
+        rpsCounter.innerText = 'Unavailable';
+        defenseStatus.className = 'ops-value bad';
+        defenseStatus.innerText = 'Unknown';
+        trafficMessage.className = 'ops-value bad';
+        trafficMessage.innerText = 'Service unreachable';
         banner.style.display = 'block';
         soarBanner.style.display = 'none';
         outageModal.style.display = 'flex';
